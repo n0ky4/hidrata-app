@@ -1,6 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { Storage } from '../utils/storage'
+import { StorageSchema } from '../utils/storage/schema'
 
 const FirstSettingsSchema = z.object({
     age: z.coerce
@@ -21,9 +23,14 @@ const FirstSettingsSchema = z.object({
         .positive('Peso inválido!'),
 })
 
-type FirstSettingsType = z.infer<typeof FirstSettingsSchema>
+export type FirstSettingsType = z.infer<typeof FirstSettingsSchema>
 
-export default function FirstUsePopup() {
+interface FirstUsePopupProps {
+    storage: Storage
+    onReady: () => void
+}
+
+export default function FirstUsePopup({ storage, onReady }: FirstUsePopupProps) {
     const {
         register,
         handleSubmit,
@@ -32,8 +39,16 @@ export default function FirstUsePopup() {
         resolver: zodResolver(FirstSettingsSchema),
     })
 
-    function setSettings(data: any) {
-        console.log(data)
+    const setSettings = async ({ age, weight }: FirstSettingsType) => {
+        const parsed = StorageSchema.parse({
+            settings: {
+                age,
+                weight,
+            },
+        })
+
+        await storage.setData(parsed)
+        onReady()
     }
 
     return (
