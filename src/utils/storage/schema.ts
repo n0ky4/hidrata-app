@@ -2,13 +2,19 @@ import { z } from 'zod'
 
 export const StorageSchema = z.object({
     settings: z.object({
-        height: z.coerce.number().int().positive(),
+        age: z.coerce.number().int().positive(),
         weight: z.coerce.number().int().positive(),
-        notify: z.object({
-            enabled: z.coerce.boolean().default(false),
-            everyMinutes: z.coerce.number().int().positive().default(120),
-            sound: z.union([z.literal('bells'), z.literal('drop'), z.literal('marimba')]),
-        }),
+        notify: z
+            .object({
+                enabled: z.coerce.boolean(),
+                everyMinutes: z.coerce.number().int().positive(),
+                sound: z.union([z.literal('bells'), z.literal('drop'), z.literal('marimba')]),
+            })
+            .default({
+                enabled: false,
+                everyMinutes: 120,
+                sound: 'bells',
+            }),
     }),
     records: z
         .object({
@@ -31,18 +37,8 @@ export const StorageSchema = z.object({
                 ])
                 .array(),
         })
-        .array(),
+        .array()
+        .optional(),
 })
 
 export type StorageType = z.infer<typeof StorageSchema>
-
-export const defaultData = {
-    settings: {
-        notify: {
-            enabled: false,
-            everyMinutes: 30,
-            sound: 'bells',
-        },
-    },
-    records: [],
-}
