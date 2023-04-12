@@ -13,7 +13,11 @@ function App() {
         })()
     }, [])
 
-    return <div className='App'>{firstUse && <FirstUsePopup />}</div>
+    return (
+        <div className='App'>
+            {firstUse && <FirstUsePopup storage={storage} onReady={() => setFirstUse(false)} />}
+        </div>
+    )
 }
 
 export default App
