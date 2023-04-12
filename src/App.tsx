@@ -14,9 +14,9 @@ function App() {
     }, [])
 
     return (
-        <div className='App'>
+        <main>
             {firstUse && <FirstUsePopup storage={storage} onReady={() => setFirstUse(false)} />}
-        </div>
+        </main>
     )
 }
 
