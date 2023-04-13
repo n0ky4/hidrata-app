@@ -9,6 +9,16 @@ test('isDataValid() should return true when data is valid', () => {
             weight: 70,
             notify: { enabled: false, everyMinutes: 120, sound: 'bells' },
         },
+        records: [
+            {
+                date: '2023-01-01',
+                settings: {
+                    age: 35,
+                    weight: 70,
+                },
+                items: ['glass', { type: 'custom', ml: 500 }],
+            },
+        ],
     }
 
     const result = storage.isDataValid(validData)
@@ -17,7 +27,25 @@ test('isDataValid() should return true when data is valid', () => {
 
 test('isDataValid() should return false when data is invalid', () => {
     const storage = new Storage(true)
-    const invalidData = { banana: true }
+    const invalidData = {
+        settings: {
+            age: 'this is a string',
+            weight: '50',
+            notify: {
+                enabled: 10,
+                everyMinutes: 'zzzzzzzzzz',
+            },
+        },
+        records: [
+            {
+                date: new Date(),
+                settings: {
+                    banana: true,
+                },
+                items: ['glass', { type: 'custom', ml: 500 }],
+            },
+        ],
+    }
 
     const result = storage.isDataValid(invalidData)
     expect(result).toBe(false)
