@@ -15,12 +15,7 @@ export class Storage {
     }
 
     isDataValid(data: any) {
-        try {
-            StorageSchema.parse(data)
-            return true
-        } catch {
-            return false
-        }
+        return StorageSchema.safeParse(data).success
     }
 
     async clearData() {
