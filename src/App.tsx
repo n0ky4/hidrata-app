@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import FirstUsePopup from './components/FirstUsePopup'
 import { useStorage } from './utils/storage'
 import { StorageType } from './utils/storage/schema'
-import { getDailyWaterML } from './utils/water'
+import { getRecommendedWaterIntake } from './utils/water'
 
 function App() {
     const storage = useStorage()
@@ -30,7 +30,7 @@ function App() {
         )
 
     const { age, weight } = data.settings
-    const dailyWater = getDailyWaterML(age, weight)
+    const dailyWater = getRecommendedWaterIntake(age, weight)
 
     const dataList = [
         ['Idade', age],
