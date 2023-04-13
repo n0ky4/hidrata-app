@@ -1,21 +1,66 @@
 import { useEffect, useState } from 'react'
 import FirstUsePopup from './components/FirstUsePopup'
-import { Storage } from './utils/storage'
+import { useStorage } from './utils/storage'
+import { StorageType } from './utils/storage/schema'
+import { getDailyWaterML } from './utils/water'
 
 function App() {
-    const [storage, setStorage] = useState(new Storage())
-    const [firstUse, setFirstUse] = useState(false)
+    const storage = useStorage()
+    const [data, setData] = useState<StorageType | null>(null)
+
+    // Data validation / First use detection
+    const checkData = () => {
+        if (!storage) return
+        storage.getData().then((retrievedData) => {
+            if (retrievedData && storage.isDataValid(retrievedData))
+                setData(retrievedData as StorageType)
+            else storage.clearData()
+        })
+    }
 
     useEffect(() => {
-        ;(async () => {
-            const data = await storage.getData()
-            if (!data) setFirstUse(true)
-        })()
+        checkData()
     }, [])
+
+    if (!data)
+        return (
+            <main>
+                <FirstUsePopup storage={storage} onReady={checkData} />
+            </main>
+        )
+
+    const { age, weight } = data.settings
+    const dailyWater = getDailyWaterML(age, weight)
+
+    const dataList = [
+        ['Idade', age],
+        ['Peso', weight],
+        ['Qtd. Água Diária', `${dailyWater} ml`],
+    ]
 
     return (
         <main>
-            {firstUse && <FirstUsePopup storage={storage} onReady={() => setFirstUse(false)} />}
+            <div className='max-w-screen-md mx-auto p-4'>
+                <h1 className='text-2xl font-white font-semibold'>hidrata-app</h1>
+                <div className='my-5'>
+                    <h1 className='font-white font-semibold text-xl'>Dados</h1>
+                    <div className='my-2'>
+                        {dataList.map((x) => {
+                            return (
+                                <p className='text-zinc-300' key={x[0]}>
+                                    <span className='text-white'>{x[0]}:</span> {x[1]}
+                                </p>
+                            )
+                        })}
+                    </div>
+                </div>
+                <div className='my-5'>
+                    <h1 className='font-white font-semibold text-xl'>JSON</h1>
+                    <pre className='text-zinc-300 font-mono text-sm'>
+                        {JSON.stringify(data, null, 2)}
+                    </pre>
+                </div>
+            </div>
         </main>
     )
 }
