@@ -27,7 +27,7 @@ export const StorageSchema = z.object({
                 return true
             }),
             settings: z.object({
-                height: z.coerce.number().int().positive(),
+                age: z.coerce.number().int().positive(),
                 weight: z.coerce.number().int().positive(),
             }),
             items: z
