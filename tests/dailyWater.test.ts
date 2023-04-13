@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
 import { getDailyWaterML } from './../src/utils/water'
 
-test('Daily recommended water amount by age and weight', () => {
+test('getDailyWaterML should return the correct value according to age and weight', () => {
     expect(getDailyWaterML(9, 30)).toBe(30 * 40)
     expect(getDailyWaterML(16, 60)).toBe(60 * 40)
     expect(getDailyWaterML(17, 70)).toBe(70 * 40)
