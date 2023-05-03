@@ -1,7 +1,10 @@
-import { GearSix } from '@phosphor-icons/react'
+import { GearSix, Plus } from '@phosphor-icons/react'
 import { useEffect, useState } from 'react'
+import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar'
+import colors from 'tailwindcss/colors'
 import { Debug } from './components/Debug'
 import FirstUsePopup from './components/FirstUsePopup'
+import { GhostButton } from './components/GhostButton'
 import { useStorage } from './utils/storage'
 import { StorageType } from './utils/storage/schema'
 import { getRecommendedWaterIntake } from './utils/water'
@@ -47,6 +50,7 @@ function App() {
         ['Peso', weight],
         ['Qtd. Água Diária', `${dailyWater} ml`],
     ]
+    const percentage = 56
 
     return (
         <>
@@ -76,13 +80,46 @@ function App() {
                 <div className='max-w-screen-md mx-auto p-4 border-b-2 flex items-center justify-between border-zinc-700'>
                     <h1 className='text-2xl font-white font-semibold'>hidrata-app</h1>
                     <div className='flex items-center gap-2'>
-                        <button className='p-2 rounded-lg bg-transparent text-zinc-300 hover:bg-white/20 hover:text-white transition-colors'>
+                        <GhostButton>
                             <GearSix size={24} weight='bold' />
-                        </button>
+                        </GhostButton>
                     </div>
                 </div>
             </nav>
-            <main></main>
+            <main>
+                <div className='max-w-screen-md mx-auto px-4 py-6'>
+                    <div className='flex flex-col gap-4 text-center'>
+                        <p className='font-semibold text-lg text-zinc-200 uppercase'>
+                            Consumo Diário de Água
+                        </p>
+                        <div className='mx-auto w-60 h-60'>
+                            <CircularProgressbarWithChildren
+                                value={percentage}
+                                strokeWidth={4}
+                                styles={buildStyles({
+                                    strokeLinecap: 'round',
+                                    pathTransitionDuration: 0.5,
+                                    textColor: colors.blue[300],
+                                    trailColor: colors.zinc[700],
+                                    pathColor: colors.blue[300],
+                                })}
+                            >
+                                <div className='flex items-center gap-2'>
+                                    <h1 className='text-6xl font-bold text-blue-100'>
+                                        {percentage}%
+                                    </h1>
+                                    <button className='p-1.5 rounded-md bg-transparent hover:bg-white/20 transition-colors'>
+                                        <Plus size={18} weight='bold' />
+                                    </button>
+                                </div>
+                            </CircularProgressbarWithChildren>
+                        </div>
+                        <p className='text-sm text-zinc-400'>
+                            Vamos lá! Ainda faltam <b>1000ml</b> de água 💧
+                        </p>
+                    </div>
+                </div>
+            </main>
         </>
     )
 }
