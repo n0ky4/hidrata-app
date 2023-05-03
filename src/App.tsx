@@ -1,3 +1,4 @@
+import { GearSix } from '@phosphor-icons/react'
 import { useEffect, useState } from 'react'
 import { Debug } from './components/Debug'
 import FirstUsePopup from './components/FirstUsePopup'
@@ -71,11 +72,17 @@ function App() {
                     </div>
                 </Debug>
             )}
-            <main>
-                <div className='max-w-screen-md mx-auto p-4'>
+            <nav>
+                <div className='max-w-screen-md mx-auto p-4 border-b-2 flex items-center justify-between border-zinc-700'>
                     <h1 className='text-2xl font-white font-semibold'>hidrata-app</h1>
+                    <div className='flex items-center'>
+                        <button className='p-2 rounded-lg bg-transparent text-zinc-300 hover:bg-white/20 hover:text-white transition-colors'>
+                            <GearSix size={24} weight='bold' />
+                        </button>
+                    </div>
                 </div>
-            </main>
+            </nav>
+            <main></main>
         </>
     )
 }
