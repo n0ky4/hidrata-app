@@ -31,11 +31,11 @@ export const StorageSchema = z.object({
                 weight: z.coerce.number().int().positive(),
             }),
             items: z
-                .union([
-                    z.literal('glass'),
-                    z.literal('bottle'),
-                    z.object({ type: z.literal('custom'), ml: z.number().int().positive() }),
-                ])
+                .object({
+                    type: z.union([z.literal('glass'), z.literal('bottle'), z.literal('custom')]),
+                    ml: z.coerce.number().int().positive().optional(),
+                    createdAt: z.coerce.string(),
+                })
                 .array(),
         })
         .array()
