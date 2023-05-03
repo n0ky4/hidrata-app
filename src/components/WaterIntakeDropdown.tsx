@@ -12,7 +12,7 @@ export function WaterIntakeDropdown() {
     const isMac = navigator.userAgent.indexOf('Mac') !== -1
     const dropdownItems: DropdownItem[] = [
         {
-            label: 'Copo (200ml)',
+            label: 'Copo (250ml)',
             shortcut: 'N',
         },
         {
