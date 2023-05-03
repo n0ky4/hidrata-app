@@ -75,7 +75,7 @@ function App() {
             <nav>
                 <div className='max-w-screen-md mx-auto p-4 border-b-2 flex items-center justify-between border-zinc-700'>
                     <h1 className='text-2xl font-white font-semibold'>hidrata-app</h1>
-                    <div className='flex items-center'>
+                    <div className='flex items-center gap-2'>
                         <button className='p-2 rounded-lg bg-transparent text-zinc-300 hover:bg-white/20 hover:text-white transition-colors'>
                             <GearSix size={24} weight='bold' />
                         </button>
