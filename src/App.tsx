@@ -107,11 +107,11 @@ function App() {
                                 })}
                             >
                                 <div className='flex items-center gap-2'>
-                                    <div className='relative'>
+                                    <div className='relative group'>
                                         <h1 className='text-6xl font-bold text-blue-100'>
                                             {percentage}%
                                         </h1>
-                                        <span className='absolute -bottom-3 left-0 text-sm font-mono text-zinc-500'>
+                                        <span className='absolute -bottom-3 left-0 text-sm font-mono text-zinc-500 opacity-0 transition-opacity group-hover:opacity-100'>
                                             1512/2700ml
                                         </span>
                                     </div>
