@@ -94,7 +94,7 @@ function App() {
                         <p className='font-semibold text-lg text-zinc-200 uppercase'>
                             Consumo Diário de Água
                         </p>
-                        <div className='mx-auto w-60 h-60'>
+                        <div className='mx-auto w-full max-w-[240px] select-none'>
                             <CircularProgressbarWithChildren
                                 value={percentage}
                                 strokeWidth={4}
@@ -107,9 +107,14 @@ function App() {
                                 })}
                             >
                                 <div className='flex items-center gap-2'>
-                                    <h1 className='text-6xl font-bold text-blue-100'>
-                                        {percentage}%
-                                    </h1>
+                                    <div className='relative'>
+                                        <h1 className='text-6xl font-bold text-blue-100'>
+                                            {percentage}%
+                                        </h1>
+                                        <span className='absolute -bottom-3 left-0 text-sm font-mono text-zinc-500'>
+                                            1512/2700ml
+                                        </span>
+                                    </div>
                                     <WaterIntakeDropdown />
                                 </div>
                             </CircularProgressbarWithChildren>
