@@ -1,10 +1,11 @@
-import { GearSix, Plus } from '@phosphor-icons/react'
+import { GearSix } from '@phosphor-icons/react'
 import { useEffect, useState } from 'react'
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar'
 import colors from 'tailwindcss/colors'
 import { Debug } from './components/Debug'
 import FirstUsePopup from './components/FirstUsePopup'
 import { GhostButton } from './components/GhostButton'
+import { WaterIntakeDropdown } from './components/WaterIntakeDropdown'
 import { useStorage } from './utils/storage'
 import { StorageType } from './utils/storage/schema'
 import { getRecommendedWaterIntake } from './utils/water'
@@ -50,6 +51,7 @@ function App() {
         ['Peso', weight],
         ['Qtd. Água Diária', `${dailyWater} ml`],
     ]
+
     const percentage = 56
 
     return (
@@ -108,9 +110,7 @@ function App() {
                                     <h1 className='text-6xl font-bold text-blue-100'>
                                         {percentage}%
                                     </h1>
-                                    <button className='p-1.5 rounded-md bg-transparent hover:bg-white/20 transition-colors'>
-                                        <Plus size={18} weight='bold' />
-                                    </button>
+                                    <WaterIntakeDropdown />
                                 </div>
                             </CircularProgressbarWithChildren>
                         </div>
