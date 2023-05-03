@@ -7,6 +7,7 @@ export default {
             fontFamily: {
                 sans: ['Sora', 'sans-serif'],
                 serif: ['Sora', 'sans-serif'],
+                mono: ['Space Mono', 'monospace'],
             },
         },
     },
