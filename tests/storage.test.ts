@@ -16,7 +16,10 @@ test('isDataValid() should return true when data is valid', () => {
                     age: 35,
                     weight: 70,
                 },
-                items: ['glass', { type: 'custom', ml: 500 }],
+                items: [
+                    { type: 'glass', createdAt: '2023-05-03T19:00:20.000Z' },
+                    { type: 'custom', ml: 500, createdAt: '2023-05-03T22:00:00.000Z' },
+                ],
             },
         ],
     }
