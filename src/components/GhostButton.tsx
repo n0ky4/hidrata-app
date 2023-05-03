@@ -1,10 +1,18 @@
+import clsx from 'clsx'
+
 interface GhostButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
     children: React.ReactNode
+    className?: string
 }
 
-export function GhostButton({ children }: GhostButtonProps) {
+export function GhostButton({ children, className }: GhostButtonProps) {
     return (
-        <button className='p-2 rounded-lg bg-transparent text-zinc-300 hover:bg-white/20 hover:text-white transition-colors'>
+        <button
+            className={clsx(
+                'p-2 rounded-lg bg-transparent text-zinc-300 hover:text-white transition-colors hover:bg-white/20',
+                className
+            )}
+        >
             {children}
         </button>
     )
