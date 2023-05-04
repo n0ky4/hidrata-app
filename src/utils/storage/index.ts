@@ -37,10 +37,42 @@ export class Storage {
         await localforage.setItem('data', parsed)
     }
 
-    async hasTodayRecord() {
+    private async dataMethodHandler(data: any, method: (data: StorageType) => any): Promise<any> {
+        return new Promise(async (resolve) => {
+            if (data && this.isDataValid(data)) return resolve(method(data))
+            const _data = await this.getSafeData()
+            if (!_data) return resolve(null)
+            return resolve(method(_data))
+        })
+    }
+
+    async hasTodayRecord(data?: StorageType) {
+        return await this.dataMethodHandler(data, (data) => {
+            const today = new Date().toISOString().split('T')[0]
+            return data.records.some((x) => x.date === today)
+        })
+    }
+
+    async getCurrentSettings(data?: StorageType): Promise<StorageType['settings'] | null> {
+        return await this.dataMethodHandler(data, (data) => {
+            return data.settings
+        })
+    }
+
+    async createRecord(date: Date) {
         const data = await this.getSafeData()
-        if (!data || !data.records) return false
-        const today = new Date().toISOString().split('T')[0]
-        return data.records.some((x) => x.date === today)
+        if (!data) return
+
+        const settings = await this.getCurrentSettings(data)
+        if (!settings) return
+
+        const record = {
+            date: date.toISOString().split('T')[0],
+            settings,
+            items: [],
+        }
+
+        data.records.push(record)
+        await this.setData(data)
     }
 }
