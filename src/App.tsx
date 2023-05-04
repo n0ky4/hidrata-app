@@ -17,9 +17,9 @@ function App() {
     const [debug, setDebug] = useState(false)
 
     // Data validation / First use detection
-    const checkData = () => {
+    const checkData = async () => {
         if (!storage) return
-        storage.getData().then((retrievedData) => {
+        await storage.getData().then((retrievedData) => {
             if (retrievedData && storage.isDataValid(retrievedData))
                 setData(retrievedData as StorageType)
             else storage.clearData()
@@ -27,8 +27,6 @@ function App() {
     }
 
     useEffect(() => {
-        checkData()
-
         document.addEventListener('keydown', (e) => {
             // ctrl d
             if (e.ctrlKey && e.key === 'd') {
@@ -37,15 +35,20 @@ function App() {
             }
         })
         ;(async () => {
-            const hasDate = await storage.hasTodayRecord()
-            console.log(hasDate)
+            await checkData()
+
+            const data = await storage.getSafeData()
+            if (!data) return
+
+            const hasToday = await storage.hasTodayRecord(data)
+            if (!hasToday) await storage.createRecord(new Date())
         })()
     }, [])
 
     if (!data)
         return (
             <main>
-                <FirstUsePopup storage={storage} onReady={checkData} />
+                <FirstUsePopup storage={storage} />
             </main>
         )
 
