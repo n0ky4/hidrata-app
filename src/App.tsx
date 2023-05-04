@@ -139,6 +139,12 @@ function App() {
         await checkData()
     }
 
+    const handleItemDelete = async (id: string) => {
+        lg(`Deletando item ${id}`)
+        await storage.deleteItem(id)
+        await checkData()
+    }
+
     return (
         <>
             {debug && (
@@ -211,7 +217,9 @@ function App() {
                         {todayRecords.length ? (
                             // sort by createdAt
                             todayRecords.map((x) => {
-                                return <HistoryCard key={x.id} item={x} />
+                                return (
+                                    <HistoryCard key={x.id} item={x} onDelete={handleItemDelete} />
+                                )
                             })
                         ) : (
                             <span className='text-zinc-400'>

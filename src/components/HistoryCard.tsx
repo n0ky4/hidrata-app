@@ -6,9 +6,10 @@ import { GhostButton } from './GhostButton'
 
 interface HistoryCardProps {
     item: StorageType['records'][0]['items'][0]
+    onDelete: (id: string) => void
 }
 
-export function HistoryCard({ item }: HistoryCardProps) {
+export function HistoryCard({ item, onDelete }: HistoryCardProps) {
     const [time, setTime] = useState('há alguns minutos')
     const title = new Date(item.createdAt).toLocaleString()
 
@@ -40,7 +41,7 @@ export function HistoryCard({ item }: HistoryCardProps) {
                 <GhostButton>
                     <Pencil size={22} weight='bold' />
                 </GhostButton>
-                <GhostButton red={true}>
+                <GhostButton red={true} onClick={() => onDelete(item.id)}>
                     <Trash size={22} weight='bold' />
                 </GhostButton>
             </div>

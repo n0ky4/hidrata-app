@@ -124,4 +124,14 @@ export class Storage {
         todayRecord.items.push(record)
         await this.setData(data)
     }
+
+    async deleteItem(id: string) {
+        const data = await this.getSafeData()
+        if (!data) return
+        const today = new Date().toISOString().split('T')[0]
+        const todayRecord = data.records.find((x) => x.date === today)
+        if (!todayRecord) return
+        todayRecord.items = todayRecord.items.filter((x) => x.id !== id)
+        await this.setData(data)
+    }
 }
