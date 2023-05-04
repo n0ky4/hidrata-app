@@ -28,6 +28,7 @@ function App() {
 
     useEffect(() => {
         checkData()
+
         document.addEventListener('keydown', (e) => {
             // ctrl d
             if (e.ctrlKey && e.key === 'd') {
@@ -35,6 +36,10 @@ function App() {
                 setDebug((prev) => !prev)
             }
         })
+        ;(async () => {
+            const hasDate = await storage.hasTodayRecord()
+            console.log(hasDate)
+        })()
     }, [])
 
     if (!data)
@@ -129,7 +134,7 @@ function App() {
                         <HistoryCard />
                     </div>
                     <a
-                        href='/history'
+                        href='#'
                         className='text-sm text-center text-zinc-400 hover:underline hover:text-white transition-colors'
                     >
                         ver registros anteriores
