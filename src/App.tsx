@@ -15,15 +15,32 @@ function App() {
     const storage = useStorage()
     const [data, setData] = useState<StorageType | null>(null)
     const [debug, setDebug] = useState(false)
+    const [showFirstUse, setShowFirstUse] = useState(false)
+
+    function lg(msg: any) {
+        console.log('[data-handler]', msg)
+    }
 
     // Data validation / First use detection
     const checkData = async () => {
-        if (!storage) return
-        await storage.getData().then((retrievedData) => {
-            if (retrievedData && storage.isDataValid(retrievedData))
-                setData(retrievedData as StorageType)
-            else storage.clearData()
-        })
+        lg('Checando dados...')
+        if (!storage) {
+            lg('Não há storage, mostrando tela de primeiro uso')
+            setShowFirstUse(true)
+            return
+        }
+
+        lg('Retornando dados...')
+        const data = await storage.getSafeData()
+        if (!data) {
+            lg('Não há dados, mostrando tela de primeiro uso')
+            setShowFirstUse(true)
+            return
+        }
+
+        lg('Há dados, mostrando tela principal e setando state...')
+        setData(data as StorageType)
+        setShowFirstUse(false)
     }
 
     useEffect(() => {
@@ -36,6 +53,9 @@ function App() {
         })
         ;(async () => {
             await checkData()
+            storage.onDataChange((data) => {
+                setData(data as StorageType)
+            })
 
             const data = await storage.getSafeData()
             if (!data) return
@@ -45,12 +65,13 @@ function App() {
         })()
     }, [])
 
-    if (!data)
+    if (showFirstUse)
         return (
             <main>
                 <FirstUsePopup storage={storage} />
             </main>
         )
+    else if (!data) return null
 
     const { age, weight } = data.settings
     const dailyWater = getRecommendedWaterIntake(age, weight)
