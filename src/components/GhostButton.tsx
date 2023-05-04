@@ -6,15 +6,16 @@ interface GhostButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
     red?: boolean
 }
 
-export function GhostButton({ children, red }: GhostButtonProps) {
+export function GhostButton(props: GhostButtonProps) {
     return (
         <button
             className={clsx(
                 'p-2 rounded-lg bg-transparent text-zinc-300 hover:text-white transition-colors',
-                red ? 'hover:bg-red-500' : 'hover:bg-white/20'
+                props.red ? 'hover:bg-red-500' : 'hover:bg-white/20'
             )}
+            {...props}
         >
-            {children}
+            {props.children}
         </button>
     )
 }
