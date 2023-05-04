@@ -128,6 +128,12 @@ function App() {
                     <div className='flex flex-col gap-2'>
                         <HistoryCard />
                     </div>
+                    <a
+                        href='/history'
+                        className='text-sm text-center text-zinc-400 hover:underline hover:text-white transition-colors'
+                    >
+                        ver registros anteriores
+                    </a>
                 </section>
             </main>
         </>
