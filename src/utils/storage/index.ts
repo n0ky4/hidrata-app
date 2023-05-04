@@ -6,6 +6,7 @@ export function useStorage() {
 }
 
 export class Storage {
+    private onDataChangeCallbacks: Array<(data: StorageType) => void> = []
     constructor(doNotConfigLocalForage?: boolean) {
         if (!doNotConfigLocalForage)
             localforage.config({
@@ -16,6 +17,14 @@ export class Storage {
 
     isDataValid(data: any) {
         return StorageSchema.safeParse(data).success
+    }
+
+    onDataChange(callback: (data: StorageType) => void) {
+        this.onDataChangeCallbacks.push(callback)
+    }
+
+    private async triggerOnDataChange(data: StorageType) {
+        this.onDataChangeCallbacks.forEach((x) => x(data))
     }
 
     async clearData() {
@@ -35,6 +44,7 @@ export class Storage {
     async setData(data: StorageType) {
         const parsed = StorageSchema.parse(data)
         await localforage.setItem('data', parsed)
+        await this.triggerOnDataChange(parsed)
     }
 
     private async dataMethodHandler(data: any, method: (data: StorageType) => any): Promise<any> {
@@ -43,6 +53,20 @@ export class Storage {
             const _data = await this.getSafeData()
             if (!_data) return resolve(null)
             return resolve(method(_data))
+        })
+    }
+
+    async getRecordsFrom(date: Date, data?: StorageType) {
+        return await this.dataMethodHandler(data, (data) => {
+            const dateStr = date.toISOString().split('T')[0]
+            return data.records.filter((x) => x.date === dateStr)
+        })
+    }
+
+    async getTodayRecords(data?: StorageType) {
+        return await this.dataMethodHandler(data, (data) => {
+            const today = new Date().toISOString().split('T')[0]
+            return data.records.filter((x) => x.date === today)
         })
     }
 
