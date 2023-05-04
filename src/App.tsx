@@ -1,4 +1,7 @@
 import { GearSix } from '@phosphor-icons/react'
+import dayjs from 'dayjs'
+import 'dayjs/locale/pt-br'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import { useEffect, useState } from 'react'
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar'
 import colors from 'tailwindcss/colors'
@@ -10,8 +13,6 @@ import { WaterIntakeDropdown } from './components/WaterIntakeDropdown'
 import { useStorage } from './utils/storage'
 import { StorageType } from './utils/storage/schema'
 import { getRecommendedWaterIntake } from './utils/water'
-// import all moment locales
-import 'moment/min/locales'
 
 function App() {
     const storage = useStorage()
@@ -50,6 +51,9 @@ function App() {
     }
 
     useEffect(() => {
+        dayjs.extend(relativeTime)
+        dayjs.locale('pt-BR')
+
         document.addEventListener('keydown', (e) => {
             // ctrl d
             if (e.ctrlKey && e.key === 'd') {
@@ -98,7 +102,11 @@ function App() {
                 return
             }
             lg('(data update hook) há registros de hoje, atualizando state...')
-            setTodayRecords(items)
+            setTodayRecords(
+                items.sort((a, b) => {
+                    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                })
+            )
         })()
     }, [data])
 
@@ -201,6 +209,7 @@ function App() {
                     <h1 className='text-xl font-bold'>Histórico</h1>
                     <div className='flex flex-col gap-2'>
                         {todayRecords.length ? (
+                            // sort by createdAt
                             todayRecords.map((x) => {
                                 return <HistoryCard key={x.id} item={x} />
                             })

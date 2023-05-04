@@ -1,5 +1,5 @@
 import { Pencil, Trash } from '@phosphor-icons/react'
-import moment from 'moment-timezone'
+import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { StorageType } from '../utils/storage/schema'
 import { GhostButton } from './GhostButton'
@@ -17,8 +17,7 @@ export function HistoryCard({ item }: HistoryCardProps) {
     }
 
     const updateTime = () => {
-        const tz = moment.tz.guess()
-        const formatted = moment(item.createdAt).tz(tz).fromNow()
+        const formatted = dayjs(item.createdAt).fromNow()
         setTime(formatted)
     }
 
