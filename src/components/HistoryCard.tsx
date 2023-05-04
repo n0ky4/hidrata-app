@@ -12,7 +12,7 @@ export function HistoryCard() {
                 <GhostButton>
                     <Pencil size={22} weight='bold' />
                 </GhostButton>
-                <GhostButton className='hover:bg-red-500'>
+                <GhostButton red={true}>
                     <Trash size={22} weight='bold' />
                 </GhostButton>
             </div>
