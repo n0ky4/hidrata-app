@@ -32,6 +32,7 @@ export const StorageSchema = z.object({
             }),
             items: z
                 .object({
+                    id: z.string().uuid(),
                     type: z.union([z.literal('glass'), z.literal('bottle'), z.literal('custom')]),
                     ml: z.coerce.number().int().positive().optional(),
                     createdAt: z.coerce.string(),
