@@ -27,10 +27,9 @@ export type FirstSettingsType = z.infer<typeof FirstSettingsSchema>
 
 interface FirstUsePopupProps {
     storage: Storage
-    onReady: () => void
 }
 
-export default function FirstUsePopup({ storage, onReady }: FirstUsePopupProps) {
+export default function FirstUsePopup({ storage }: FirstUsePopupProps) {
     const {
         register,
         handleSubmit,
@@ -48,7 +47,7 @@ export default function FirstUsePopup({ storage, onReady }: FirstUsePopupProps) 
         })
 
         await storage.setData(parsed)
-        onReady()
+        window.location.reload()
     }
 
     return (
