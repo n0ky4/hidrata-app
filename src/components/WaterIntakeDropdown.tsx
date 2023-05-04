@@ -1,28 +1,50 @@
 import { Plus, PlusCircle } from '@phosphor-icons/react'
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu'
 import clsx from 'clsx'
+import { StorageType } from '../utils/storage/schema'
+
+type ItemsType = StorageType['records'][0]['items'][0]['type']
 
 type DropdownItem = {
+    id: ItemsType
     label: string
     icon?: React.ReactNode
     shortcut?: string
 }
 
-export function WaterIntakeDropdown() {
+interface WaterIntakeDropdownProps {
+    onAdd: (type: ItemsType, ml?: number) => void
+}
+
+export function WaterIntakeDropdown({ onAdd }: WaterIntakeDropdownProps) {
     const isMac = navigator.userAgent.indexOf('Mac') !== -1
     const dropdownItems: DropdownItem[] = [
         {
+            id: 'glass',
             label: 'Copo (250ml)',
             shortcut: 'N',
         },
         {
+            id: 'bottle',
             label: 'Garrafa (500ml)',
         },
         {
+            id: 'custom',
             label: 'Adicionar',
             icon: <PlusCircle weight='bold' size={18} />,
         },
     ]
+
+    const handleClick = (id: ItemsType) => {
+        if (id === 'custom') {
+            const ml = prompt('Quantos ml de água você bebeu?')
+            if (!ml) return
+            const parsed = parseInt(ml)
+            if (!isNaN(parsed)) onAdd(id, parsed)
+            return
+        }
+        onAdd(id)
+    }
 
     return (
         <DropdownMenuPrimitive.Root>
@@ -41,13 +63,14 @@ export function WaterIntakeDropdown() {
                         'bg-white dark:bg-zinc-900'
                     )}
                 >
-                    {dropdownItems.map(({ label, icon, shortcut }, i) => (
+                    {dropdownItems.map(({ id, label, icon, shortcut }) => (
                         <DropdownMenuPrimitive.Item
-                            key={`${label}-${i}`}
+                            key={id}
                             className={clsx(
                                 'flex cursor-default select-none items-center rounded-md px-2 py-2 text-sm outline-none',
                                 'text-gray-400 focus:bg-gray-50 dark:text-zinc-500 dark:focus:bg-zinc-800'
                             )}
+                            onClick={() => handleClick(id)}
                         >
                             <div className='text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5 flex-grow'>
                                 {icon}

@@ -10,12 +10,18 @@ import { WaterIntakeDropdown } from './components/WaterIntakeDropdown'
 import { useStorage } from './utils/storage'
 import { StorageType } from './utils/storage/schema'
 import { getRecommendedWaterIntake } from './utils/water'
+// import all moment locales
+import 'moment/min/locales'
 
 function App() {
     const storage = useStorage()
     const [data, setData] = useState<StorageType | null>(null)
     const [debug, setDebug] = useState(false)
     const [showFirstUse, setShowFirstUse] = useState(false)
+    const [todayRecords, setTodayRecords] = useState<StorageType['records'][0]['items']>([])
+    const [percent, setPercent] = useState(0)
+    const [waterIntake, setWaterIntake] = useState(0)
+    const [recommendedWater, setRecommendedWater] = useState(0)
 
     function lg(msg: any) {
         console.log('[data-handler]', msg)
@@ -53,10 +59,6 @@ function App() {
         })
         ;(async () => {
             await checkData()
-            storage.onDataChange((data) => {
-                setData(data as StorageType)
-            })
-
             const data = await storage.getSafeData()
             if (!data) return
 
@@ -64,6 +66,41 @@ function App() {
             if (!hasToday) await storage.createRecord(new Date())
         })()
     }, [])
+
+    useEffect(() => {
+        lg('(data update hook) checando dados...')
+        if (!data) {
+            lg('(data update hook) dados inexistentes, retornando...')
+            return
+        }
+
+        lg('(data update hook) dados existentes, checando validade...')
+        const isValid = storage.isDataValid(data)
+        if (!isValid) {
+            lg('(data update hook) dados inválidos, limpando dados e recarregando página.')
+            storage.clearData()
+            window.location.reload()
+        }
+
+        lg('(data update hook) dados válidos, atualizando percentual...')
+        const { age, weight } = data.settings
+        const dailyWater = getRecommendedWaterIntake(age, weight)
+        lg(`(data update hook) qtd. água diária: ${dailyWater}`)
+        lg('(data update hook) atualizando state água diária...')
+        setRecommendedWater(dailyWater)
+        lg('(data update hook) atualizando state porcentagem...')
+        setPercent((waterIntake / dailyWater) * 100)
+        ;(async () => {
+            lg('(data update hook) pegando registros de hoje...')
+            const items = await storage.getTodayRecordItems(data)
+            if (!items) {
+                lg('(data update hook) não há registros de hoje, retornando...')
+                return
+            }
+            lg('(data update hook) há registros de hoje, atualizando state...')
+            setTodayRecords(items)
+        })()
+    }, [data])
 
     if (showFirstUse)
         return (
@@ -82,7 +119,17 @@ function App() {
         ['Qtd. Água Diária', `${dailyWater} ml`],
     ]
 
-    const percentage = 56
+    const handleAddWaterIntake = async (
+        type: StorageType['records'][0]['items'][0]['type'],
+        ml?: number
+    ) => {
+        lg(`Adicionando água do tipo ${type} (ml: ${ml})`)
+        await storage.addItem({
+            type,
+            ml,
+        })
+        await checkData()
+    }
 
     return (
         <>
@@ -125,7 +172,7 @@ function App() {
                     </p>
                     <div className='mx-auto w-full max-w-[240px] select-none'>
                         <CircularProgressbarWithChildren
-                            value={percentage}
+                            value={percent}
                             strokeWidth={4}
                             styles={buildStyles({
                                 strokeLinecap: 'round',
@@ -137,32 +184,41 @@ function App() {
                         >
                             <div className='flex items-center gap-2'>
                                 <div className='relative group'>
-                                    <h1 className='text-6xl font-bold text-blue-100'>
-                                        {percentage}%
-                                    </h1>
+                                    <h1 className='text-6xl font-bold text-blue-100'>{percent}%</h1>
                                     <span className='absolute -bottom-3 left-0 text-sm font-mono text-zinc-500 opacity-0 transition-opacity group-hover:opacity-100'>
-                                        1512/2700ml
+                                        {waterIntake}/{recommendedWater}ml
                                     </span>
                                 </div>
-                                <WaterIntakeDropdown />
+                                <WaterIntakeDropdown onAdd={handleAddWaterIntake} />
                             </div>
                         </CircularProgressbarWithChildren>
                     </div>
                     <p className='text-sm text-zinc-400'>
-                        Vamos lá! Ainda faltam <b>1000ml</b> de água 💧
+                        Vamos lá! Ainda faltam <b>{recommendedWater - waterIntake}ml</b> de água 💧
                     </p>
                 </section>
                 <section className='flex flex-col gap-2'>
                     <h1 className='text-xl font-bold'>Histórico</h1>
                     <div className='flex flex-col gap-2'>
-                        <HistoryCard />
+                        {todayRecords.length ? (
+                            todayRecords.map((x) => {
+                                return <HistoryCard key={x.id} item={x} />
+                            })
+                        ) : (
+                            <span className='text-zinc-400'>
+                                Não há nenhum registro de hoje... Que tal começar tomando um copo
+                                d'água? 😊💧
+                            </span>
+                        )}
                     </div>
-                    <a
-                        href='#'
-                        className='text-sm text-center text-zinc-400 hover:underline hover:text-white transition-colors'
-                    >
-                        ver registros anteriores
-                    </a>
+                    <div className='flex items-center justify-center w-full'>
+                        <a
+                            href='#'
+                            className='block text-sm text-zinc-400 underline hover:text-white transition-colors'
+                        >
+                            ver registros anteriores
+                        </a>
+                    </div>
                 </section>
             </main>
         </>

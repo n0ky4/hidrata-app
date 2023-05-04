@@ -5,8 +5,13 @@ export function useStorage() {
     return new Storage()
 }
 
+interface RecordItem {
+    type: StorageType['records'][0]['items'][0]['type']
+    ml?: number
+    createdAt?: string
+}
+
 export class Storage {
-    private onDataChangeCallbacks: Array<(data: StorageType) => void> = []
     constructor(doNotConfigLocalForage?: boolean) {
         if (!doNotConfigLocalForage)
             localforage.config({
@@ -16,15 +21,11 @@ export class Storage {
     }
 
     isDataValid(data: any) {
-        return StorageSchema.safeParse(data).success
-    }
-
-    onDataChange(callback: (data: StorageType) => void) {
-        this.onDataChangeCallbacks.push(callback)
-    }
-
-    private async triggerOnDataChange(data: StorageType) {
-        this.onDataChangeCallbacks.forEach((x) => x(data))
+        try {
+            return StorageSchema.safeParse(data).success
+        } catch {
+            return false
+        }
     }
 
     async clearData() {
@@ -32,19 +33,26 @@ export class Storage {
     }
 
     async getData(): Promise<any> {
-        return await localforage.getItem('data')
+        try {
+            return await localforage.getItem('data')
+        } catch {
+            return null
+        }
     }
 
     async getSafeData(): Promise<StorageType | null> {
         const data = await this.getData()
         if (!data) return null
-        return StorageSchema.parse(data)
+        try {
+            return StorageSchema.parse(data)
+        } catch (err) {
+            return null
+        }
     }
 
     async setData(data: StorageType) {
         const parsed = StorageSchema.parse(data)
         await localforage.setItem('data', parsed)
-        await this.triggerOnDataChange(parsed)
     }
 
     private async dataMethodHandler(data: any, method: (data: StorageType) => any): Promise<any> {
@@ -63,10 +71,12 @@ export class Storage {
         })
     }
 
-    async getTodayRecords(data?: StorageType) {
-        return await this.dataMethodHandler(data, (data) => {
+    async getTodayRecordItems(data?: StorageType): Promise<StorageType['records'][0]['items']> {
+        return await this.dataMethodHandler(data, async (data) => {
             const today = new Date().toISOString().split('T')[0]
-            return data.records.filter((x) => x.date === today)
+            const record = data.records.find((x) => x.date === today)
+            if (!record) return []
+            return record.items
         })
     }
 
@@ -97,6 +107,21 @@ export class Storage {
         }
 
         data.records.push(record)
+        await this.setData(data)
+    }
+
+    async addItem(item: RecordItem) {
+        const data = await this.getSafeData()
+        if (!data) return
+        const record: StorageType['records'][0]['items'][0] = {
+            id: crypto.randomUUID(),
+            createdAt: item.createdAt ?? new Date().toISOString(),
+            ...item,
+        }
+        const today = new Date().toISOString().split('T')[0]
+        const todayRecord = data.records.find((x) => x.date === today)
+        if (!todayRecord) return
+        todayRecord.items.push(record)
         await this.setData(data)
     }
 }
