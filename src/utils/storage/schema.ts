@@ -40,7 +40,7 @@ export const StorageSchema = z.object({
                 .array(),
         })
         .array()
-        .optional(),
+        .default([]),
 })
 
 export type StorageType = z.infer<typeof StorageSchema>
