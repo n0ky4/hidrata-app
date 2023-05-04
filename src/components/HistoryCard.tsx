@@ -10,6 +10,7 @@ interface HistoryCardProps {
 
 export function HistoryCard({ item }: HistoryCardProps) {
     const [time, setTime] = useState('há alguns minutos')
+    const title = new Date(item.createdAt).toLocaleString()
 
     const labels = {
         glass: "um copo d'água",
@@ -30,7 +31,7 @@ export function HistoryCard({ item }: HistoryCardProps) {
     return (
         <div className='flex items-center gap-4 w-full px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors'>
             <div className='w-1/4 text-sm text-zinc-400'>
-                <span>{time}</span>
+                <span title={title}>{time}</span>
             </div>
             <div className='w-full'>
                 bebeu {item.type === 'custom' ? `${item.ml} ml de água` : labels[item.type]}
