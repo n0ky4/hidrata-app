@@ -20,7 +20,7 @@ function App() {
     const [debug, setDebug] = useState(false)
     const [showFirstUse, setShowFirstUse] = useState(false)
     const [todayRecords, setTodayRecords] = useState<StorageType['records'][0]['items']>([])
-    const [percent, setPercent] = useState(0)
+    const [percent, setPercent] = useState('0')
     const [waterIntake, setWaterIntake] = useState(0)
     const [recommendedWater, setRecommendedWater] = useState(0)
 
@@ -92,9 +92,13 @@ function App() {
         lg(`(data update hook) qtd. água diária: ${dailyWater}`)
         lg('(data update hook) atualizando state água diária...')
         setRecommendedWater(dailyWater)
-        lg('(data update hook) atualizando state porcentagem...')
-        setPercent((waterIntake / dailyWater) * 100)
         ;(async () => {
+            const waterIntake = await storage.calculateTodayWaterIntake()
+            lg(`(data update hook) qtd. água ingerida hoje: ${waterIntake}`)
+
+            lg('(data update hook) atualizando state água ingerida hoje...')
+            setWaterIntake(waterIntake)
+
             lg('(data update hook) pegando registros de hoje...')
             const items = await storage.getTodayRecordItems(data)
             if (!items) {
@@ -107,6 +111,9 @@ function App() {
                     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
                 })
             )
+
+            lg('(data update hook) atualizando state porcentagem...')
+            setPercent(((waterIntake / dailyWater) * 100).toFixed(0))
         })()
     }, [data])
 
@@ -186,7 +193,7 @@ function App() {
                     </p>
                     <div className='mx-auto w-full max-w-[240px] select-none'>
                         <CircularProgressbarWithChildren
-                            value={percent}
+                            value={parseInt(percent)}
                             strokeWidth={4}
                             styles={buildStyles({
                                 strokeLinecap: 'round',
