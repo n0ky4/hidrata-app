@@ -215,16 +215,18 @@ function App() {
                         </CircularProgressbarWithChildren>
                     </div>
 
-                    {recommendedWater - waterIntake > 0 ? (
-                        <p className='text-sm text-zinc-400'>
-                            Vamos lá! Ainda faltam <b>{recommendedWater - waterIntake}ml</b> de água
-                            💧
-                        </p>
-                    ) : (
-                        <p className='text-sm text-zinc-400'>
-                            Parabéns! Você ingeriu a quantidade de água recomendada de hoje 😊👏
-                        </p>
-                    )}
+                    <p className='text-sm text-zinc-400'>
+                        {recommendedWater - waterIntake > 0 ? (
+                            <>
+                                Vamos lá! Ainda faltam <b>{recommendedWater - waterIntake}ml</b> de
+                                água💧
+                            </>
+                        ) : (
+                            <>
+                                Parabéns! Você ingeriu a quantidade de água recomendada de hoje 😊👏
+                            </>
+                        )}
+                    </p>
                 </section>
                 <section className='flex flex-col gap-2'>
                     <h1 className='text-xl font-bold'>Histórico</h1>
