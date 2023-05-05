@@ -191,10 +191,10 @@ function App() {
                     <p className='font-semibold text-lg text-zinc-200 uppercase'>
                         Consumo Diário de Água
                     </p>
-                    <div className='mx-auto w-full max-w-[240px] select-none'>
+                    <div className='mx-auto w-full max-w-[300px] select-none'>
                         <CircularProgressbarWithChildren
                             value={parseInt(percent)}
-                            strokeWidth={4}
+                            strokeWidth={5}
                             styles={buildStyles({
                                 strokeLinecap: 'round',
                                 pathTransitionDuration: 0.5,
@@ -214,9 +214,17 @@ function App() {
                             </div>
                         </CircularProgressbarWithChildren>
                     </div>
-                    <p className='text-sm text-zinc-400'>
-                        Vamos lá! Ainda faltam <b>{recommendedWater - waterIntake}ml</b> de água 💧
-                    </p>
+
+                    {recommendedWater - waterIntake > 0 ? (
+                        <p className='text-sm text-zinc-400'>
+                            Vamos lá! Ainda faltam <b>{recommendedWater - waterIntake}ml</b> de água
+                            💧
+                        </p>
+                    ) : (
+                        <p className='text-sm text-zinc-400'>
+                            Parabéns! Você ingeriu a quantidade de água recomendada de hoje 😊👏
+                        </p>
+                    )}
                 </section>
                 <section className='flex flex-col gap-2'>
                     <h1 className='text-xl font-bold'>Histórico</h1>
