@@ -41,7 +41,7 @@ export function HistoryCard({ item, onDelete }: HistoryCardProps) {
                 <GhostButton>
                     <Pencil size={22} weight='bold' />
                 </GhostButton>
-                <GhostButton red={true} onClick={() => onDelete(item.id)}>
+                <GhostButton red onClick={() => onDelete(item.id)}>
                     <Trash size={22} weight='bold' />
                 </GhostButton>
             </div>
