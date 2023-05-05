@@ -93,6 +93,27 @@ export class Storage {
         })
     }
 
+    async calculateTodayWaterIntake(data?: StorageType) {
+        return await this.dataMethodHandler(data, async (data) => {
+            const today = new Date().toISOString().split('T')[0]
+            const record = data.records.find((x) => x.date === today)
+            if (!record) return 0
+            const sum = record.items.reduce((acc, item) => {
+                switch (item.type) {
+                    case 'custom':
+                        return acc + (item.ml ?? 0)
+                    case 'glass':
+                        return acc + 250
+                    case 'bottle':
+                        return acc + 500
+                    default:
+                        return acc
+                }
+            }, 0)
+            return sum
+        })
+    }
+
     async createRecord(date: Date) {
         const data = await this.getSafeData()
         if (!data) return
