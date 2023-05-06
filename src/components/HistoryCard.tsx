@@ -10,7 +10,7 @@ interface HistoryCardProps {
 }
 
 export function HistoryCard({ item, onDelete }: HistoryCardProps) {
-    const [time, setTime] = useState('há alguns minutos')
+    const [time, setTime] = useState('há poucos segundos')
     const title = new Date(item.createdAt).toLocaleString()
 
     const labels = {
