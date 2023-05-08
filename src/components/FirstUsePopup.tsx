@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Storage } from '../utils/storage'
 import { StorageSchema } from '../utils/storage/schema'
+import Modal from './Modal'
 
 const FirstSettingsSchema = z.object({
     age: z.coerce
@@ -51,13 +52,13 @@ export default function FirstUsePopup({ storage }: FirstUsePopupProps) {
     }
 
     return (
-        <div className='fixed top-0 left-0 w-screen h-screen p-5 pt-20'>
-            <div className='max-w-xl mx-auto z-10 relative p-6 rounded-xl bg-zinc-800 flex flex-col gap-4'>
-                <h1 className='text-2xl font-bold'>Primeiras configurações</h1>
-                <p className='text-md'>
-                    Olá, seja bem-vindo(a) ao <b>hidrata-app</b>, vamos começar? Informe sua idade e
-                    seu peso para calcularmos a quantidade diária de água ideal para você ;)
-                </p>
+        <Modal show={true} canClose={false}>
+            <Modal.Title>Primeiras configurações</Modal.Title>
+            <Modal.Description>
+                Olá, seja bem-vindo(a) ao <b>hidrata-app</b>, vamos começar? Informe sua idade e seu
+                peso para calcularmos a quantidade diária de água ideal para você ;)
+            </Modal.Description>
+            <Modal.Content>
                 <form className='flex flex-col gap-4' onSubmit={handleSubmit(setSettings)}>
                     <div className='flex flex-col gap-2'>
                         <label htmlFor='height' className='font-semibold'>
@@ -98,8 +99,7 @@ export default function FirstUsePopup({ storage }: FirstUsePopupProps) {
                         </button>
                     </div>
                 </form>
-            </div>
-            <div className='absolute top-0 left-0 w-full h-full bg-[rgba(0,0,0,.5)]'></div>
-        </div>
+            </Modal.Content>
+        </Modal>
     )
 }
