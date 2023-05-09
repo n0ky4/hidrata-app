@@ -23,6 +23,7 @@ Coisas que preciso/planejo fazer no projeto.
 
 ## ✨ Aparência
 
+-   [ ] Adicionar ícone/arte quando não houver registros
 -   [ ] Melhorar o design
 -   [ ] Animações
 -   [ ] Temas
