@@ -4,6 +4,14 @@ export const StorageSchema = z.object({
     settings: z.object({
         age: z.coerce.number().int().positive(),
         weight: z.coerce.number().int().positive(),
+        containers: z
+            .object({
+                id: z.string().uuid(),
+                name: z.string(),
+                ml: z.coerce.number().int().positive(),
+            })
+            .array()
+            .default([]),
         notify: z
             .object({
                 enabled: z.coerce.boolean(),
