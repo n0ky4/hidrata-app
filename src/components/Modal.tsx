@@ -12,8 +12,6 @@ type SubComponentNode = {
 
 interface ModalProps {
     children: React.ReactNode
-    title?: string | React.ReactNode
-    description?: string | React.ReactNode
     show: boolean
     canClose?: boolean
     onModalClose?: () => void
