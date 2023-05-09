@@ -5,14 +5,16 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import { useEffect, useState } from 'react'
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar'
 import colors from 'tailwindcss/colors'
+import CustomWaterIntakeModal from './components/CustomWaterIntakeModal'
 import { Debug } from './components/Debug'
 import FirstUsePopup from './components/FirstUsePopup'
 import { GhostButton } from './components/GhostButton'
-import { HistoryCard } from './components/HistoryCard'
+import { RecordCard } from './components/RecordCard'
 import { WaterIntakeDropdown } from './components/WaterIntakeDropdown'
+import { clamp, getRecommendedWaterIntake } from './utils/helpers'
+import log from './utils/log'
 import { useStorage } from './utils/storage'
 import { StorageType } from './utils/storage/schema'
-import { getRecommendedWaterIntake } from './utils/water'
 
 function App() {
     const storage = useStorage()
@@ -20,32 +22,29 @@ function App() {
     const [debug, setDebug] = useState(false)
     const [showFirstUse, setShowFirstUse] = useState(false)
     const [todayRecords, setTodayRecords] = useState<StorageType['records'][0]['items']>([])
-    const [percent, setPercent] = useState('0')
+    const [percent, setPercent] = useState(0)
     const [waterIntake, setWaterIntake] = useState(0)
     const [recommendedWater, setRecommendedWater] = useState(0)
-
-    function lg(msg: any) {
-        console.log('[data-handler]', msg)
-    }
+    const [showCustomWaterIntakeModal, setShowCustomWaterIntakeModal] = useState(false)
 
     // Data validation / First use detection
     const checkData = async () => {
-        lg('Checando dados...')
+        log.info('checando dados...', 'validation')
         if (!storage) {
-            lg('Não há storage, mostrando tela de primeiro uso')
+            log.warn('não há storage, mostrando tela de primeiro uso', 'validation')
             setShowFirstUse(true)
             return
         }
 
-        lg('Retornando dados...')
+        log.info('retornando dados...', 'validation')
         const data = await storage.getSafeData()
         if (!data) {
-            lg('Não há dados, mostrando tela de primeiro uso')
+            log.warn('não há dados, mostrando tela de primeiro uso', 'validation')
             setShowFirstUse(true)
             return
         }
 
-        lg('Há dados, mostrando tela principal e setando state...')
+        log.info('há dados, mostrando tela principal e setando state...', 'validation')
         setData(data as StorageType)
         setShowFirstUse(false)
     }
@@ -54,13 +53,16 @@ function App() {
         dayjs.extend(relativeTime)
         dayjs.locale('pt-BR')
 
-        document.addEventListener('keydown', (e) => {
-            // ctrl d
-            if (e.ctrlKey && e.key === 'd') {
-                e.preventDefault()
-                setDebug((prev) => !prev)
-            }
-        })
+        if (import.meta.env.DEV) {
+            document.addEventListener('keydown', (e) => {
+                // ctrl d
+                if (e.ctrlKey && e.key === 'd') {
+                    e.preventDefault()
+                    setDebug((prev) => !prev)
+                }
+            })
+        }
+
         ;(async () => {
             await checkData()
             const data = await storage.getSafeData()
@@ -72,48 +74,49 @@ function App() {
     }, [])
 
     useEffect(() => {
-        lg('(data update hook) checando dados...')
+        log.info('checando dados...', 'data')
         if (!data) {
-            lg('(data update hook) dados inexistentes, retornando...')
+            log.info('dados inexistentes, retornando...', 'data')
             return
         }
 
-        lg('(data update hook) dados existentes, checando validade...')
+        log.info('dados existentes, checando validade...', 'data')
         const isValid = storage.isDataValid(data)
         if (!isValid) {
-            lg('(data update hook) dados inválidos, limpando dados e recarregando página.')
+            log.info('dados inválidos, limpando dados e recarregando página.', 'data')
             storage.clearData()
             window.location.reload()
         }
 
-        lg('(data update hook) dados válidos, atualizando percentual...')
+        log.info('dados válidos, atualizando percentual...', 'data')
         const { age, weight } = data.settings
         const dailyWater = getRecommendedWaterIntake(age, weight)
-        lg(`(data update hook) qtd. água diária: ${dailyWater}`)
-        lg('(data update hook) atualizando state água diária...')
+        log.info(`qtd. água diária: ${dailyWater}`, 'data')
+        log.info('atualizando state água diária...', 'data')
         setRecommendedWater(dailyWater)
         ;(async () => {
             const waterIntake = await storage.calculateTodayWaterIntake()
-            lg(`(data update hook) qtd. água ingerida hoje: ${waterIntake}`)
+            log.info(`qtd. água ingerida hoje: ${waterIntake}`, 'data')
 
-            lg('(data update hook) atualizando state água ingerida hoje...')
+            log.info('atualizando state água ingerida hoje...', 'data')
             setWaterIntake(waterIntake)
 
-            lg('(data update hook) pegando registros de hoje...')
+            log.info('pegando registros de hoje...', 'data')
             const items = await storage.getTodayRecordItems(data)
             if (!items) {
-                lg('(data update hook) não há registros de hoje, retornando...')
+                log.info('não há registros de hoje, retornando...', 'data')
                 return
             }
-            lg('(data update hook) há registros de hoje, atualizando state...')
+            log.info('há registros de hoje, atualizando state...', 'data')
             setTodayRecords(
                 items.sort((a, b) => {
                     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
                 })
             )
 
-            lg('(data update hook) atualizando state porcentagem...')
-            setPercent(((waterIntake / dailyWater) * 100).toFixed(0))
+            log.info('atualizando state porcentagem...', 'data')
+            const percent = Number(((waterIntake / dailyWater) * 100).toFixed(0))
+            setPercent(percent)
         })()
     }, [data])
 
@@ -138,7 +141,7 @@ function App() {
         type: StorageType['records'][0]['items'][0]['type'],
         ml?: number
     ) => {
-        lg(`Adicionando água do tipo ${type} (ml: ${ml})`)
+        log.info(`adicionando água do tipo ${type}${ml ? ` (ml: ${ml})` : ''}`)
         await storage.addItem({
             type,
             ml,
@@ -147,14 +150,14 @@ function App() {
     }
 
     const handleItemDelete = async (id: string) => {
-        lg(`Deletando item ${id}`)
+        log.info(`deletando item ${id}`)
         await storage.deleteItem(id)
         await checkData()
     }
 
     return (
         <>
-            {debug && (
+            {debug && import.meta.env.DEV && (
                 <Debug>
                     <div className='my-5'>
                         <h1 className='font-white font-semibold text-xl'>Dados</h1>
@@ -176,6 +179,11 @@ function App() {
                     </div>
                 </Debug>
             )}
+            <CustomWaterIntakeModal
+                onSave={(quantity: number) => handleAddWaterIntake('custom', quantity)}
+                show={showCustomWaterIntakeModal}
+                onModalClose={() => setShowCustomWaterIntakeModal(false)}
+            />
             <nav>
                 <div className='max-w-screen-md mx-auto p-4 border-b-2 flex items-center justify-between border-zinc-700'>
                     <h1 className='text-2xl font-white font-semibold'>hidrata-app</h1>
@@ -193,7 +201,7 @@ function App() {
                     </p>
                     <div className='mx-auto w-full max-w-[300px] select-none'>
                         <CircularProgressbarWithChildren
-                            value={parseInt(percent)}
+                            value={clamp(percent, 0, 100)}
                             strokeWidth={5}
                             styles={buildStyles({
                                 strokeLinecap: 'round',
@@ -205,12 +213,17 @@ function App() {
                         >
                             <div className='flex items-center gap-2'>
                                 <div className='relative group'>
-                                    <h1 className='text-6xl font-bold text-blue-100'>{percent}%</h1>
+                                    <h1 className='text-6xl font-bold text-blue-100'>
+                                        {percent <= 999 ? percent : '+999'}%
+                                    </h1>
                                     <span className='absolute -bottom-3 left-0 text-sm font-mono text-zinc-500 opacity-0 transition-opacity group-hover:opacity-100'>
                                         {waterIntake}/{recommendedWater}ml
                                     </span>
                                 </div>
-                                <WaterIntakeDropdown onAdd={handleAddWaterIntake} />
+                                <WaterIntakeDropdown
+                                    onAdd={handleAddWaterIntake}
+                                    onOpenModal={() => setShowCustomWaterIntakeModal(true)}
+                                />
                             </div>
                         </CircularProgressbarWithChildren>
                     </div>
@@ -218,7 +231,7 @@ function App() {
                     <p className='text-sm text-zinc-400'>
                         {recommendedWater - waterIntake > 0 ? (
                             <>
-                                Vamos lá! Ainda faltam <b>{recommendedWater - waterIntake}ml</b> de
+                                Vamos lá! Ainda faltam <b>{recommendedWater - waterIntake} ml</b> de
                                 água💧
                             </>
                         ) : (
@@ -232,10 +245,9 @@ function App() {
                     <h1 className='text-xl font-bold'>Histórico</h1>
                     <div className='flex flex-col gap-2'>
                         {todayRecords.length ? (
-                            // sort by createdAt
                             todayRecords.map((x) => {
                                 return (
-                                    <HistoryCard key={x.id} item={x} onDelete={handleItemDelete} />
+                                    <RecordCard key={x.id} item={x} onDelete={handleItemDelete} />
                                 )
                             })
                         ) : (

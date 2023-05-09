@@ -14,19 +14,20 @@ type DropdownItem = {
 
 interface WaterIntakeDropdownProps {
     onAdd: (type: ItemsType, ml?: number) => void
+    onOpenModal?: () => void
 }
 
-export function WaterIntakeDropdown({ onAdd }: WaterIntakeDropdownProps) {
+export function WaterIntakeDropdown({ onAdd, onOpenModal }: WaterIntakeDropdownProps) {
     const isMac = navigator.userAgent.indexOf('Mac') !== -1
     const dropdownItems: DropdownItem[] = [
         {
             id: 'glass',
-            label: 'Copo (250ml)',
+            label: 'Copo (250 ml)',
             shortcut: 'N',
         },
         {
             id: 'bottle',
-            label: 'Garrafa (500ml)',
+            label: 'Garrafa (500 ml)',
         },
         {
             id: 'custom',
@@ -36,13 +37,7 @@ export function WaterIntakeDropdown({ onAdd }: WaterIntakeDropdownProps) {
     ]
 
     const handleClick = (id: ItemsType) => {
-        if (id === 'custom') {
-            const ml = prompt('Quantos ml de água você bebeu?')
-            if (!ml) return
-            const parsed = parseInt(ml)
-            if (!isNaN(parsed)) onAdd(id, parsed)
-            return
-        }
+        if (id === 'custom') return onOpenModal ? onOpenModal() : null
         onAdd(id)
     }
 
