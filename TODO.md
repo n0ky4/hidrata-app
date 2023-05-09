@@ -6,7 +6,7 @@ Coisas que preciso/planejo fazer no projeto.
 
 -   [ ] Editar registro
 -   [ ] Atalhos personalizados
--   [ ] Modal de ml custom
+-   [x] Modal de ml custom
     -   [ ] Salvar ml custom
 -   [ ] Página de configuração
 -   [ ] Página de registros anteriores
