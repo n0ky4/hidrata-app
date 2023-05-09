@@ -61,7 +61,7 @@ export default function FirstUsePopup({ storage }: FirstUsePopupProps) {
             <Modal.Content>
                 <form className='flex flex-col gap-4' onSubmit={handleSubmit(setSettings)}>
                     <div className='flex flex-col gap-2'>
-                        <label htmlFor='height' className='font-semibold'>
+                        <label htmlFor='age' className='font-semibold'>
                             Idade
                         </label>
                         <input
