@@ -5,7 +5,7 @@ import { WithChildren } from '../utils/types'
 import { GhostButton } from './GhostButton'
 
 type SubComponentNode = {
-    type: {
+    type?: {
         name?: string
     }
 }
@@ -31,19 +31,20 @@ function Modal({ children, show, onModalClose, canClose = true }: ModalProps) {
 
     const subComponents = subComponentList.map((key) => {
         return React.Children.map(children, (child) => {
-            return (child as SubComponentNode).type.name === key ? child : null
+            return child && (child as SubComponentNode)?.type?.name === key ? child : null
         })
     })
 
-    const title = subComponents.find(
-        (component) => component && (component as SubComponentNode[])[0].type.name === 'Title'
-    )
-    const description = subComponents.find(
-        (component) => component && (component as SubComponentNode[])[0].type.name === 'Description'
-    )
-    const content = subComponents.find(
-        (component) => component && (component as SubComponentNode[])[0].type.name === 'Content'
-    )
+    const title = subComponents.filter(
+        (component) => component && (component as SubComponentNode[])[0]?.type?.name === 'Title'
+    )[0]
+    const description = subComponents.filter(
+        (component) =>
+            component && (component as SubComponentNode[])[0]?.type?.name === 'Description'
+    )[0]
+    const content = subComponents.filter(
+        (component) => component && (component as SubComponentNode[])[0]?.type?.name === 'Content'
+    )[0]
 
     return (
         <Transition.Root show={show}>
