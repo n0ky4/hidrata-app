@@ -22,12 +22,12 @@ export function WaterIntakeDropdown({ onAdd, onOpenModal }: WaterIntakeDropdownP
     const dropdownItems: DropdownItem[] = [
         {
             id: 'glass',
-            label: 'Copo (250ml)',
+            label: 'Copo (250 ml)',
             shortcut: 'N',
         },
         {
             id: 'bottle',
-            label: 'Garrafa (500ml)',
+            label: 'Garrafa (500 ml)',
         },
         {
             id: 'custom',

@@ -228,7 +228,7 @@ function App() {
                     <p className='text-sm text-zinc-400'>
                         {recommendedWater - waterIntake > 0 ? (
                             <>
-                                Vamos lá! Ainda faltam <b>{recommendedWater - waterIntake}ml</b> de
+                                Vamos lá! Ainda faltam <b>{recommendedWater - waterIntake} ml</b> de
                                 água💧
                             </>
                         ) : (
