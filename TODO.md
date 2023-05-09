@@ -30,3 +30,8 @@ Coisas que preciso/planejo fazer no projeto.
     -   [ ] Tema claro
     -   [ ] Cor de destaque personalizada
 -   [ ] Responsividade
+
+## 📚 Documentação
+
+-   [ ] Documentar código
+-   [ ] Criar um README.md
