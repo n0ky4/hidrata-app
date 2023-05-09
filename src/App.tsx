@@ -8,7 +8,7 @@ import colors from 'tailwindcss/colors'
 import { Debug } from './components/Debug'
 import FirstUsePopup from './components/FirstUsePopup'
 import { GhostButton } from './components/GhostButton'
-import { HistoryCard } from './components/HistoryCard'
+import { RecordCard } from './components/RecordCard'
 import { WaterIntakeDropdown } from './components/WaterIntakeDropdown'
 import { clamp, getRecommendedWaterIntake } from './utils/helpers'
 import log from './utils/log'
@@ -229,10 +229,9 @@ function App() {
                     <h1 className='text-xl font-bold'>Histórico</h1>
                     <div className='flex flex-col gap-2'>
                         {todayRecords.length ? (
-                            // sort by createdAt
                             todayRecords.map((x) => {
                                 return (
-                                    <HistoryCard key={x.id} item={x} onDelete={handleItemDelete} />
+                                    <RecordCard key={x.id} item={x} onDelete={handleItemDelete} />
                                 )
                             })
                         ) : (
