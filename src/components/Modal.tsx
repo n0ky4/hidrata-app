@@ -1,7 +1,14 @@
 import { Transition } from '@headlessui/react'
 import { X } from '@phosphor-icons/react'
 import React, { Fragment } from 'react'
+import { WithChildren } from '../utils/types'
 import { GhostButton } from './GhostButton'
+
+type SubComponentNode = {
+    type: {
+        name?: string
+    }
+}
 
 interface ModalProps {
     children: React.ReactNode
@@ -12,10 +19,9 @@ interface ModalProps {
     onModalClose?: () => void
 }
 
-type SubComponentType = {
-    type: {
-        name?: string
-    }
+interface ContentProps {
+    children: React.ReactNode
+    flex?: boolean
 }
 
 function Modal({ children, show, onModalClose, canClose = true }: ModalProps) {
@@ -27,13 +33,19 @@ function Modal({ children, show, onModalClose, canClose = true }: ModalProps) {
 
     const subComponents = subComponentList.map((key) => {
         return React.Children.map(children, (child) => {
-            return (child as ).type.name === key ? child : null
+            return (child as SubComponentNode).type.name === key ? child : null
         })
     })
 
-    const title = subComponents.find((component) => component[0].type.name === 'Title')
-    const description = subComponents.find((component) => component[0].type.name === 'Description')
-    const content = subComponents.find((component) => component[0].type.name === 'Content')
+    const title = subComponents.find(
+        (component) => component && (component as SubComponentNode[])[0].type.name === 'Title'
+    )
+    const description = subComponents.find(
+        (component) => component && (component as SubComponentNode[])[0].type.name === 'Description'
+    )
+    const content = subComponents.find(
+        (component) => component && (component as SubComponentNode[])[0].type.name === 'Content'
+    )
 
     return (
         <Transition.Root show={show}>
@@ -79,18 +91,18 @@ function Modal({ children, show, onModalClose, canClose = true }: ModalProps) {
     )
 }
 
-const Title = ({ children }: { children: React.ReactNode }) => {
+const Title = ({ children }: WithChildren) => {
     return <h1 className='text-2xl font-bold'>{children}</h1>
 }
 Modal.Title = Title
 
-const Description = ({ children }: { children: React.ReactNode }) => {
+const Description = ({ children }: WithChildren) => {
     return <p className='text-md'>{children}</p>
 }
 Modal.Description = Description
 
-const Content = ({ children }: { children: React.ReactNode }) => {
-    return <>{children}</>
+const Content = ({ children, flex = false }: ContentProps) => {
+    return flex ? <div className='flex flex-col gap-4'>{children}</div> : <>{children}</>
 }
 Modal.Content = Content
 
