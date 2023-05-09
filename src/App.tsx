@@ -213,7 +213,9 @@ function App() {
                         >
                             <div className='flex items-center gap-2'>
                                 <div className='relative group'>
-                                    <h1 className='text-6xl font-bold text-blue-100'>{percent}%</h1>
+                                    <h1 className='text-6xl font-bold text-blue-100'>
+                                        {percent <= 999 ? percent : '+999'}%
+                                    </h1>
                                     <span className='absolute -bottom-3 left-0 text-sm font-mono text-zinc-500 opacity-0 transition-opacity group-hover:opacity-100'>
                                         {waterIntake}/{recommendedWater}ml
                                     </span>
