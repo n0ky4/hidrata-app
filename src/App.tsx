@@ -22,7 +22,7 @@ function App() {
     const [debug, setDebug] = useState(false)
     const [showFirstUse, setShowFirstUse] = useState(false)
     const [todayRecords, setTodayRecords] = useState<StorageType['records'][0]['items']>([])
-    const [percent, setPercent] = useState('0')
+    const [percent, setPercent] = useState(0)
     const [waterIntake, setWaterIntake] = useState(0)
     const [recommendedWater, setRecommendedWater] = useState(0)
     const [showCustomWaterIntakeModal, setShowCustomWaterIntakeModal] = useState(false)
@@ -115,7 +115,8 @@ function App() {
             )
 
             log.info('atualizando state porcentagem...', 'data')
-            setPercent(((waterIntake / dailyWater) * 100).toFixed(0))
+            const percent = Number(((waterIntake / dailyWater) * 100).toFixed(0))
+            setPercent(percent)
         })()
     }, [data])
 
