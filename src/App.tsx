@@ -10,10 +10,10 @@ import FirstUsePopup from './components/FirstUsePopup'
 import { GhostButton } from './components/GhostButton'
 import { HistoryCard } from './components/HistoryCard'
 import { WaterIntakeDropdown } from './components/WaterIntakeDropdown'
+import { clamp, getRecommendedWaterIntake } from './utils/helpers'
 import log from './utils/log'
 import { useStorage } from './utils/storage'
 import { StorageType } from './utils/storage/schema'
-import { getRecommendedWaterIntake } from './utils/water'
 
 function App() {
     const storage = useStorage()
@@ -190,7 +190,7 @@ function App() {
                     </p>
                     <div className='mx-auto w-full max-w-[300px] select-none'>
                         <CircularProgressbarWithChildren
-                            value={parseInt(percent)}
+                            value={clamp(percent, 0, 100)}
                             strokeWidth={5}
                             styles={buildStyles({
                                 strokeLinecap: 'round',
