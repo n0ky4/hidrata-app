@@ -47,7 +47,7 @@ function Modal({ children, show, onModalClose, canClose = true }: ModalProps) {
     )[0]
 
     return (
-        <Transition.Root show={show}>
+        <Transition.Root show={show} as={Fragment}>
             <div className='fixed top-0 left-0 w-screen h-screen px-5 py-16 z-50 overflow-auto'>
                 <Transition.Child
                     as={Fragment}

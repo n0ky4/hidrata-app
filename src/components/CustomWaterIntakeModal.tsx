@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import Modal from './Modal'
@@ -28,12 +29,23 @@ export default function CustomWaterIntakeModal({
     onModalClose,
 }: CustomWaterIntakeModalProps) {
     const {
+        setFocus,
         register,
         handleSubmit,
         formState: { errors },
     } = useForm<QuantityType>({
         resolver: zodResolver(QuantitySchema),
     })
+
+    useEffect(() => {
+        if (show) {
+            // I don't know why, but this is necessary to make the input focus
+            // Without this, the input will not focus
+            setTimeout(() => {
+                setFocus('quantity', { shouldSelect: true })
+            }, 1)
+        }
+    }, [show])
 
     const addQuantity = async ({ quantity }: QuantityType) => {
         onSave(quantity)
