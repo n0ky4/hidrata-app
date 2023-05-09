@@ -10,6 +10,7 @@ import FirstUsePopup from './components/FirstUsePopup'
 import { GhostButton } from './components/GhostButton'
 import { HistoryCard } from './components/HistoryCard'
 import { WaterIntakeDropdown } from './components/WaterIntakeDropdown'
+import log from './utils/log'
 import { useStorage } from './utils/storage'
 import { StorageType } from './utils/storage/schema'
 import { getRecommendedWaterIntake } from './utils/water'
@@ -24,28 +25,24 @@ function App() {
     const [waterIntake, setWaterIntake] = useState(0)
     const [recommendedWater, setRecommendedWater] = useState(0)
 
-    function lg(msg: any) {
-        console.log('[data-handler]', msg)
-    }
-
     // Data validation / First use detection
     const checkData = async () => {
-        lg('Checando dados...')
+        log.info('checando dados...', 'validation')
         if (!storage) {
-            lg('Não há storage, mostrando tela de primeiro uso')
+            log.warn('não há storage, mostrando tela de primeiro uso', 'validation')
             setShowFirstUse(true)
             return
         }
 
-        lg('Retornando dados...')
+        log.info('retornando dados...', 'validation')
         const data = await storage.getSafeData()
         if (!data) {
-            lg('Não há dados, mostrando tela de primeiro uso')
+            log.warn('não há dados, mostrando tela de primeiro uso', 'validation')
             setShowFirstUse(true)
             return
         }
 
-        lg('Há dados, mostrando tela principal e setando state...')
+        log.info('há dados, mostrando tela principal e setando state...', 'validation')
         setData(data as StorageType)
         setShowFirstUse(false)
     }
@@ -72,47 +69,47 @@ function App() {
     }, [])
 
     useEffect(() => {
-        lg('(data update hook) checando dados...')
+        log.info('checando dados...', 'data')
         if (!data) {
-            lg('(data update hook) dados inexistentes, retornando...')
+            log.info('dados inexistentes, retornando...', 'data')
             return
         }
 
-        lg('(data update hook) dados existentes, checando validade...')
+        log.info('dados existentes, checando validade...', 'data')
         const isValid = storage.isDataValid(data)
         if (!isValid) {
-            lg('(data update hook) dados inválidos, limpando dados e recarregando página.')
+            log.info('dados inválidos, limpando dados e recarregando página.', 'data')
             storage.clearData()
             window.location.reload()
         }
 
-        lg('(data update hook) dados válidos, atualizando percentual...')
+        log.info('dados válidos, atualizando percentual...', 'data')
         const { age, weight } = data.settings
         const dailyWater = getRecommendedWaterIntake(age, weight)
-        lg(`(data update hook) qtd. água diária: ${dailyWater}`)
-        lg('(data update hook) atualizando state água diária...')
+        log.info(`qtd. água diária: ${dailyWater}`, 'data')
+        log.info('atualizando state água diária...', 'data')
         setRecommendedWater(dailyWater)
         ;(async () => {
             const waterIntake = await storage.calculateTodayWaterIntake()
-            lg(`(data update hook) qtd. água ingerida hoje: ${waterIntake}`)
+            log.info(`qtd. água ingerida hoje: ${waterIntake}`, 'data')
 
-            lg('(data update hook) atualizando state água ingerida hoje...')
+            log.info('atualizando state água ingerida hoje...', 'data')
             setWaterIntake(waterIntake)
 
-            lg('(data update hook) pegando registros de hoje...')
+            log.info('pegando registros de hoje...', 'data')
             const items = await storage.getTodayRecordItems(data)
             if (!items) {
-                lg('(data update hook) não há registros de hoje, retornando...')
+                log.info('não há registros de hoje, retornando...', 'data')
                 return
             }
-            lg('(data update hook) há registros de hoje, atualizando state...')
+            log.info('há registros de hoje, atualizando state...', 'data')
             setTodayRecords(
                 items.sort((a, b) => {
                     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
                 })
             )
 
-            lg('(data update hook) atualizando state porcentagem...')
+            log.info('atualizando state porcentagem...', 'data')
             setPercent(((waterIntake / dailyWater) * 100).toFixed(0))
         })()
     }, [data])
@@ -138,7 +135,7 @@ function App() {
         type: StorageType['records'][0]['items'][0]['type'],
         ml?: number
     ) => {
-        lg(`Adicionando água do tipo ${type} (ml: ${ml})`)
+        log.info(`adicionando água do tipo ${type}${ml ? ` (ml: ${ml})` : ''}`)
         await storage.addItem({
             type,
             ml,
@@ -147,7 +144,7 @@ function App() {
     }
 
     const handleItemDelete = async (id: string) => {
-        lg(`Deletando item ${id}`)
+        log.info(`deletando item ${id}`)
         await storage.deleteItem(id)
         await checkData()
     }
