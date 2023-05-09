@@ -5,6 +5,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import { useEffect, useState } from 'react'
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar'
 import colors from 'tailwindcss/colors'
+import CustomWaterIntakeModal from './components/CustomWaterIntakeModal'
 import { Debug } from './components/Debug'
 import FirstUsePopup from './components/FirstUsePopup'
 import { GhostButton } from './components/GhostButton'
@@ -24,6 +25,7 @@ function App() {
     const [percent, setPercent] = useState('0')
     const [waterIntake, setWaterIntake] = useState(0)
     const [recommendedWater, setRecommendedWater] = useState(0)
+    const [showCustomWaterIntakeModal, setShowCustomWaterIntakeModal] = useState(false)
 
     // Data validation / First use detection
     const checkData = async () => {
@@ -176,6 +178,11 @@ function App() {
                     </div>
                 </Debug>
             )}
+            <CustomWaterIntakeModal
+                onSave={(quantity: number) => handleAddWaterIntake('custom', quantity)}
+                show={showCustomWaterIntakeModal}
+                onModalClose={() => setShowCustomWaterIntakeModal(false)}
+            />
             <nav>
                 <div className='max-w-screen-md mx-auto p-4 border-b-2 flex items-center justify-between border-zinc-700'>
                     <h1 className='text-2xl font-white font-semibold'>hidrata-app</h1>
@@ -210,7 +217,10 @@ function App() {
                                         {waterIntake}/{recommendedWater}ml
                                     </span>
                                 </div>
-                                <WaterIntakeDropdown onAdd={handleAddWaterIntake} />
+                                <WaterIntakeDropdown
+                                    onAdd={handleAddWaterIntake}
+                                    onOpenModal={() => setShowCustomWaterIntakeModal(true)}
+                                />
                             </div>
                         </CircularProgressbarWithChildren>
                     </div>
