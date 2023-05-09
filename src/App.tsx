@@ -51,13 +51,16 @@ function App() {
         dayjs.extend(relativeTime)
         dayjs.locale('pt-BR')
 
-        document.addEventListener('keydown', (e) => {
-            // ctrl d
-            if (e.ctrlKey && e.key === 'd') {
-                e.preventDefault()
-                setDebug((prev) => !prev)
-            }
-        })
+        if (import.meta.env.DEV) {
+            document.addEventListener('keydown', (e) => {
+                // ctrl d
+                if (e.ctrlKey && e.key === 'd') {
+                    e.preventDefault()
+                    setDebug((prev) => !prev)
+                }
+            })
+        }
+
         ;(async () => {
             await checkData()
             const data = await storage.getSafeData()
@@ -151,7 +154,7 @@ function App() {
 
     return (
         <>
-            {debug && (
+            {debug && import.meta.env.DEV && (
                 <Debug>
                     <div className='my-5'>
                         <h1 className='font-white font-semibold text-xl'>Dados</h1>
