@@ -47,7 +47,7 @@ function Modal({ children, show, onModalClose, canClose = true }: ModalProps) {
 
     return (
         <Transition.Root show={show}>
-            <div className='fixed top-0 left-0 w-screen h-screen p-5 pt-20 z-50'>
+            <div className='fixed top-0 left-0 w-screen h-screen px-5 py-16 z-50 overflow-auto'>
                 <Transition.Child
                     as={Fragment}
                     enter='ease-out duration-200'
@@ -80,7 +80,7 @@ function Modal({ children, show, onModalClose, canClose = true }: ModalProps) {
                     leaveTo='opacity-0'
                 >
                     <div
-                        className='absolute top-0 left-0 w-full h-full bg-black/50'
+                        className='fixed top-0 left-0 w-full h-full bg-black/50'
                         onClick={() => closeModal()}
                     ></div>
                 </Transition.Child>
@@ -100,7 +100,7 @@ const Description = ({ children }: WithChildren) => {
 Modal.Description = Description
 
 const Content = ({ children, flex = false }: ContentProps) => {
-    return flex ? <div className='flex flex-col gap-4'>{children}</div> : <>{children}</>
+    return flex ? <div className='flex flex-col gap-4'>{children}</div> : <div>{children}</div>
 }
 Modal.Content = Content
 
