@@ -43,7 +43,7 @@ function DropdownItem({ type, icon, label, ml, handleClick, shortcut, isMac }: D
             )}
             onClick={_handleClick}
         >
-            <div className='text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5 flex-grow'>
+            <div className='text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5 flex-grow overflow-hidden'>
                 {icon}
                 <span>
                     {type === 'custom' ? (label ? `${label} (${ml} ml)` : `${ml} ml`) : label}
