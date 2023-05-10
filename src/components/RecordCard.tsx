@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react'
 import { StorageType } from '../utils/storage/schema'
 import { GhostButton } from './GhostButton'
 
-interface HistoryCardProps {
+interface RecordCardProps {
     item: StorageType['records'][0]['items'][0]
     onDelete: (id: string) => void
 }
 
-export function HistoryCard({ item, onDelete }: HistoryCardProps) {
+export function RecordCard({ item, onDelete }: RecordCardProps) {
     const [time, setTime] = useState('há poucos segundos')
     const title = new Date(item.createdAt).toLocaleString()
 
