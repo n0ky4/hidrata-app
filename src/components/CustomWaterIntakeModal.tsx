@@ -14,20 +14,22 @@ const QuantitySchema = z.object({
         .finite('Quantidade inválida')
         .int('Quantidade inválida!')
         .positive('Quantidade inválida!'),
-    name: z.string().max(50, 'Esse nome é muito grande!').optional(),
+    name: z.string().max(32, 'Esse nome é muito grande!').optional(),
 })
 
 export type QuantityType = z.infer<typeof QuantitySchema>
 
 interface CustomWaterIntakeModalProps {
     show: boolean
-    onSave: (quantity: number) => void
+    onAddWaterIntake: (ml: number) => void
+    onSaveCustomContainer: (ml: number, name?: string) => void
     onModalClose: () => void
 }
 
 export default function CustomWaterIntakeModal({
     show,
-    onSave,
+    onSaveCustomContainer,
+    onAddWaterIntake,
     onModalClose,
 }: CustomWaterIntakeModalProps) {
     const {
@@ -52,7 +54,7 @@ export default function CustomWaterIntakeModal({
     }
 
     const [randomName, setRandomName] = useState(getRandomName())
-    const [checkbox, setCheckbox] = useState(false)
+    const [checkbox, setCheckbox] = useState<boolean>(false)
 
     useEffect(() => {
         if (show) {
@@ -64,8 +66,9 @@ export default function CustomWaterIntakeModal({
         }
     }, [show])
 
-    const addQuantity = async ({ quantity }: QuantityType) => {
-        onSave(quantity)
+    const addQuantity = async ({ quantity, name }: QuantityType) => {
+        if (checkbox) onSaveCustomContainer(quantity, name)
+        else onAddWaterIntake(quantity)
         onModalClose()
     }
 
@@ -90,11 +93,7 @@ export default function CustomWaterIntakeModal({
                             </span>
                         )}
                     </div>
-                    <Checkbox
-                        name='save-custom'
-                        checked={checkbox}
-                        onClick={(e) => setCheckbox(e as boolean)}
-                    >
+                    <Checkbox name='save-custom' checked={checkbox} onClick={(e) => setCheckbox(e)}>
                         Salvar
                     </Checkbox>
                     {checkbox && (

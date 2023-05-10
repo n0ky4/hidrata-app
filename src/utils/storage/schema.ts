@@ -7,7 +7,7 @@ export const StorageSchema = z.object({
         containers: z
             .object({
                 id: z.string().uuid(),
-                name: z.string(),
+                label: z.string().optional(),
                 ml: z.coerce.number().int().positive(),
             })
             .array()
@@ -39,12 +39,20 @@ export const StorageSchema = z.object({
                 weight: z.coerce.number().int().positive(),
             }),
             items: z
-                .object({
-                    id: z.string().uuid(),
-                    type: z.union([z.literal('glass'), z.literal('bottle'), z.literal('custom')]),
-                    ml: z.coerce.number().int().positive().optional(),
-                    createdAt: z.coerce.string(),
-                })
+                .union([
+                    z.object({
+                        id: z.string(),
+                        type: z.union([z.literal('glass'), z.literal('bottle')]),
+                        createdAt: z.coerce.string(),
+                    }),
+                    z.object({
+                        id: z.string(),
+                        type: z.literal('custom'),
+                        ml: z.coerce.number().int().positive(),
+                        label: z.string().optional(),
+                        createdAt: z.coerce.string(),
+                    }),
+                ])
                 .array(),
         })
         .array()
@@ -52,3 +60,7 @@ export const StorageSchema = z.object({
 })
 
 export type StorageType = z.infer<typeof StorageSchema>
+export type RecordItemType = StorageType['records'][0]['items']
+export type ItemsType = StorageType['records'][0]['items'][0]['type']
+export type ContainerType = StorageType['settings']['containers']
+export type SettingsType = StorageType['settings']

@@ -14,18 +14,19 @@ import { WaterIntakeDropdown } from './components/WaterIntakeDropdown'
 import { clamp, getRecommendedWaterIntake } from './utils/helpers'
 import log from './utils/log'
 import { useStorage } from './utils/storage'
-import { StorageType } from './utils/storage/schema'
+import { ContainerType, ItemsType, RecordItemType, StorageType } from './utils/storage/schema'
 
 function App() {
     const storage = useStorage()
     const [data, setData] = useState<StorageType | null>(null)
     const [debug, setDebug] = useState(false)
     const [showFirstUse, setShowFirstUse] = useState(false)
-    const [todayRecords, setTodayRecords] = useState<StorageType['records'][0]['items']>([])
+    const [todayRecords, setTodayRecords] = useState<RecordItemType>([])
     const [percent, setPercent] = useState(0)
     const [waterIntake, setWaterIntake] = useState(0)
     const [recommendedWater, setRecommendedWater] = useState(0)
     const [showCustomWaterIntakeModal, setShowCustomWaterIntakeModal] = useState(false)
+    const [containers, setContainers] = useState<ContainerType>([])
 
     // Data validation / First use detection
     const checkData = async () => {
@@ -88,11 +89,17 @@ function App() {
             window.location.reload()
         }
 
-        log.info('dados válidos, atualizando percentual...', 'data')
-        const { age, weight } = data.settings
+        log.info('dados válidos', 'data')
+        const { age, weight, containers } = data.settings
+
+        log.info(`containers: ${containers.length}`)
+        setContainers(containers)
+
         const dailyWater = getRecommendedWaterIntake(age, weight)
+
         log.info(`qtd. água diária: ${dailyWater}`, 'data')
         log.info('atualizando state água diária...', 'data')
+
         setRecommendedWater(dailyWater)
         ;(async () => {
             const waterIntake = await storage.calculateTodayWaterIntake()
@@ -137,16 +144,20 @@ function App() {
         ['Qtd. Água Diária', `${dailyWater} ml`],
     ]
 
-    const handleAddWaterIntake = async (
-        type: StorageType['records'][0]['items'][0]['type'],
-        ml?: number
-    ) => {
-        log.info(`adicionando água do tipo ${type}${ml ? ` (ml: ${ml})` : ''}`)
+    const handleAddWaterIntake = async (type: ItemsType, ml?: number, label?: string) => {
+        log.info(`adicionando água; tipo: ${type}, ml: ${ml}, label: ${label}`)
         await storage.addItem({
             type,
             ml,
+            label,
         })
         await checkData()
+    }
+
+    const handleAddCustomContainer = async (ml: number, label?: string) => {
+        log.info(`adicionando container customizado; ml: ${ml}, label: ${label}`)
+        await storage.addContainer(ml, label)
+        await handleAddWaterIntake('custom', ml, label)
     }
 
     const handleItemDelete = async (id: string) => {
@@ -180,7 +191,8 @@ function App() {
                 </Debug>
             )}
             <CustomWaterIntakeModal
-                onSave={(quantity: number) => handleAddWaterIntake('custom', quantity)}
+                onSaveCustomContainer={handleAddCustomContainer}
+                onAddWaterIntake={(ml: number) => handleAddWaterIntake('custom', ml)}
                 show={showCustomWaterIntakeModal}
                 onModalClose={() => setShowCustomWaterIntakeModal(false)}
             />
@@ -221,6 +233,7 @@ function App() {
                                     </span>
                                 </div>
                                 <WaterIntakeDropdown
+                                    containers={containers}
                                     onAdd={handleAddWaterIntake}
                                     onOpenModal={() => setShowCustomWaterIntakeModal(true)}
                                 />

@@ -1,43 +1,87 @@
 import { Plus, PlusCircle } from '@phosphor-icons/react'
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu'
 import clsx from 'clsx'
-import { StorageType } from '../utils/storage/schema'
+import { getWaterMLFromType } from '../utils/helpers'
+import { ContainerType, ItemsType } from '../utils/storage/schema'
 
-type ItemsType = StorageType['records'][0]['items'][0]['type']
+type ItemsTypeAddCustom = ItemsType | 'add-custom'
 
-type DropdownItem = {
-    id: ItemsType
+type DropdownItemType = {
+    type: ItemsTypeAddCustom
     label: string
     icon?: React.ReactNode
     shortcut?: string
 }
 
 interface WaterIntakeDropdownProps {
-    onAdd: (type: ItemsType, ml?: number) => void
+    containers: ContainerType
+    onAdd: (type: ItemsType, ml?: number, label?: string) => void
     onOpenModal?: () => void
 }
 
-export function WaterIntakeDropdown({ onAdd, onOpenModal }: WaterIntakeDropdownProps) {
+interface DropdownItemProps {
+    type: ItemsTypeAddCustom
+    label?: string
+    icon?: React.ReactNode
+    shortcut?: string
+    ml?: number
+    isMac: boolean
+    handleClick: (id: ItemsTypeAddCustom, ml?: number, label?: string) => void
+}
+
+function DropdownItem({ type, icon, label, ml, handleClick, shortcut, isMac }: DropdownItemProps) {
+    const _handleClick = () => {
+        if (type === 'custom') return handleClick(type, ml, label)
+        handleClick(type)
+    }
+
+    return (
+        <DropdownMenuPrimitive.Item
+            className={clsx(
+                'flex cursor-default select-none items-center rounded-md px-2 py-2 text-sm outline-none',
+                'text-gray-400 focus:bg-gray-50 dark:text-zinc-500 dark:focus:bg-zinc-800'
+            )}
+            onClick={_handleClick}
+        >
+            <div className='text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5 flex-grow'>
+                {icon}
+                <span>
+                    {type === 'custom' ? (label ? `${label} (${ml} ml)` : `${ml} ml`) : label}
+                </span>
+            </div>
+            {shortcut && (
+                <span className='text-sm'>
+                    {isMac ? '⌘ + ' : 'Ctrl + '}
+                    {shortcut}
+                </span>
+            )}
+        </DropdownMenuPrimitive.Item>
+    )
+}
+
+export function WaterIntakeDropdown({ onAdd, onOpenModal, containers }: WaterIntakeDropdownProps) {
     const isMac = navigator.userAgent.indexOf('Mac') !== -1
-    const dropdownItems: DropdownItem[] = [
+
+    const dropdownItems: DropdownItemType[] = [
         {
-            id: 'glass',
-            label: 'Copo (250 ml)',
-            shortcut: 'N',
+            type: 'glass',
+            label: `Copo (${getWaterMLFromType('glass')} ml)`,
         },
         {
-            id: 'bottle',
-            label: 'Garrafa (500 ml)',
-        },
-        {
-            id: 'custom',
-            label: 'Adicionar',
-            icon: <PlusCircle weight='bold' size={18} />,
+            type: 'bottle',
+            label: `Garrafa (${getWaterMLFromType('bottle')} ml)`,
         },
     ]
 
-    const handleClick = (id: ItemsType) => {
-        if (id === 'custom') return onOpenModal ? onOpenModal() : null
+    const lastItem: DropdownItemType = {
+        type: 'add-custom',
+        label: 'Adicionar',
+        icon: <PlusCircle weight='bold' size={18} />,
+    }
+
+    const handleClick = (id: ItemsTypeAddCustom, ml?: number, label?: string) => {
+        if (id === 'add-custom') return onOpenModal ? onOpenModal() : null
+        if (id === 'custom') return onAdd(id, ml, label)
         onAdd(id)
     }
 
@@ -58,27 +102,41 @@ export function WaterIntakeDropdown({ onAdd, onOpenModal }: WaterIntakeDropdownP
                         'bg-white dark:bg-zinc-900'
                     )}
                 >
-                    {dropdownItems.map(({ id, label, icon, shortcut }) => (
-                        <DropdownMenuPrimitive.Item
-                            key={id}
-                            className={clsx(
-                                'flex cursor-default select-none items-center rounded-md px-2 py-2 text-sm outline-none',
-                                'text-gray-400 focus:bg-gray-50 dark:text-zinc-500 dark:focus:bg-zinc-800'
-                            )}
-                            onClick={() => handleClick(id)}
-                        >
-                            <div className='text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5 flex-grow'>
-                                {icon}
-                                <span className=''>{label}</span>
-                            </div>
-                            {shortcut && (
-                                <span className='text-sm'>
-                                    {isMac ? '⌘ + ' : 'Ctrl + '}
-                                    {shortcut}
-                                </span>
-                            )}
-                        </DropdownMenuPrimitive.Item>
+                    {dropdownItems.map(({ type, label, icon, shortcut }) => (
+                        <DropdownItem
+                            key={`${type}-${label}`}
+                            type={type}
+                            label={label}
+                            icon={icon}
+                            shortcut={shortcut}
+                            isMac={isMac}
+                            handleClick={handleClick}
+                        />
                     ))}
+
+                    {containers.map(({ id, ml, label }) => (
+                        <DropdownItem
+                            key={`${id}-${label}`}
+                            type='custom'
+                            label={label}
+                            ml={ml}
+                            isMac={isMac}
+                            handleClick={handleClick}
+                        />
+                    ))}
+
+                    <div className='h-[2px] bg-zinc-800 my-1' />
+
+                    {lastItem && (
+                        <DropdownItem
+                            type={lastItem.type}
+                            label={lastItem.label}
+                            icon={lastItem.icon}
+                            shortcut={lastItem.shortcut}
+                            isMac={isMac}
+                            handleClick={handleClick}
+                        />
+                    )}
                 </DropdownMenuPrimitive.Content>
             </DropdownMenuPrimitive.Portal>
         </DropdownMenuPrimitive.Root>

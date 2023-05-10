@@ -1,3 +1,5 @@
+import { ItemsType } from './storage/schema'
+
 export function getRecommendedWaterIntake(age: number, weight: number) {
     // Fonte: https://www.andf.com.br/noticias/agua-descubra-o-que-ela-tem-de-tao-especial-e-porque-e-fundamental-preserva-la
     if (age <= 17) return weight * 40
@@ -9,4 +11,15 @@ export function getRecommendedWaterIntake(age: number, weight: number) {
 export function clamp(num: number | string, min: number, max: number) {
     if (typeof num === 'string') num = Number(num)
     return Math.min(Math.max(num, min), max)
+}
+
+export function getWaterMLFromType(type: ItemsType) {
+    switch (type) {
+        case 'glass':
+            return 250
+        case 'bottle':
+            return 500
+        default:
+            return 0
+    }
 }

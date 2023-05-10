@@ -1,11 +1,12 @@
 import { Pencil, Trash } from '@phosphor-icons/react'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
-import { StorageType } from '../utils/storage/schema'
+import { getWaterMLFromType } from '../utils/helpers'
+import { RecordItemType } from '../utils/storage/schema'
 import { GhostButton } from './GhostButton'
 
 interface RecordCardProps {
-    item: StorageType['records'][0]['items'][0]
+    item: RecordItemType[0]
     onDelete: (id: string) => void
 }
 
@@ -29,13 +30,22 @@ export function RecordCard({ item, onDelete }: RecordCardProps) {
         return () => clearInterval(interval)
     }, [])
 
+    const mlTitle = (item.type === 'custom' ? item.ml : getWaterMLFromType(item.type)) + ' ml'
+
     return (
         <div className='flex items-center gap-4 w-full px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors'>
             <div className='w-1/4 text-sm text-zinc-400'>
                 <span title={title}>{time}</span>
             </div>
             <div className='w-full'>
-                bebeu {item.type === 'custom' ? `${item.ml} ml de água` : labels[item.type]}
+                <span title={mlTitle}>
+                    bebeu{' '}
+                    {item.type === 'custom'
+                        ? item.label
+                            ? `no(a) ${item.label}`
+                            : `${item.ml} ml de água`
+                        : labels[item.type]}
+                </span>
             </div>
             <div className='flex items-center gap-2'>
                 <GhostButton>

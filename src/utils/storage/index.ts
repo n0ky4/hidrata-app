@@ -1,13 +1,15 @@
 import localforage from 'localforage'
-import { StorageSchema, StorageType } from './schema'
+import { getWaterMLFromType } from '../helpers'
+import { ItemsType, RecordItemType, SettingsType, StorageSchema, StorageType } from './schema'
 
 export function useStorage() {
     return new Storage()
 }
 
 interface RecordItem {
-    type: StorageType['records'][0]['items'][0]['type']
+    type: ItemsType
     ml?: number
+    label?: string
     createdAt?: string
 }
 
@@ -71,7 +73,7 @@ export class Storage {
         })
     }
 
-    async getTodayRecordItems(data?: StorageType): Promise<StorageType['records'][0]['items']> {
+    async getTodayRecordItems(data?: StorageType): Promise<RecordItemType> {
         return await this.dataMethodHandler(data, async (data) => {
             const today = new Date().toISOString().split('T')[0]
             const record = data.records.find((x) => x.date === today)
@@ -87,7 +89,7 @@ export class Storage {
         })
     }
 
-    async getCurrentSettings(data?: StorageType): Promise<StorageType['settings'] | null> {
+    async getCurrentSettings(data?: StorageType): Promise<SettingsType | null> {
         return await this.dataMethodHandler(data, (data) => {
             return data.settings
         })
@@ -103,9 +105,9 @@ export class Storage {
                     case 'custom':
                         return acc + (item.ml ?? 0)
                     case 'glass':
-                        return acc + 250
+                        return acc + getWaterMLFromType('glass')
                     case 'bottle':
-                        return acc + 500
+                        return acc + getWaterMLFromType('bottle')
                     default:
                         return acc
                 }
@@ -134,14 +136,32 @@ export class Storage {
     async addItem(item: RecordItem) {
         const data = await this.getSafeData()
         if (!data) return
-        const record: StorageType['records'][0]['items'][0] = {
-            id: crypto.randomUUID(),
-            createdAt: item.createdAt ?? new Date().toISOString(),
-            ...item,
+
+        const createdAt = item.createdAt || new Date().toISOString()
+        let record: RecordItemType[0]
+
+        if (item.type === 'custom') {
+            if (!item.ml) throw new Error('Missing ml')
+
+            record = {
+                id: crypto.randomUUID(),
+                createdAt,
+                type: 'custom',
+                ml: item.ml,
+                label: item.label,
+            }
+        } else {
+            record = {
+                id: crypto.randomUUID(),
+                createdAt,
+                type: item.type,
+            }
         }
+
         const today = new Date().toISOString().split('T')[0]
         const todayRecord = data.records.find((x) => x.date === today)
-        if (!todayRecord) return
+        if (!todayRecord) throw new Error('Missing today record')
+
         todayRecord.items.push(record)
         await this.setData(data)
     }
@@ -153,6 +173,17 @@ export class Storage {
         const todayRecord = data.records.find((x) => x.date === today)
         if (!todayRecord) return
         todayRecord.items = todayRecord.items.filter((x) => x.id !== id)
+        await this.setData(data)
+    }
+
+    async addContainer(ml: number, label?: string) {
+        const data = await this.getSafeData()
+        if (!data) return
+        data.settings.containers.push({
+            id: crypto.randomUUID(),
+            ml,
+            label,
+        })
         await this.setData(data)
     }
 }
