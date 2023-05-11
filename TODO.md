@@ -26,6 +26,7 @@ Coisas que preciso/planejo fazer no projeto.
 -   [ ] Adicionar ícone/arte quando não houver registros
 -   [ ] Melhorar o design
 -   [ ] Animações
+    -   [ ] Animação de porcentagem incrementando
 -   [ ] Temas
     -   [ ] Tema claro
     -   [ ] Cor de destaque personalizada
