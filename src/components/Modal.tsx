@@ -1,6 +1,6 @@
 import { Transition } from '@headlessui/react'
 import { X } from '@phosphor-icons/react'
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { WithChildren } from '../utils/types'
 import { GhostButton } from './GhostButton'
 
@@ -45,6 +45,12 @@ function Modal({ children, show, onModalClose, canClose = true }: ModalProps) {
     const content = subComponents.filter(
         (component) => component && (component as SubComponentNode[])[0]?.type?.name === 'Content'
     )[0]
+
+    useEffect(() => {
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal()
+        })
+    }, [])
 
     return (
         <Transition.Root show={show} as={Fragment}>
