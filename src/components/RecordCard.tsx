@@ -8,9 +8,10 @@ import { GhostButton } from './GhostButton'
 interface RecordCardProps {
     item: RecordItemType[0]
     onDelete: (id: string) => void
+    onEdit: (id: string) => void
 }
 
-export function RecordCard({ item, onDelete }: RecordCardProps) {
+export function RecordCard({ item, onDelete, onEdit }: RecordCardProps) {
     const [time, setTime] = useState('há poucos segundos')
     const title = new Date(item.createdAt).toLocaleString()
 
@@ -48,10 +49,10 @@ export function RecordCard({ item, onDelete }: RecordCardProps) {
                 </span>
             </div>
             <div className='flex items-center gap-2'>
-                <GhostButton>
+                <GhostButton onClick={() => onEdit(item.id)}>
                     <Pencil size={22} weight='bold' />
                 </GhostButton>
-                <GhostButton red onClick={() => onDelete(item.id)}>
+                <GhostButton className='hover:bg-red-500' onClick={() => onDelete(item.id)}>
                     <Trash size={22} weight='bold' />
                 </GhostButton>
             </div>

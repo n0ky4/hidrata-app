@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import { getWaterMLFromType } from '../utils/helpers'
 import { ContainerType, ItemsType } from '../utils/storage/schema'
 
-type ItemsTypeAddCustom = ItemsType | 'add-custom'
+export type ItemsTypeAddCustom = ItemsType | 'add-custom'
 
 type DropdownItemType = {
     type: ItemsTypeAddCustom

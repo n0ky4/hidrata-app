@@ -7,6 +7,7 @@ import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-pro
 import colors from 'tailwindcss/colors'
 import CustomWaterIntakeModal from './components/CustomWaterIntakeModal'
 import { Debug } from './components/Debug'
+import EditItemModal, { EditChangesType, ItemEditDataType } from './components/EditItemModal'
 import FirstUsePopup from './components/FirstUsePopup'
 import { GhostButton } from './components/GhostButton'
 import { RecordCard } from './components/RecordCard'
@@ -27,6 +28,8 @@ function App() {
     const [recommendedWater, setRecommendedWater] = useState(0)
     const [showCustomWaterIntakeModal, setShowCustomWaterIntakeModal] = useState(false)
     const [containers, setContainers] = useState<ContainerType>([])
+    const [itemEditData, setItemEditData] = useState<ItemEditDataType | null>(null)
+    const [showEditItemModal, setShowEditItemModal] = useState(false)
 
     // Data validation / First use detection
     const checkData = async () => {
@@ -166,6 +169,28 @@ function App() {
         await checkData()
     }
 
+    const handleItemEdit = async (id: string, edit: EditChangesType) => {
+        log.info(`editando item ${id}; edit: ${JSON.stringify(edit)}`)
+    }
+
+    const handleOpenItemEditModal = async (id: string) => {
+        log.info(`editando item ${id}`)
+        const item = await storage.getItemById(id)
+        if (!item) return
+
+        if (item.type === 'custom') {
+            // if (item.label) {
+            //     setItemEditData({
+            //         id,
+            //         type: item.type,
+            //         quantity: item.ml,
+            //     })
+            // }
+        }
+
+        setShowEditItemModal(true)
+    }
+
     return (
         <>
             {debug && import.meta.env.DEV && (
@@ -195,6 +220,13 @@ function App() {
                 onAddWaterIntake={(ml: number) => handleAddWaterIntake('custom', ml)}
                 show={showCustomWaterIntakeModal}
                 onModalClose={() => setShowCustomWaterIntakeModal(false)}
+            />
+            <EditItemModal
+                data={itemEditData}
+                show={showEditItemModal}
+                containers={containers}
+                onEdit={handleItemEdit}
+                onModalClose={() => setShowEditItemModal(false)}
             />
             <nav>
                 <div className='max-w-screen-md mx-auto p-4 border-b-2 flex items-center justify-between border-zinc-700'>
@@ -260,7 +292,12 @@ function App() {
                         {todayRecords.length ? (
                             todayRecords.map((x) => {
                                 return (
-                                    <RecordCard key={x.id} item={x} onDelete={handleItemDelete} />
+                                    <RecordCard
+                                        key={x.id}
+                                        item={x}
+                                        onDelete={handleItemDelete}
+                                        onEdit={handleOpenItemEditModal}
+                                    />
                                 )
                             })
                         ) : (

@@ -95,6 +95,14 @@ export class Storage {
         })
     }
 
+    async getItemById(id: string, data?: StorageType): Promise<RecordItemType[0] | null> {
+        return await this.dataMethodHandler(data, (data) => {
+            const find = data.records.flatMap((x) => x.items).find((x) => x.id === id)
+            if (!find) return null
+            return find
+        })
+    }
+
     async calculateTodayWaterIntake(data?: StorageType) {
         return await this.dataMethodHandler(data, async (data) => {
             const today = new Date().toISOString().split('T')[0]
