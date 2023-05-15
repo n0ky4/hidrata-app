@@ -7,14 +7,14 @@ import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-pro
 import colors from 'tailwindcss/colors'
 import CustomWaterIntakeModal from './components/CustomWaterIntakeModal'
 import { Debug } from './components/Debug'
-import EditItemModal, { EditChangesType, ItemEditDataType } from './components/EditItemModal'
+import EditItemModal, { ItemEditDataType } from './components/EditItemModal'
 import FirstUsePopup from './components/FirstUsePopup'
-import { GhostButton } from './components/GhostButton'
+import GhostButton from './components/GhostButton'
 import { RecordCard } from './components/RecordCard'
 import { WaterIntakeDropdown } from './components/WaterIntakeDropdown'
 import { clamp, getRecommendedWaterIntake } from './utils/helpers'
 import log from './utils/log'
-import { useStorage } from './utils/storage'
+import { EditChangesType, useStorage } from './utils/storage'
 import { ContainerType, ItemsType, RecordItemType, StorageType } from './utils/storage/schema'
 
 function App() {
@@ -147,20 +147,20 @@ function App() {
         ['Qtd. Água Diária', `${dailyWater} ml`],
     ]
 
-    const handleAddWaterIntake = async (type: ItemsType, ml?: number, label?: string) => {
-        log.info(`adicionando água; tipo: ${type}, ml: ${ml}, label: ${label}`)
+    const handleAddWaterIntake = async (type: ItemsType, quantity?: number, label?: string) => {
+        log.info(`adicionando água; tipo: ${type}, ml: ${quantity}, label: ${label}`)
         await storage.addItem({
             type,
-            ml,
+            quantity,
             label,
         })
         await checkData()
     }
 
-    const handleAddCustomContainer = async (ml: number, label?: string) => {
-        log.info(`adicionando container customizado; ml: ${ml}, label: ${label}`)
-        await storage.addContainer(ml, label)
-        await handleAddWaterIntake('custom', ml, label)
+    const handleAddCustomContainer = async (quantity: number, label?: string) => {
+        log.info(`adicionando container customizado; ml: ${quantity}, label: ${label}`)
+        await storage.addContainer(quantity, label)
+        await handleAddWaterIntake('custom', quantity, label)
     }
 
     const handleItemDelete = async (id: string) => {
@@ -171,21 +171,28 @@ function App() {
 
     const handleItemEdit = async (id: string, edit: EditChangesType) => {
         log.info(`editando item ${id}; edit: ${JSON.stringify(edit)}`)
+        await storage.editItem(id, edit)
+        await checkData()
     }
 
     const handleOpenItemEditModal = async (id: string) => {
         log.info(`editando item ${id}`)
         const item = await storage.getItemById(id)
+
         if (!item) return
 
         if (item.type === 'custom') {
-            // if (item.label) {
-            //     setItemEditData({
-            //         id,
-            //         type: item.type,
-            //         quantity: item.ml,
-            //     })
-            // }
+            setItemEditData({
+                id: item.id,
+                type: item.type,
+                quantity: item.quantity,
+                label: item.label,
+            })
+        } else {
+            setItemEditData({
+                id: item.id,
+                type: item.type,
+            })
         }
 
         setShowEditItemModal(true)
@@ -217,14 +224,13 @@ function App() {
             )}
             <CustomWaterIntakeModal
                 onSaveCustomContainer={handleAddCustomContainer}
-                onAddWaterIntake={(ml: number) => handleAddWaterIntake('custom', ml)}
+                onAddWaterIntake={(quantity: number) => handleAddWaterIntake('custom', quantity)}
                 show={showCustomWaterIntakeModal}
                 onModalClose={() => setShowCustomWaterIntakeModal(false)}
             />
             <EditItemModal
                 data={itemEditData}
                 show={showEditItemModal}
-                containers={containers}
                 onEdit={handleItemEdit}
                 onModalClose={() => setShowEditItemModal(false)}
             />

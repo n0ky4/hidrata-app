@@ -8,9 +8,15 @@ export function useStorage() {
 
 interface RecordItem {
     type: ItemsType
-    ml?: number
+    quantity?: number
     label?: string
     createdAt?: string
+}
+
+export interface EditChangesType {
+    type: ItemsType
+    quantity?: number
+    label?: string
 }
 
 export class Storage {
@@ -111,7 +117,7 @@ export class Storage {
             const sum = record.items.reduce((acc, item) => {
                 switch (item.type) {
                     case 'custom':
-                        return acc + (item.ml ?? 0)
+                        return acc + (item.quantity ?? 0)
                     case 'glass':
                         return acc + getWaterMLFromType('glass')
                     case 'bottle':
@@ -149,13 +155,13 @@ export class Storage {
         let record: RecordItemType[0]
 
         if (item.type === 'custom') {
-            if (!item.ml) throw new Error('Missing ml')
+            if (!item.quantity) throw new Error('Missing quantity')
 
             record = {
                 id: crypto.randomUUID(),
                 createdAt,
                 type: 'custom',
-                ml: item.ml,
+                quantity: item.quantity,
                 label: item.label,
             }
         } else {
@@ -184,12 +190,31 @@ export class Storage {
         await this.setData(data)
     }
 
-    async addContainer(ml: number, label?: string) {
+    async editItem(id: string, item: EditChangesType) {
+        const data = await this.getSafeData()
+        if (!data) return
+        const today = new Date().toISOString().split('T')[0]
+        const todayRecord = data.records.find((x) => x.date === today)
+        if (!todayRecord) return
+
+        let toEdit = todayRecord.items.find((x) => x.id === id)
+        if (!toEdit) return
+
+        if (item.type) toEdit.type = item.type
+        // @ts-ignore
+        if (item.quantity) toEdit.quantity = item.quantity
+        // @ts-ignore
+        if (item.label) toEdit.label = item.label
+
+        await this.setData(data)
+    }
+
+    async addContainer(quantity: number, label?: string) {
         const data = await this.getSafeData()
         if (!data) return
         data.settings.containers.push({
             id: crypto.randomUUID(),
-            ml,
+            quantity,
             label,
         })
         await this.setData(data)

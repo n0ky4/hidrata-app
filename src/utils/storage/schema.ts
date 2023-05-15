@@ -8,7 +8,7 @@ export const StorageSchema = z.object({
             .object({
                 id: z.string().uuid(),
                 label: z.string().optional(),
-                ml: z.coerce.number().int().positive(),
+                quantity: z.coerce.number().int().positive(),
             })
             .array()
             .default([]),
@@ -48,7 +48,7 @@ export const StorageSchema = z.object({
                     z.object({
                         id: z.string(),
                         type: z.literal('custom'),
-                        ml: z.coerce.number().int().positive(),
+                        quantity: z.coerce.number().int().positive(),
                         label: z.string().optional(),
                         createdAt: z.coerce.string(),
                     }),

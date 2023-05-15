@@ -15,7 +15,7 @@ type DropdownItemType = {
 
 interface WaterIntakeDropdownProps {
     containers: ContainerType
-    onAdd: (type: ItemsType, ml?: number, label?: string) => void
+    onAdd: (type: ItemsType, quantity?: number, label?: string) => void
     onOpenModal?: () => void
 }
 
@@ -24,14 +24,22 @@ interface DropdownItemProps {
     label?: string
     icon?: React.ReactNode
     shortcut?: string
-    ml?: number
+    quantity?: number
     isMac: boolean
-    handleClick: (id: ItemsTypeAddCustom, ml?: number, label?: string) => void
+    handleClick: (id: ItemsTypeAddCustom, quantity?: number, label?: string) => void
 }
 
-function DropdownItem({ type, icon, label, ml, handleClick, shortcut, isMac }: DropdownItemProps) {
+function DropdownItem({
+    type,
+    icon,
+    label,
+    quantity,
+    handleClick,
+    shortcut,
+    isMac,
+}: DropdownItemProps) {
     const _handleClick = () => {
-        if (type === 'custom') return handleClick(type, ml, label)
+        if (type === 'custom') return handleClick(type, quantity, label)
         handleClick(type)
     }
 
@@ -46,7 +54,11 @@ function DropdownItem({ type, icon, label, ml, handleClick, shortcut, isMac }: D
             <div className='text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5 flex-grow overflow-hidden'>
                 {icon}
                 <span>
-                    {type === 'custom' ? (label ? `${label} (${ml} ml)` : `${ml} ml`) : label}
+                    {type === 'custom'
+                        ? label
+                            ? `${label} (${quantity} ml)`
+                            : `${quantity} ml`
+                        : label}
                 </span>
             </div>
             {shortcut && (
@@ -79,9 +91,9 @@ export function WaterIntakeDropdown({ onAdd, onOpenModal, containers }: WaterInt
         icon: <PlusCircle weight='bold' size={18} />,
     }
 
-    const handleClick = (id: ItemsTypeAddCustom, ml?: number, label?: string) => {
+    const handleClick = (id: ItemsTypeAddCustom, quantity?: number, label?: string) => {
         if (id === 'add-custom') return onOpenModal ? onOpenModal() : null
-        if (id === 'custom') return onAdd(id, ml, label)
+        if (id === 'custom') return onAdd(id, quantity, label)
         onAdd(id)
     }
 
@@ -114,12 +126,12 @@ export function WaterIntakeDropdown({ onAdd, onOpenModal, containers }: WaterInt
                         />
                     ))}
 
-                    {containers.map(({ id, ml, label }) => (
+                    {containers.map(({ id, quantity, label }) => (
                         <DropdownItem
                             key={`${id}-${label}`}
                             type='custom'
                             label={label}
-                            ml={ml}
+                            quantity={quantity}
                             isMac={isMac}
                             handleClick={handleClick}
                         />

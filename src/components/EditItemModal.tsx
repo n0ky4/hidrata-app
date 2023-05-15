@@ -2,54 +2,41 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { ContainerType } from '../utils/storage/schema'
+import { EditChangesType } from '../utils/storage'
+import { ItemsType } from '../utils/storage/schema'
 import EditItemTypeSelect from './EditItemTypeSelect'
 import Modal from './Modal'
-import { ItemsTypeAddCustom } from './WaterIntakeDropdown'
 
-const QuantitySchema = z.object({
+export interface ItemEditDataType extends EditChangesType {
+    id: string
+}
+
+interface EditItemModalProps {
+    data: ItemEditDataType | null
+    show: boolean
+    onModalClose: () => void
+    onEdit: (id: string, edit: EditChangesType) => void
+}
+
+export const QuantitySchema = z.object({
     quantity: z.coerce
         .number({
+            required_error: 'É necessário colocar a quantidade!',
             invalid_type_error: 'Quantidade inválida!',
         })
         .finite('Quantidade inválida')
         .int('Quantidade inválida!')
         .positive('Quantidade inválida!')
         .optional(),
+    label: z.string().max(32, 'Esse nome é muito grande!').optional(),
 })
 
 export type QuantityType = z.infer<typeof QuantitySchema>
 
-export type EditChangesType = {
-    type: ItemsTypeAddCustom
-    containerId?: string
-    quantity?: number
-}
-
-export type ItemEditDataType = {
-    id: string
-    type: ItemsTypeAddCustom
-    quantity?: number
-    containerId?: string
-}
-
-interface EditItemModalProps {
-    data: ItemEditDataType | null
-    show: boolean
-    containers: ContainerType
-    onModalClose: () => void
-    onEdit: (id: string, edit: EditChangesType) => void
-}
-
-export default function EditItemModal({
-    data,
-    onModalClose,
-    onEdit,
-    show,
-    containers,
-}: EditItemModalProps) {
+export default function EditItemModal({ data, onModalClose, onEdit, show }: EditItemModalProps) {
     const {
         setFocus,
+        setValue,
         register,
         handleSubmit,
         formState: { errors },
@@ -57,13 +44,8 @@ export default function EditItemModal({
         resolver: zodResolver(QuantitySchema),
     })
 
-    const [isCustomValue, setIsCustomValue] = useState(data && data.type === 'add-custom')
-    const [selectedType, setSelectedType] = useState<ItemsTypeAddCustom>(
-        data && data.type ? data.type : 'glass'
-    )
-    const [containerId, setContainerId] = useState<string | undefined>(
-        data && data.containerId ? data.containerId : undefined
-    )
+    const [isCustomValue, setIsCustomValue] = useState(data?.type === 'custom')
+    const [selectedType, setSelectedType] = useState<ItemsType>(data?.type || 'glass')
 
     useEffect(() => {
         if (show) {
@@ -75,30 +57,28 @@ export default function EditItemModal({
     }, [show])
 
     useEffect(() => {
-        if (selectedType === 'add-custom') setIsCustomValue(true)
+        if (selectedType === 'custom') setIsCustomValue(true)
         else setIsCustomValue(false)
     }, [selectedType])
 
-    const handleEdit = async ({ quantity }: QuantityType) => {
+    useEffect(() => {
+        if (!data) return
+        setSelectedType(data.type)
+        setValue('quantity', data.quantity || undefined)
+        setValue('label', data.label)
+    }, [data])
+
+    const handleEdit = async ({ quantity, label }: QuantityType) => {
         if (!data || (data && !data.id)) return
         switch (selectedType) {
             case 'custom':
-                if (!containerId) throw new Error('Unknown container id')
-                onEdit(data.id, { type: 'custom', containerId, quantity })
-                break
-            case 'add-custom':
-                onEdit(data.id, { type: 'custom', quantity })
+                onEdit(data.id, { type: 'custom', quantity, label })
                 break
             default:
                 onEdit(data.id, { type: selectedType })
                 break
         }
         onModalClose()
-    }
-
-    const onTypeChange = (type: ItemsTypeAddCustom, containerId?: string) => {
-        if (type === 'custom' && containerId) setContainerId(containerId)
-        setSelectedType(type)
     }
 
     return (
@@ -112,29 +92,46 @@ export default function EditItemModal({
                         </label>
                         <div>
                             <EditItemTypeSelect
-                                containers={containers}
-                                onChange={onTypeChange}
+                                onChange={(type) => setSelectedType(type)}
                                 defaultValue={selectedType}
                             />
                         </div>
                     </div>
                     {isCustomValue && (
-                        <div className='flex flex-col gap-2'>
-                            <label htmlFor='quantity' className='font-semibold'>
-                                Quantidade (em ml):
-                            </label>
-                            <input
-                                type='text'
-                                className='font-lg bg-zinc-900 border-2 border-zinc-700 rounded p-2'
-                                placeholder='Ex: 1500'
-                                {...register('quantity')}
-                            />
-                            {errors.quantity && (
-                                <span className='block font-sm text-red-500'>
-                                    {errors.quantity.message}
-                                </span>
-                            )}
-                        </div>
+                        <>
+                            <div className='flex flex-col gap-2'>
+                                <label htmlFor='quantity' className='font-semibold'>
+                                    Quantidade (em ml):
+                                </label>
+                                <input
+                                    type='text'
+                                    className='font-lg bg-zinc-900 border-2 border-zinc-700 rounded p-2'
+                                    placeholder='Ex: 1500'
+                                    {...register('quantity')}
+                                />
+                                {errors.quantity && (
+                                    <span className='block font-sm text-red-500'>
+                                        {errors.quantity.message}
+                                    </span>
+                                )}
+                            </div>
+                            <div className='flex flex-col gap-2'>
+                                <label htmlFor='name' className='font-semibold'>
+                                    Nome (opcional):
+                                </label>
+                                <input
+                                    type='text'
+                                    className='font-lg bg-zinc-900 border-2 border-zinc-700 rounded p-2'
+                                    placeholder='Escolha um nome para esse recipiente'
+                                    {...register('label')}
+                                />
+                                {errors.label && (
+                                    <span className='block font-sm text-red-500'>
+                                        {errors.label.message}
+                                    </span>
+                                )}
+                            </div>
+                        </>
                     )}
 
                     <div>

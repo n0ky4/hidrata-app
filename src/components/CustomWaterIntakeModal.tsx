@@ -5,7 +5,7 @@ import { z } from 'zod'
 import Checkbox from './Checkbox'
 import Modal from './Modal'
 
-const QuantitySchema = z.object({
+export const QuantitySchema = z.object({
     quantity: z.coerce
         .number({
             required_error: 'É necessário colocar a quantidade!',
@@ -14,15 +14,15 @@ const QuantitySchema = z.object({
         .finite('Quantidade inválida')
         .int('Quantidade inválida!')
         .positive('Quantidade inválida!'),
-    name: z.string().max(32, 'Esse nome é muito grande!').optional(),
+    label: z.string().max(32, 'Esse nome é muito grande!').optional(),
 })
 
 export type QuantityType = z.infer<typeof QuantitySchema>
 
 interface CustomWaterIntakeModalProps {
     show: boolean
-    onAddWaterIntake: (ml: number) => void
-    onSaveCustomContainer: (ml: number, name?: string) => void
+    onAddWaterIntake: (quantity: number) => void
+    onSaveCustomContainer: (quantity: number, label?: string) => void
     onModalClose: () => void
 }
 
@@ -66,8 +66,8 @@ export default function CustomWaterIntakeModal({
         }
     }, [show])
 
-    const addQuantity = async ({ quantity, name }: QuantityType) => {
-        if (checkbox) onSaveCustomContainer(quantity, name)
+    const addQuantity = async ({ quantity, label }: QuantityType) => {
+        if (checkbox) onSaveCustomContainer(quantity, label)
         else onAddWaterIntake(quantity)
         onModalClose()
     }
@@ -105,11 +105,11 @@ export default function CustomWaterIntakeModal({
                                 type='text'
                                 className='font-lg bg-zinc-900 border-2 border-zinc-700 rounded p-2'
                                 placeholder={randomName}
-                                {...register('name')}
+                                {...register('label')}
                             />
-                            {errors.name && (
+                            {errors.label && (
                                 <span className='block font-sm text-red-500'>
-                                    {errors.name.message}
+                                    {errors.label.message}
                                 </span>
                             )}
                         </div>

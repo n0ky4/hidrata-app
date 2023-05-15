@@ -1,14 +1,12 @@
 import { CaretDown, CaretUp, CheckCircle } from '@phosphor-icons/react'
 import * as SelectPrimitive from '@radix-ui/react-select'
 import { clsx } from 'clsx'
-import { ContainerType } from '../utils/storage/schema'
-import { GhostButton } from './GhostButton'
-import { ItemsTypeAddCustom } from './WaterIntakeDropdown'
+import { ItemsType } from '../utils/storage/schema'
+import GhostButton from './GhostButton'
 
 interface SelectProps {
     defaultValue?: string
-    containers: ContainerType
-    onChange?: (value: ItemsTypeAddCustom, containerId?: string) => void
+    onChange?: (value: ItemsType) => void
 }
 
 interface SelectItemProps {
@@ -34,8 +32,8 @@ function SelectItem({ name, id }: SelectItemProps) {
     )
 }
 
-export default function EditItemTypeSelect({ defaultValue, containers, onChange }: SelectProps) {
-    const defaultItems = [
+export default function EditItemTypeSelect({ defaultValue, onChange }: SelectProps) {
+    const defaultItems: SelectItemProps[] = [
         {
             id: 'glass',
             name: 'Copo (250 ml)',
@@ -44,24 +42,16 @@ export default function EditItemTypeSelect({ defaultValue, containers, onChange 
             id: 'bottle',
             name: 'Garrafa (500 ml)',
         },
+        {
+            id: 'custom',
+            name: 'Adicionar',
+        },
     ]
-
-    const lastItem = {
-        id: 'add-custom',
-        name: 'Adicionar',
-    }
-
-    const handleChange = (value: ItemsTypeAddCustom) => {
-        if (value.length !== 36) return onChange?.(value)
-
-        const container = containers.find((container) => container.id === value)
-        if (container) onChange?.('custom', container.id)
-    }
 
     return (
         <SelectPrimitive.Root
             defaultValue={defaultValue ?? defaultItems[0].id}
-            onValueChange={handleChange}
+            onValueChange={onChange}
         >
             <SelectPrimitive.Trigger asChild aria-label='Tipo do item'>
                 <GhostButton className='inline-flex items-center justify-center bg-zinc-900 hover:bg-zinc-700 px-6'>
@@ -80,21 +70,6 @@ export default function EditItemTypeSelect({ defaultValue, containers, onChange 
                         {defaultItems.map((item, i) => (
                             <SelectItem key={`${item.id}-${i}`} id={item.id} name={item.name} />
                         ))}
-
-                        {containers.length !== 0 &&
-                            containers.map((container, i) => (
-                                <SelectItem
-                                    key={`${container.id}-${i}`}
-                                    id={container.id}
-                                    name={
-                                        container.label
-                                            ? `${container.label} (${container.ml} ml)`
-                                            : `${container.ml} ml`
-                                    }
-                                />
-                            ))}
-                        <div className='h-[2px] bg-zinc-800 my-1' />
-                        <SelectItem id={lastItem.id} name={lastItem.name} />
                     </SelectPrimitive.Group>
                 </SelectPrimitive.Viewport>
                 <SelectPrimitive.ScrollDownButton className='flex items-center justify-center text-zinc-300'>

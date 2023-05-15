@@ -2,7 +2,7 @@ import { Transition } from '@headlessui/react'
 import { X } from '@phosphor-icons/react'
 import React, { Fragment, useEffect } from 'react'
 import { WithChildren } from '../utils/types'
-import { GhostButton } from './GhostButton'
+import GhostButton from './GhostButton'
 
 type SubComponentNode = {
     type?: {
