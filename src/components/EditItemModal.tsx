@@ -6,6 +6,7 @@ import { getWaterMLFromType } from '../utils/helpers'
 import { EditChangesType } from '../utils/storage'
 import { ItemsType } from '../utils/storage/schema'
 import Button from './Button'
+import Input from './Input'
 import Modal from './Modal'
 import Select, { SelectOptionType } from './Select'
 
@@ -122,12 +123,13 @@ export default function EditItemModal({ data, onModalClose, onEdit, show }: Edit
                                 <label htmlFor='quantity_edm' className='font-semibold'>
                                     Quantidade (em ml):
                                 </label>
-                                <input
+                                <Input
                                     type='text'
-                                    className='font-lg bg-zinc-900 border-2 border-zinc-700 rounded p-2'
                                     placeholder='Ex: 1500'
                                     id='quantity_edm'
-                                    {...register('quantity')}
+                                    register={register}
+                                    validationSchema={QuantitySchema}
+                                    name='quantity'
                                 />
                                 {errors.quantity && (
                                     <span className='block font-sm text-red-500'>
@@ -139,12 +141,13 @@ export default function EditItemModal({ data, onModalClose, onEdit, show }: Edit
                                 <label htmlFor='label_edm' className='font-semibold'>
                                     Nome (opcional):
                                 </label>
-                                <input
+                                <Input
                                     type='text'
-                                    className='font-lg bg-zinc-900 border-2 border-zinc-700 rounded p-2'
                                     placeholder='Escolha um nome para esse recipiente'
                                     id='label_edm'
-                                    {...register('label')}
+                                    register={register}
+                                    validationSchema={QuantitySchema}
+                                    name='label'
                                 />
                                 {errors.label && (
                                     <span className='block font-sm text-red-500'>

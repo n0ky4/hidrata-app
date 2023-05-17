@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import Button from './Button'
 import Checkbox from './Checkbox'
+import Input from './Input'
 import Modal from './Modal'
 
 export const QuantitySchema = z.object({
@@ -82,12 +83,13 @@ export default function CustomWaterIntakeModal({
                         <label htmlFor='quantity_cwim' className='font-semibold'>
                             Quantidade (em ml):
                         </label>
-                        <input
+                        <Input
                             type='number'
-                            className='font-lg bg-zinc-900 border-2 border-zinc-700 rounded p-2'
                             placeholder='Ex: 1500'
                             id='quantity_cwim'
-                            {...register('quantity')}
+                            register={register}
+                            validationSchema={QuantitySchema}
+                            name='quantity'
                         />
                         {errors.quantity && (
                             <span className='block font-sm text-red-500'>
@@ -103,12 +105,13 @@ export default function CustomWaterIntakeModal({
                             <label htmlFor='label_cwim' className='font-semibold'>
                                 Nome (opcional):
                             </label>
-                            <input
+                            <Input
                                 type='text'
-                                className='font-lg bg-zinc-900 border-2 border-zinc-700 rounded p-2'
                                 placeholder={randomName}
                                 id='label_cwim'
-                                {...register('label')}
+                                register={register}
+                                validationSchema={QuantitySchema}
+                                name='label'
                             />
                             {errors.label && (
                                 <span className='block font-sm text-red-500'>

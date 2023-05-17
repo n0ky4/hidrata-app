@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { Storage } from '../utils/storage'
 import { StorageSchema } from '../utils/storage/schema'
 import Button from './Button'
+import Input from './Input'
 import Modal from './Modal'
 
 const FirstSettingsSchema = z.object({
@@ -65,12 +66,13 @@ export default function FirstUsePopup({ storage }: FirstUsePopupProps) {
                         <label htmlFor='age_fup' className='font-semibold'>
                             Idade
                         </label>
-                        <input
+                        <Input
                             type='number'
-                            className='font-lg bg-zinc-900 border-2 border-zinc-700 rounded p-2'
                             placeholder='Ex: 35'
                             id='age_fup'
-                            {...register('age')}
+                            register={register}
+                            validationSchema={FirstSettingsSchema}
+                            name='age'
                         />
                         {errors.age && (
                             <span className='block font-sm text-red-500'>{errors.age.message}</span>
@@ -80,12 +82,13 @@ export default function FirstUsePopup({ storage }: FirstUsePopupProps) {
                         <label htmlFor='weight_fup' className='font-semibold'>
                             Peso (em kg):
                         </label>
-                        <input
+                        <Input
                             type='number'
-                            className='font-lg bg-zinc-900 border-2 border-zinc-700 rounded p-2'
                             placeholder='Ex: 70'
                             id='weight_fup'
-                            {...register('weight')}
+                            register={register}
+                            validationSchema={FirstSettingsSchema}
+                            name='weight'
                         />
                         {errors.weight && (
                             <span className='block font-sm text-red-500'>
