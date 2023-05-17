@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import Button from './Button'
 import Checkbox from './Checkbox'
 import Modal from './Modal'
 
@@ -78,13 +79,14 @@ export default function CustomWaterIntakeModal({
             <Modal.Content>
                 <form className='flex flex-col gap-4' onSubmit={handleSubmit(addQuantity)}>
                     <div className='flex flex-col gap-2'>
-                        <label htmlFor='quantity' className='font-semibold'>
+                        <label htmlFor='quantity_cwim' className='font-semibold'>
                             Quantidade (em ml):
                         </label>
                         <input
                             type='number'
                             className='font-lg bg-zinc-900 border-2 border-zinc-700 rounded p-2'
                             placeholder='Ex: 1500'
+                            id='quantity_cwim'
                             {...register('quantity')}
                         />
                         {errors.quantity && (
@@ -93,18 +95,19 @@ export default function CustomWaterIntakeModal({
                             </span>
                         )}
                     </div>
-                    <Checkbox name='save-custom' checked={checkbox} onClick={(e) => setCheckbox(e)}>
+                    <Checkbox id='save_cwim' checked={checkbox} onClick={(e) => setCheckbox(e)}>
                         Salvar
                     </Checkbox>
                     {checkbox && (
                         <div className='flex flex-col gap-2'>
-                            <label htmlFor='name' className='font-semibold'>
+                            <label htmlFor='label_cwim' className='font-semibold'>
                                 Nome (opcional):
                             </label>
                             <input
                                 type='text'
                                 className='font-lg bg-zinc-900 border-2 border-zinc-700 rounded p-2'
                                 placeholder={randomName}
+                                id='label_cwim'
                                 {...register('label')}
                             />
                             {errors.label && (
@@ -116,12 +119,9 @@ export default function CustomWaterIntakeModal({
                     )}
 
                     <div>
-                        <button
-                            type='submit'
-                            className='bg-blue-600 text-white font-lg font-semibold py-2 px-4 rounded hover:bg-blue-700 transition-colors float-right'
-                        >
+                        <Button type='submit' className='float-right'>
                             Adicionar
-                        </button>
+                        </Button>
                     </div>
                 </form>
             </Modal.Content>

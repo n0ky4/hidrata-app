@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Storage } from '../utils/storage'
 import { StorageSchema } from '../utils/storage/schema'
+import Button from './Button'
 import Modal from './Modal'
 
 const FirstSettingsSchema = z.object({
@@ -61,13 +62,14 @@ export default function FirstUsePopup({ storage }: FirstUsePopupProps) {
             <Modal.Content>
                 <form className='flex flex-col gap-4' onSubmit={handleSubmit(setSettings)}>
                     <div className='flex flex-col gap-2'>
-                        <label htmlFor='age' className='font-semibold'>
+                        <label htmlFor='age_fup' className='font-semibold'>
                             Idade
                         </label>
                         <input
                             type='number'
                             className='font-lg bg-zinc-900 border-2 border-zinc-700 rounded p-2'
                             placeholder='Ex: 35'
+                            id='age_fup'
                             {...register('age')}
                         />
                         {errors.age && (
@@ -75,13 +77,14 @@ export default function FirstUsePopup({ storage }: FirstUsePopupProps) {
                         )}
                     </div>
                     <div className='flex flex-col gap-2'>
-                        <label htmlFor='weight' className='font-semibold'>
+                        <label htmlFor='weight_fup' className='font-semibold'>
                             Peso (em kg):
                         </label>
                         <input
                             type='number'
                             className='font-lg bg-zinc-900 border-2 border-zinc-700 rounded p-2'
                             placeholder='Ex: 70'
+                            id='weight_fup'
                             {...register('weight')}
                         />
                         {errors.weight && (
@@ -91,12 +94,15 @@ export default function FirstUsePopup({ storage }: FirstUsePopupProps) {
                         )}
                     </div>
                     <div>
-                        <button
+                        {/* <button
                             type='submit'
                             className='bg-blue-600 text-white font-lg font-semibold py-2 px-4 rounded hover:bg-blue-700 transition-colors float-right'
                         >
                             Salvar
-                        </button>
+                        </button> */}
+                        <Button type='submit' className='float-right'>
+                            Salvar
+                        </Button>
                     </div>
                 </form>
             </Modal.Content>

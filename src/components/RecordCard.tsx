@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { getWaterMLFromType } from '../utils/helpers'
 import { RecordItemType } from '../utils/storage/schema'
-import GhostButton from './GhostButton'
+import Button from './Button'
 
 interface RecordCardProps {
     item: RecordItemType[0]
@@ -49,12 +49,12 @@ export function RecordCard({ item, onDelete, onEdit }: RecordCardProps) {
                 </span>
             </div>
             <div className='flex items-center gap-2'>
-                <GhostButton onClick={() => onEdit(item.id)}>
+                <Button onClick={() => onEdit(item.id)} ghost>
                     <Pencil size={22} weight='bold' />
-                </GhostButton>
-                <GhostButton className='hover:bg-red-500' onClick={() => onDelete(item.id)}>
+                </Button>
+                <Button onClick={() => onDelete(item.id)} ghost className='hover:!bg-red-500'>
                     <Trash size={22} weight='bold' />
-                </GhostButton>
+                </Button>
             </div>
         </div>
     )

@@ -2,10 +2,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { getWaterMLFromType } from '../utils/helpers'
 import { EditChangesType } from '../utils/storage'
 import { ItemsType } from '../utils/storage/schema'
-import EditItemTypeSelect from './EditItemTypeSelect'
+import Button from './Button'
 import Modal from './Modal'
+import Select, { SelectOptionType } from './Select'
 
 export interface ItemEditDataType extends EditChangesType {
     id: string
@@ -34,6 +36,21 @@ export const QuantitySchema = z.object({
 export type QuantityType = z.infer<typeof QuantitySchema>
 
 export default function EditItemModal({ data, onModalClose, onEdit, show }: EditItemModalProps) {
+    const selectItems: SelectOptionType[] = [
+        {
+            value: 'glass',
+            label: `Copo (${getWaterMLFromType('glass')} ml)`,
+        },
+        {
+            value: 'bottle',
+            label: `Garrafa (${getWaterMLFromType('bottle')} ml)`,
+        },
+        {
+            value: 'custom',
+            label: 'Adicionar',
+        },
+    ]
+
     const {
         setFocus,
         setValue,
@@ -45,7 +62,7 @@ export default function EditItemModal({ data, onModalClose, onEdit, show }: Edit
     })
 
     const [isCustomValue, setIsCustomValue] = useState(data?.type === 'custom')
-    const [selectedType, setSelectedType] = useState<ItemsType>(data?.type || 'glass')
+    const [selectedType, setSelectedType] = useState<SelectOptionType>(selectItems[0])
 
     useEffect(() => {
         if (show) {
@@ -57,27 +74,27 @@ export default function EditItemModal({ data, onModalClose, onEdit, show }: Edit
     }, [show])
 
     useEffect(() => {
-        if (selectedType === 'custom') setIsCustomValue(true)
+        if (selectedType.value === 'custom') setIsCustomValue(true)
         else setIsCustomValue(false)
     }, [selectedType])
 
     useEffect(() => {
         if (!data) return
-        setSelectedType(data.type)
+        const find = selectItems.filter((x) => x.value === data?.type)[0]
+        if (find) setSelectedType(find)
         setValue('quantity', data.quantity || undefined)
         setValue('label', data.label)
     }, [data])
 
     const handleEdit = async ({ quantity, label }: QuantityType) => {
         if (!data || (data && !data.id)) return
-        switch (selectedType) {
-            case 'custom':
-                onEdit(data.id, { type: 'custom', quantity, label })
-                break
-            default:
-                onEdit(data.id, { type: selectedType })
-                break
+
+        if (selectedType.value === 'custom') {
+            onEdit(data.id, { type: 'custom', quantity, label })
+        } else {
+            onEdit(data.id, { type: selectedType.value as ItemsType })
         }
+
         onModalClose()
     }
 
@@ -87,26 +104,29 @@ export default function EditItemModal({ data, onModalClose, onEdit, show }: Edit
             <Modal.Content>
                 <form className='flex flex-col gap-4' onSubmit={handleSubmit(handleEdit)}>
                     <div className='flex flex-col gap-2'>
-                        <label htmlFor='quantity' className='font-semibold'>
+                        <label htmlFor='type_edm' className='font-semibold'>
                             Tipo:
                         </label>
                         <div>
-                            <EditItemTypeSelect
-                                onChange={(type) => setSelectedType(type)}
-                                defaultValue={selectedType}
+                            <Select
+                                id='type_edm'
+                                options={selectItems}
+                                value={selectedType}
+                                onChange={setSelectedType}
                             />
                         </div>
                     </div>
                     {isCustomValue && (
                         <>
                             <div className='flex flex-col gap-2'>
-                                <label htmlFor='quantity' className='font-semibold'>
+                                <label htmlFor='quantity_edm' className='font-semibold'>
                                     Quantidade (em ml):
                                 </label>
                                 <input
                                     type='text'
                                     className='font-lg bg-zinc-900 border-2 border-zinc-700 rounded p-2'
                                     placeholder='Ex: 1500'
+                                    id='quantity_edm'
                                     {...register('quantity')}
                                 />
                                 {errors.quantity && (
@@ -116,13 +136,14 @@ export default function EditItemModal({ data, onModalClose, onEdit, show }: Edit
                                 )}
                             </div>
                             <div className='flex flex-col gap-2'>
-                                <label htmlFor='name' className='font-semibold'>
+                                <label htmlFor='label_edm' className='font-semibold'>
                                     Nome (opcional):
                                 </label>
                                 <input
                                     type='text'
                                     className='font-lg bg-zinc-900 border-2 border-zinc-700 rounded p-2'
                                     placeholder='Escolha um nome para esse recipiente'
+                                    id='label_edm'
                                     {...register('label')}
                                 />
                                 {errors.label && (
@@ -135,12 +156,9 @@ export default function EditItemModal({ data, onModalClose, onEdit, show }: Edit
                     )}
 
                     <div>
-                        <button
-                            type='submit'
-                            className='bg-blue-600 text-white font-lg font-semibold py-2 px-4 rounded hover:bg-blue-700 transition-colors float-right'
-                        >
+                        <Button type='submit' className='float-right'>
                             Editar
-                        </button>
+                        </Button>
                     </div>
                 </form>
             </Modal.Content>

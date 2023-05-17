@@ -5,11 +5,11 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import { useEffect, useState } from 'react'
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar'
 import colors from 'tailwindcss/colors'
+import Button from './components/Button'
 import CustomWaterIntakeModal from './components/CustomWaterIntakeModal'
 import { Debug } from './components/Debug'
 import EditItemModal, { ItemEditDataType } from './components/EditItemModal'
 import FirstUsePopup from './components/FirstUsePopup'
-import GhostButton from './components/GhostButton'
 import { RecordCard } from './components/RecordCard'
 import { WaterIntakeDropdown } from './components/WaterIntakeDropdown'
 import { clamp, getRecommendedWaterIntake } from './utils/helpers'
@@ -238,9 +238,9 @@ function App() {
                 <div className='max-w-screen-md mx-auto p-4 border-b-2 flex items-center justify-between border-zinc-700'>
                     <h1 className='text-2xl font-white font-semibold'>hidrata-app</h1>
                     <div className='flex items-center gap-2'>
-                        <GhostButton>
+                        <Button ghost>
                             <GearSix size={24} weight='bold' />
-                        </GhostButton>
+                        </Button>
                     </div>
                 </div>
             </nav>

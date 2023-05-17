@@ -2,7 +2,7 @@ import { Transition } from '@headlessui/react'
 import { X } from '@phosphor-icons/react'
 import React, { Fragment, useEffect } from 'react'
 import { WithChildren } from '../utils/types'
-import GhostButton from './GhostButton'
+import Button from './Button'
 
 type SubComponentNode = {
     type?: {
@@ -68,9 +68,9 @@ function Modal({ children, show, onModalClose, canClose = true }: ModalProps) {
                         <div className='flex items-center justify-between'>
                             {title}
                             {canClose ? (
-                                <GhostButton onClick={() => closeModal()}>
+                                <Button onClick={() => closeModal()} ghost>
                                     <X weight='bold' size={24} />
-                                </GhostButton>
+                                </Button>
                             ) : null}
                         </div>
                         {description}

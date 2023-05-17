@@ -4,17 +4,17 @@ import * as LabelPrimitive from '@radix-ui/react-label'
 import { clsx } from 'clsx'
 
 interface CheckboxType {
-    name: string
+    id: string
     children?: React.ReactNode
     checked: boolean
     onClick?: (checked: boolean) => void
 }
 
-export default function Checkbox({ name, children, onClick, checked }: CheckboxType) {
+export default function Checkbox({ id, children, onClick, checked }: CheckboxType) {
     return (
         <div className='flex items-center'>
             <CheckboxPrimitive.Root
-                name={name}
+                id={id}
                 className={clsx(
                     'flex h-6 w-6 items-center justify-center rounded-md',
                     'radix-state-checked:bg-blue-600 radix-state-unchecked:bg-zinc-900'
@@ -27,7 +27,7 @@ export default function Checkbox({ name, children, onClick, checked }: CheckboxT
                 </CheckboxPrimitive.Indicator>
             </CheckboxPrimitive.Root>
             <LabelPrimitive.Label
-                htmlFor={name}
+                htmlFor={id}
                 className='ml-3 select-none text-sm font-medium text-zinc-100'
             >
                 {children}
