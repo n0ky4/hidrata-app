@@ -31,6 +31,7 @@ Coisas que preciso/planejo fazer no projeto.
     -   [ ] Tema claro
     -   [ ] Cor de destaque personalizada
 -   [ ] Responsividade
+-   [ ] Garantir acessibilidade
 
 ## 📚 Documentação
 
