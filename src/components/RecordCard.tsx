@@ -1,7 +1,8 @@
 import { Pencil, Trash } from '@phosphor-icons/react'
+import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
-import { getWaterMLFromType } from '../utils/helpers'
+import { capitalize, getWaterMLFromType } from '../utils/helpers'
 import { RecordItemType } from '../utils/storage/schema'
 import Button from './Button'
 
@@ -13,16 +14,27 @@ interface RecordCardProps {
 
 export function RecordCard({ item, onDelete, onEdit }: RecordCardProps) {
     const [time, setTime] = useState('há poucos segundos')
+    const [minTime, setMinTime] = useState('')
     const title = new Date(item.createdAt).toLocaleString()
 
     const labels = {
-        glass: "um copo d'água",
-        bottle: "uma garrafa d'água",
+        glass: {
+            prefix: 'um',
+            label: 'copo',
+            suffix: "d'água",
+        },
+        bottle: {
+            prefix: 'uma',
+            label: 'garrafa',
+            suffix: "d'água",
+        },
     }
 
     const updateTime = () => {
-        const formatted = dayjs(item.createdAt).fromNow()
-        setTime(formatted)
+        const date = dayjs(item.createdAt)
+        setTime(date.fromNow())
+        // set minified time
+        setMinTime(date.format('HH:mm'))
     }
 
     useEffect(() => {
@@ -34,18 +46,38 @@ export function RecordCard({ item, onDelete, onEdit }: RecordCardProps) {
     const mlTitle = (item.type === 'custom' ? item.quantity : getWaterMLFromType(item.type)) + ' ml'
 
     return (
-        <div className='flex items-center gap-4 w-full px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors'>
+        <div
+            className={clsx(
+                'flex items-center gap-4 w-full px-4 py-2 rounded-lg',
+                'bg-white/5 hover:bg-white/10 transition-colors',
+                'shadow-lg/20 hover:shadow-lg/40'
+            )}
+        >
             <div className='w-1/4 text-sm text-zinc-400'>
-                <span title={title}>{time}</span>
+                <span title={title} className='hidden sm:inline'>
+                    {time}
+                </span>
+                <span title={title} className='inline sm:hidden'>
+                    {minTime}
+                </span>
             </div>
-            <div className='w-full'>
-                <span title={mlTitle}>
+            <div className='w-full truncate'>
+                <span title={mlTitle} className='hidden sm:inline'>
                     bebeu{' '}
                     {item.type === 'custom'
                         ? item.label
                             ? `no(a) ${item.label}`
                             : `${item.quantity} ml de água`
-                        : labels[item.type]}
+                        : `${labels[item.type].prefix} ${labels[item.type].label} ${
+                              labels[item.type].suffix
+                          }`}
+                </span>
+                <span title={mlTitle} className='inline sm:hidden'>
+                    {item.type === 'custom'
+                        ? item.label
+                            ? item.label
+                            : `${item.quantity} ml`
+                        : capitalize(labels[item.type].label)}
                 </span>
             </div>
             <div className='flex items-center gap-2'>

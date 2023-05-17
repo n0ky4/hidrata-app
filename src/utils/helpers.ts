@@ -23,3 +23,13 @@ export function getWaterMLFromType(type: ItemsType) {
             return 0
     }
 }
+
+export function capitalize(str: string) {
+    return str.replace(/\b\w/g, function (letter) {
+        return letter.toUpperCase()
+    })
+}
+
+export function truncate(str: string, max: number) {
+    return str.length > max ? str.substring(0, max - 3) + '...' : str
+}
