@@ -22,36 +22,39 @@ interface EditItemModalProps {
 }
 
 export const QuantitySchema = z.object({
-    quantity: z.coerce
-        .number({
-            required_error: 'É necessário colocar a quantidade!',
-            invalid_type_error: 'Quantidade inválida!',
-        })
-        .finite('Quantidade inválida')
-        .int('Quantidade inválida!')
-        .positive('Quantidade inválida!')
-        .optional(),
+    quantity: z.union([
+        z.coerce
+            .number({
+                required_error: 'É necessário colocar a quantidade!',
+                invalid_type_error: 'Quantidade inválida!',
+            })
+            .finite('Quantidade inválida')
+            .int('Quantidade inválida!')
+            .positive('Quantidade inválida!')
+            .optional(),
+        z.string().length(0, 'Quantidade inválida!'),
+    ]),
     label: z.string().max(32, 'Esse nome é muito grande!').optional(),
 })
 
 export type QuantityType = z.infer<typeof QuantitySchema>
 
-export default function EditItemModal({ data, onModalClose, onEdit, show }: EditItemModalProps) {
-    const selectItems: SelectOptionType[] = [
-        {
-            value: 'glass',
-            label: `Copo (${getWaterMLFromType('glass')} ml)`,
-        },
-        {
-            value: 'bottle',
-            label: `Garrafa (${getWaterMLFromType('bottle')} ml)`,
-        },
-        {
-            value: 'custom',
-            label: 'Adicionar',
-        },
-    ]
+const selectItems: SelectOptionType[] = [
+    {
+        value: 'glass',
+        label: `Copo (${getWaterMLFromType('glass')} ml)`,
+    },
+    {
+        value: 'bottle',
+        label: `Garrafa (${getWaterMLFromType('bottle')} ml)`,
+    },
+    {
+        value: 'custom',
+        label: 'Adicionar',
+    },
+]
 
+export default function EditItemModal({ data, onModalClose, onEdit, show }: EditItemModalProps) {
     const {
         setFocus,
         setValue,
@@ -62,17 +65,10 @@ export default function EditItemModal({ data, onModalClose, onEdit, show }: Edit
         resolver: zodResolver(QuantitySchema),
     })
 
-    const [isCustomValue, setIsCustomValue] = useState(data?.type === 'custom')
+    const [isCustomValue, setIsCustomValue] = useState<boolean>(
+        data && data.type === 'custom' ? true : false
+    )
     const [selectedType, setSelectedType] = useState<SelectOptionType>(selectItems[0])
-
-    useEffect(() => {
-        if (show) {
-            // I don't know why, but this is necessary to make the input focus
-            setTimeout(() => {
-                setFocus('quantity', { shouldSelect: true })
-            }, 1)
-        }
-    }, [show])
 
     useEffect(() => {
         if (selectedType.value === 'custom') setIsCustomValue(true)
@@ -88,10 +84,11 @@ export default function EditItemModal({ data, onModalClose, onEdit, show }: Edit
     }, [data])
 
     const handleEdit = async ({ quantity, label }: QuantityType) => {
-        if (!data || (data && !data.id)) return
+        if (!data?.id) return
 
         if (selectedType.value === 'custom') {
-            onEdit(data.id, { type: 'custom', quantity, label })
+            const qty = Number(quantity) || 0
+            onEdit(data.id, { type: 'custom', quantity: qty, label })
         } else {
             onEdit(data.id, { type: selectedType.value as ItemsType })
         }
@@ -124,7 +121,7 @@ export default function EditItemModal({ data, onModalClose, onEdit, show }: Edit
                                     Quantidade (em ml):
                                 </label>
                                 <Input
-                                    type='text'
+                                    type='number'
                                     placeholder='Ex: 1500'
                                     id='quantity_edm'
                                     register={register}
