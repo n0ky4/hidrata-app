@@ -1,8 +1,12 @@
 {
-    "name": "bebe-agua",
-    "private": true,
-    "version": "0.0.0",
+    "name": "hidrata-app",
+    "version": "1.0.0",
+    "license": "MIT",
     "type": "module",
+    "repository": "https://github.com/umgustavo/hidrata-app",
+    "bugs": {
+        "url": "https://github.com/umgustavo/hidrata-app/issues"
+    },
     "scripts": {
         "test": "vitest",
         "dev": "vite",
