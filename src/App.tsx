@@ -31,6 +31,17 @@ function App() {
     const [itemEditData, setItemEditData] = useState<ItemEditDataType | null>(null)
     const [showEditItemModal, setShowEditItemModal] = useState(false)
 
+    const refreshData = async (): Promise<boolean> => {
+        const data = await storage.getSafeData()
+        if (!data) return false
+
+        const hasToday = await storage.hasTodayRecord(data)
+        if (!hasToday) await storage.createRecord(new Date())
+
+        setData(data as StorageType)
+        return true
+    }
+
     // Data validation / First use detection
     const checkData = async () => {
         log.info('checando dados...', 'validation')
@@ -40,16 +51,14 @@ function App() {
             return
         }
 
-        log.info('retornando dados...', 'validation')
-        const data = await storage.getSafeData()
-        if (!data) {
+        const refresh = await refreshData()
+        if (!refresh) {
             log.warn('não há dados, mostrando tela de primeiro uso', 'validation')
             setShowFirstUse(true)
             return
         }
 
         log.info('há dados, mostrando tela principal e setando state...', 'validation')
-        setData(data as StorageType)
         setShowFirstUse(false)
     }
 
@@ -69,11 +78,6 @@ function App() {
 
         ;(async () => {
             await checkData()
-            const data = await storage.getSafeData()
-            if (!data) return
-
-            const hasToday = await storage.hasTodayRecord(data)
-            if (!hasToday) await storage.createRecord(new Date())
         })()
     }, [])
 
@@ -84,7 +88,6 @@ function App() {
             return
         }
 
-        log.info('dados existentes, checando validade...', 'data')
         const isValid = storage.isDataValid(data)
         if (!isValid) {
             log.info('dados inválidos, limpando dados e recarregando página.', 'data')
@@ -92,39 +95,24 @@ function App() {
             window.location.reload()
         }
 
-        log.info('dados válidos', 'data')
         const { age, weight, containers } = data.settings
-
-        log.info(`containers: ${containers.length}`)
         setContainers(containers)
 
         const dailyWater = getRecommendedWaterIntake(age, weight)
-
-        log.info(`qtd. água diária: ${dailyWater}`, 'data')
-        log.info('atualizando state água diária...', 'data')
-
         setRecommendedWater(dailyWater)
         ;(async () => {
             const waterIntake = await storage.calculateTodayWaterIntake()
-            log.info(`qtd. água ingerida hoje: ${waterIntake}`, 'data')
-
-            log.info('atualizando state água ingerida hoje...', 'data')
             setWaterIntake(waterIntake)
 
-            log.info('pegando registros de hoje...', 'data')
             const items = await storage.getTodayRecordItems(data)
-            if (!items) {
-                log.info('não há registros de hoje, retornando...', 'data')
-                return
-            }
-            log.info('há registros de hoje, atualizando state...', 'data')
+            if (!items) return
+
             setTodayRecords(
                 items.sort((a, b) => {
                     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
                 })
             )
 
-            log.info('atualizando state porcentagem...', 'data')
             const percent = Number(((waterIntake / dailyWater) * 100).toFixed(0))
             setPercent(percent)
         })()
