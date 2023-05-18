@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+// Schema dos dados que serão salvos no localStorage
 export const StorageSchema = z.object({
     settings: z.object({
         age: z.coerce.number().int().positive(),

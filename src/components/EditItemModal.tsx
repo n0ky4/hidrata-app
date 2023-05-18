@@ -21,6 +21,7 @@ interface EditItemModalProps {
     onEdit: (id: string, edit: EditChangesType) => void
 }
 
+// Schema de formulário
 export const QuantitySchema = z.object({
     quantity: z.union([
         z.coerce
@@ -39,6 +40,7 @@ export const QuantitySchema = z.object({
 
 export type QuantityType = z.infer<typeof QuantitySchema>
 
+// Itens padrão do select
 const selectItems: SelectOptionType[] = [
     {
         value: 'glass',
@@ -56,7 +58,6 @@ const selectItems: SelectOptionType[] = [
 
 export default function EditItemModal({ data, onModalClose, onEdit, show }: EditItemModalProps) {
     const {
-        setFocus,
         setValue,
         register,
         handleSubmit,

@@ -14,7 +14,8 @@ interface RecordCardProps {
 
 export function RecordCard({ item, onDelete, onEdit }: RecordCardProps) {
     const [time, setTime] = useState('há poucos segundos')
-    const [minTime, setMinTime] = useState('')
+    const [minTime, setMinTime] = useState('00:00') // Tempo para telas menores
+
     const title = new Date(item.createdAt).toLocaleString()
 
     const labels = {
@@ -33,7 +34,8 @@ export function RecordCard({ item, onDelete, onEdit }: RecordCardProps) {
     const updateTime = () => {
         const date = dayjs(item.createdAt)
         setTime(date.fromNow())
-        // set minified time
+
+        // Setar o horário minificado
         setMinTime(date.format('HH:mm'))
     }
 
@@ -54,14 +56,17 @@ export function RecordCard({ item, onDelete, onEdit }: RecordCardProps) {
             )}
         >
             <div className='w-1/4 text-sm text-zinc-400'>
+                {/* Telas maiores */}
                 <span title={title} className='hidden sm:inline'>
                     {time}
                 </span>
+                {/* Telas menores */}
                 <span title={title} className='inline sm:hidden'>
                     {minTime}
                 </span>
             </div>
             <div className='w-full truncate'>
+                {/* Telas maiores */}
                 <span title={mlTitle} className='hidden sm:inline'>
                     bebeu{' '}
                     {item.type === 'custom'
@@ -72,6 +77,7 @@ export function RecordCard({ item, onDelete, onEdit }: RecordCardProps) {
                               labels[item.type].suffix
                           }`}
                 </span>
+                {/* Telas menores */}
                 <span title={mlTitle} className='inline sm:hidden'>
                     {item.type === 'custom'
                         ? item.label

@@ -1,3 +1,5 @@
+// Funções de log para debug
+
 function lg(message: string, prefix: string, subprefix?: string) {
     if (!import.meta.env.DEV) return
     let prefixStyle = ''

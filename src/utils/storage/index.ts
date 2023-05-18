@@ -21,6 +21,7 @@ export interface EditChangesType {
 
 export class Storage {
     constructor(doNotConfigLocalForage?: boolean) {
+        // Parameter used in tests
         if (!doNotConfigLocalForage)
             localforage.config({
                 driver: localforage.LOCALSTORAGE,
@@ -63,6 +64,7 @@ export class Storage {
         await localforage.setItem('data', parsed)
     }
 
+    // Helper method to handle data
     private async dataMethodHandler(data: any, method: (data: StorageType) => any): Promise<any> {
         return new Promise(async (resolve) => {
             if (data && this.isDataValid(data)) return resolve(method(data))

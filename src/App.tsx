@@ -31,18 +31,22 @@ function App() {
     const [itemEditData, setItemEditData] = useState<ItemEditDataType | null>(null)
     const [showEditItemModal, setShowEditItemModal] = useState(false)
 
+    // Data refresh
     const refreshData = async (): Promise<boolean> => {
         const data = await storage.getSafeData()
         if (!data) return false
 
+        // Checar se o registro diário existe, se não existir, criar
         const hasToday = await storage.hasTodayRecord(data)
         if (!hasToday) await storage.createRecord(new Date())
 
+        // Setar o state
         setData(data as StorageType)
         return true
     }
 
-    // Data validation / First use detection
+    // Validação de dados, detecta se os dados são válidos.
+    // Caso não sejam, mostra o popup de primeiro uso.
     const checkData = async () => {
         log.info('checando dados...', 'validation')
         if (!storage) {
@@ -63,12 +67,13 @@ function App() {
     }
 
     useEffect(() => {
+        // Setup do dayjs
         dayjs.extend(relativeTime)
         dayjs.locale('pt-BR')
 
+        // Atalho do modal de debug
         if (import.meta.env.DEV) {
             document.addEventListener('keydown', (e) => {
-                // ctrl d
                 if (e.ctrlKey && e.key === 'd') {
                     e.preventDefault()
                     setDebug((prev) => !prev)
@@ -81,6 +86,7 @@ function App() {
         })()
     }, [])
 
+    // Hook de update dos dados (data), para atualizar outros states
     useEffect(() => {
         log.info('checando dados...', 'data')
         if (!data) {
@@ -107,17 +113,20 @@ function App() {
             const items = await storage.getTodayRecordItems(data)
             if (!items) return
 
+            // Ordenar por data de criação, do mais recente para o mais antigo
             setTodayRecords(
                 items.sort((a, b) => {
                     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
                 })
             )
 
+            // Calcular porcentagem com decimais
             const percent = Number(((waterIntake / dailyWater) * 100).toFixed(0))
             setPercent(percent)
         })()
     }, [data])
 
+    // Popup de primeiro uso caso o state seja true
     if (showFirstUse)
         return (
             <main>
@@ -127,14 +136,15 @@ function App() {
     else if (!data) return null
 
     const { age, weight } = data.settings
-    const dailyWater = getRecommendedWaterIntake(age, weight)
 
+    // Dados do modal de debug
     const dataList = [
         ['Idade', age],
         ['Peso', weight],
-        ['Qtd. Água Diária', `${dailyWater} ml`],
+        ['Qtd. Água Diária', `${recommendedWater} ml`],
     ]
 
+    // Handler para adicionar um registro de ingestão de água
     const handleAddWaterIntake = async (type: ItemsType, quantity?: number, label?: string) => {
         log.info(`adicionando água; tipo: ${type}, ml: ${quantity}, label: ${label}`)
         await storage.addItem({
@@ -145,31 +155,39 @@ function App() {
         await checkData()
     }
 
+    // Handler para adicionar um recipiente personalizado
     const handleAddCustomContainer = async (quantity: number, label?: string) => {
         log.info(`adicionando container customizado; ml: ${quantity}, label: ${label}`)
         await storage.addContainer(quantity, label)
         await handleAddWaterIntake('custom', quantity, label)
     }
 
+    // Handler para deletar um registro de ingestão de água
     const handleItemDelete = async (id: string) => {
         log.info(`deletando item ${id}`)
         await storage.deleteItem(id)
         await checkData()
     }
 
+    // Handler para editar um registro de ingestão de água
     const handleItemEdit = async (id: string, edit: EditChangesType) => {
         log.info(`editando item ${id}; edit: ${JSON.stringify(edit)}`)
         await storage.editItem(id, edit)
         await checkData()
     }
 
+    // Handler para abrir o modal de editar um registro. Aqui,
+    // pegamos o id do registro, retornamos os dados e setamos
+    // o state "itemEditData", que é usado no modal de edição.
     const handleOpenItemEditModal = async (id: string) => {
         log.info(`editando item ${id}`)
-        const item = await storage.getItemById(id)
 
+        const item = await storage.getItemById(id)
         if (!item) return
 
         if (item.type === 'custom') {
+            // Se o tipo do registro for "custom", adicionar "quantity" e "label"
+            // (propriedades típicas de um registro "custom")
             setItemEditData({
                 id: item.id,
                 type: item.type,
@@ -177,17 +195,20 @@ function App() {
                 label: item.label,
             })
         } else {
+            // Caso não for custom, apenas adicionar o id e o tipo.
             setItemEditData({
                 id: item.id,
                 type: item.type,
             })
         }
 
+        // Abrir o modal
         setShowEditItemModal(true)
     }
 
     return (
         <>
+            {/* Modal de debug */}
             {debug && import.meta.env.DEV && (
                 <Debug>
                     <div className='my-5'>
@@ -210,12 +231,14 @@ function App() {
                     </div>
                 </Debug>
             )}
+            {/* Modal para adicionar um registro */}
             <CustomWaterIntakeModal
                 onSaveCustomContainer={handleAddCustomContainer}
                 onAddWaterIntake={(quantity: number) => handleAddWaterIntake('custom', quantity)}
                 show={showCustomWaterIntakeModal}
                 onModalClose={() => setShowCustomWaterIntakeModal(false)}
             />
+            {/* Modal para editar um registro */}
             <EditItemModal
                 data={itemEditData}
                 show={showEditItemModal}
@@ -252,6 +275,7 @@ function App() {
                             <div className='flex items-center gap-2'>
                                 <div className='relative group'>
                                     <h1 className='text-6xl font-bold text-blue-100'>
+                                        {/* Mostra a porcentagem. Se for maior que 999, mostra +999 */}
                                         {percent <= 999 ? percent : '+999'}%
                                     </h1>
                                     <span className='absolute -bottom-3 left-0 text-sm font-mono text-zinc-500 opacity-0 transition-opacity group-hover:opacity-100'>
@@ -284,6 +308,7 @@ function App() {
                     <h1 className='text-xl font-bold'>Histórico</h1>
                     <div className='flex flex-col gap-2'>
                         {todayRecords.length ? (
+                            // Caso tenha registros
                             todayRecords.map((x) => {
                                 return (
                                     <RecordCard
@@ -295,6 +320,7 @@ function App() {
                                 )
                             })
                         ) : (
+                            // Caso não tenha registros
                             <span className='text-zinc-400'>
                                 Não há nenhum registro de hoje... Que tal começar tomando um copo
                                 d'água? 😊💧

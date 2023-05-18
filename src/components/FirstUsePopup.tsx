@@ -7,6 +7,7 @@ import Button from './Button'
 import Input from './Input'
 import Modal from './Modal'
 
+// Schema do formulário
 const FirstSettingsSchema = z.object({
     age: z.coerce
         .number({
@@ -49,6 +50,7 @@ export default function FirstUsePopup({ storage }: FirstUsePopupProps) {
             },
         })
 
+        // Salvar os dados e recarregar a página
         await storage.setData(parsed)
         window.location.reload()
     }

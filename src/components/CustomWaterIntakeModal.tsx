@@ -7,6 +7,7 @@ import Checkbox from './Checkbox'
 import Input from './Input'
 import Modal from './Modal'
 
+// Schema do formulário
 export const QuantitySchema = z.object({
     quantity: z.coerce
         .number({
@@ -43,6 +44,8 @@ export default function CustomWaterIntakeModal({
         resolver: zodResolver(QuantitySchema),
     })
 
+    // Função para gerar nomes aleatórios que serão
+    // usados como placeholder do input de nome
     const getRandomName = (exclude?: string) => {
         const names = [
             'Caneca que minha mãe me deu',
@@ -60,14 +63,19 @@ export default function CustomWaterIntakeModal({
 
     useEffect(() => {
         if (show) {
-            // I don't know why, but this is necessary to make the input focus
+            // Gambiarra para fazer com que o input seja focado ao
+            // abrir o modal. Por algum motivo, sem o setTimeout,
+            // o input não é focado ¯\_(ツ)_/¯
             setTimeout(() => {
                 setFocus('quantity', { shouldSelect: true })
+
+                // Troca o nome aleatório a cada vez que o modal é aberto
                 setRandomName(getRandomName(randomName))
             }, 1)
         }
     }, [show])
 
+    // Função chamada quando o formulário é submetido
     const addQuantity = async ({ quantity, label }: QuantityType) => {
         if (checkbox) onSaveCustomContainer(quantity, label)
         else onAddWaterIntake(quantity)

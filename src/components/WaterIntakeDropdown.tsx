@@ -74,6 +74,7 @@ function DropdownItem({
 export function WaterIntakeDropdown({ onAdd, onOpenModal, containers }: WaterIntakeDropdownProps) {
     const isMac = navigator.userAgent.indexOf('Mac') !== -1
 
+    // Itens padrão do dropdown
     const dropdownItems: DropdownItemType[] = [
         {
             type: 'glass',
