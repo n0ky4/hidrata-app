@@ -4,11 +4,8 @@ Coisas que preciso/planejo fazer no projeto.
 
 ## ⚙ Funcionalidade
 
--   [ ] Editar registro
--   [ ] Atalhos personalizados
--   [x] Modal de ml custom
-    -   [x] Salvar ml custom
 -   [ ] Página de configuração
+-   [ ] Página de sobre (créditos, source-code, etc)
 -   [ ] Página de registros anteriores
     -   [ ] Filtrar por data
     -   [ ] Gráficos/Estatísticas
@@ -16,7 +13,7 @@ Coisas que preciso/planejo fazer no projeto.
 -   [ ] PWA / Service Workers
     -   [ ] Alarme/Notificação
     -   [ ] Suporte offline
--   [ ] Página de sobre (créditos, source-code, etc)
+-   [ ] Atalhos personalizados
 -   [ ] Internacionalização
     -   [ ] Idiomas
     -   [ ] Unidades de medida
