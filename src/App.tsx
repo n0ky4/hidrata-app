@@ -11,6 +11,7 @@ import { Debug } from './components/Debug'
 import EditItemModal, { ItemEditDataType } from './components/EditItemModal'
 import FirstUsePopup from './components/FirstUsePopup'
 import { RecordCard } from './components/RecordCard'
+import Tag from './components/Tag'
 import { WaterIntakeDropdown } from './components/WaterIntakeDropdown'
 import { clamp, getRecommendedWaterIntake } from './utils/helpers'
 import log from './utils/log'
@@ -247,7 +248,7 @@ function App() {
             />
             <nav>
                 <div className='max-w-screen-md mx-auto p-4 border-b-2 flex items-center justify-between border-zinc-700'>
-                    <h1 className='text-2xl font-white font-semibold'>hidrata-app</h1>
+                    <h1 className='text-2xl font-white font-semibold'>hidrata-app <Tag color='blue' shadow translate>Beta</Tag></h1>
                     <div className='flex items-center gap-2'>
                         <Button ghost>
                             <GearSix size={24} weight='bold' />
