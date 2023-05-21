@@ -20,10 +20,10 @@ Coisas que preciso/planejo fazer no projeto.
 
 ## ✨ Aparência
 
--   [ ] Adicionar ícone/arte quando não houver registros
 -   [ ] Melhorar o design
 -   [ ] Animações
     -   [ ] Animação de porcentagem incrementando
+    -   [ ] Animação ilustração 'empty'
 -   [ ] Temas
     -   [ ] Tema claro
     -   [ ] Cor de destaque personalizada
