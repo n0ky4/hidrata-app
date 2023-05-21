@@ -9,6 +9,7 @@ import Button from './components/Button'
 import CustomWaterIntakeModal from './components/CustomWaterIntakeModal'
 import { Debug } from './components/Debug'
 import EditItemModal, { ItemEditDataType } from './components/EditItemModal'
+import EmptyRecords from './components/EmptyRecords'
 import FirstUsePopup from './components/FirstUsePopup'
 import { RecordCard } from './components/RecordCard'
 import Tag from './components/Tag'
@@ -248,7 +249,12 @@ function App() {
             />
             <nav>
                 <div className='max-w-screen-md mx-auto p-4 border-b-2 flex items-center justify-between border-zinc-700'>
-                    <h1 className='text-2xl font-white font-semibold'>hidrata-app <Tag color='blue' shadow translate>Beta</Tag></h1>
+                    <h1 className='text-2xl font-white font-semibold'>
+                        hidrata-app{' '}
+                        <Tag color='blue' shadow translate>
+                            Beta
+                        </Tag>
+                    </h1>
                     <div className='flex items-center gap-2'>
                         <Button ghost>
                             <GearSix size={24} weight='bold' />
@@ -322,10 +328,7 @@ function App() {
                             })
                         ) : (
                             // Caso não tenha registros
-                            <span className='text-zinc-400'>
-                                Não há nenhum registro de hoje... Que tal começar tomando um copo
-                                d'água? 😊💧
-                            </span>
+                            <EmptyRecords />
                         )}
                     </div>
                     <div className='flex items-center justify-center w-full'>
