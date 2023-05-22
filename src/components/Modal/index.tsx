@@ -1,8 +1,8 @@
 import { Transition } from '@headlessui/react'
 import { X } from '@phosphor-icons/react'
 import React, { Fragment, useEffect } from 'react'
-import { WithChildren } from '../utils/types'
-import Button from './Button'
+import { WithChildren } from '../../utils/types'
+import Button from '../Button'
 
 type SubComponentNode = {
     type?: {

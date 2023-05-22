@@ -3,10 +3,10 @@ import { ArrowCounterClockwise, Trash } from '@phosphor-icons/react'
 import clsx from 'clsx'
 import { ChangeEvent, Fragment, useEffect, useState } from 'react'
 import { z } from 'zod'
-import { ContainerType } from '../utils/storage/schema'
-import Button from './Button'
-import Input from './Input'
-import Modal from './Modal'
+import { ContainerType } from '../../utils/storage/schema'
+import Button from './../Button'
+import Input from './../Input'
+import Modal from './index'
 
 export type SettingsDataType = {
     age: number

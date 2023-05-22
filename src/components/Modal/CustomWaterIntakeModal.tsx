@@ -2,10 +2,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import Button from './Button'
-import Checkbox from './Checkbox'
-import Input from './Input'
-import Modal from './Modal'
+import Button from './../Button'
+import Checkbox from './../Checkbox'
+import Input from './../Input'
+import Modal from './index'
 
 // Schema do formulário
 export const QuantitySchema = z.object({
