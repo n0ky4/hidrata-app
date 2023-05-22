@@ -9,6 +9,7 @@ import Button from './components/Button'
 import { Debug } from './components/Debug'
 import EmptyRecords from './components/EmptyRecords'
 import FirstUsePopup from './components/FirstUsePopup'
+import ConfirmModal from './components/Modal/ConfirmModal'
 import CustomWaterIntakeModal from './components/Modal/CustomWaterIntakeModal'
 import EditItemModal, { ItemEditDataType } from './components/Modal/EditItemModal'
 import SettingsModal, { SettingsDataType } from './components/Modal/SettingsModal'
@@ -37,6 +38,7 @@ function App() {
     const [showCustomWaterIntakeModal, setShowCustomWaterIntakeModal] = useState(false)
     const [showEditItemModal, setShowEditItemModal] = useState(false)
     const [showSettingsModal, setShowSettingsModal] = useState(false)
+    const [showSettingsConfirmModal, setShowSettingsConfirmModal] = useState(false)
 
     const [percent, setPercent] = useState(0)
     const [waterIntake, setWaterIntake] = useState(0)
@@ -230,6 +232,7 @@ function App() {
         }
     }
 
+    // Handler para abrir o modal de configurações
     const handleOpenSettingsModal = async () => {
         const settings = await getParsedSettings()
         if (!settings) return
@@ -243,6 +246,7 @@ function App() {
         setShowSettingsModal(true)
     }
 
+    // Handler para salvar as configurações
     const handleSaveSettings = async (settings: SettingsDataType, ageWeightChanged?: boolean) => {
         const ogSettings = await getParsedSettings()
         if (!ogSettings) return
@@ -254,14 +258,14 @@ function App() {
         await storage.setSettings(settings)
         await checkData()
 
+        if (ageWeightChanged) setTimeout(() => setShowSettingsConfirmModal(true), 500)
+    }
+
+    const handleSettingsConfirm = async () => {
         // TODO
-        if (ageWeightChanged) {
-            setTimeout(() => {
-                const conf = confirm(
-                    'Você alterou sua idade ou peso. Deseja recalcular a ingestão diária de água de hoje?'
-                )
-            }, 500)
-        }
+
+        setShowSettingsConfirmModal(false)
+        await checkData()
     }
 
     return (
@@ -289,6 +293,16 @@ function App() {
                     </div>
                 </Debug>
             )}
+            {/* Modal de confirmação do `SettingsModal` */}
+            <ConfirmModal
+                title='Recalcular?'
+                show={showSettingsConfirmModal}
+                onConfirm={handleSettingsConfirm}
+                onCancel={() => setShowSettingsConfirmModal(false)}
+                onModalClose={() => setShowSettingsConfirmModal(false)}
+            >
+                Você alterou a idade ou peso. Deseja recalcular a quantidade de água diária?
+            </ConfirmModal>
             {/* Modal de configurações */}
             <SettingsModal
                 data={settingsData}
