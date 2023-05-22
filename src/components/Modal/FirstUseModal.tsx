@@ -1,11 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { Storage } from '../utils/storage'
-import { StorageSchema } from '../utils/storage/schema'
-import Button from './Button'
-import Input from './Input'
-import Modal from './Modal'
+import Modal from '.'
+import { Storage } from '../../utils/storage'
+import { StorageSchema } from '../../utils/storage/schema'
+import Button from '../Button'
+import Input from '../Input'
 
 // Schema do formulário
 const FirstSettingsSchema = z.object({
@@ -29,11 +29,11 @@ const FirstSettingsSchema = z.object({
 
 export type FirstSettingsType = z.infer<typeof FirstSettingsSchema>
 
-interface FirstUsePopupProps {
+interface FirstUseModalProps {
     storage: Storage
 }
 
-export default function FirstUsePopup({ storage }: FirstUsePopupProps) {
+export default function FirstUseModal({ storage }: FirstUseModalProps) {
     const {
         register,
         handleSubmit,
@@ -99,12 +99,6 @@ export default function FirstUsePopup({ storage }: FirstUsePopupProps) {
                         )}
                     </div>
                     <div>
-                        {/* <button
-                            type='submit'
-                            className='bg-blue-600 text-white font-lg font-semibold py-2 px-4 rounded hover:bg-blue-700 transition-colors float-right'
-                        >
-                            Salvar
-                        </button> */}
                         <Button type='submit' className='float-right'>
                             Salvar
                         </Button>
