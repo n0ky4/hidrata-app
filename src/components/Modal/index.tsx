@@ -1,14 +1,7 @@
 import { Transition } from '@headlessui/react'
 import { X } from '@phosphor-icons/react'
-import React, { Fragment, useEffect } from 'react'
-import { WithChildren } from '../../utils/types'
+import React, { Children, Fragment, PropsWithChildren, ReactElement, useEffect } from 'react'
 import Button from '../Button'
-
-type SubComponentNode = {
-    type?: {
-        name?: string
-    }
-}
 
 interface ModalProps {
     children: React.ReactNode
@@ -22,29 +15,37 @@ interface ContentProps {
     flex?: boolean
 }
 
+const Title = ({ children }: PropsWithChildren) => {
+    return <h1 className='text-2xl font-bold'>{children}</h1>
+}
+
+const Description = ({ children }: PropsWithChildren) => {
+    return <p className='text-md'>{children}</p>
+}
+
+const Content = ({ children, flex = false }: ContentProps) => {
+    return flex ? <div className='flex flex-col gap-4'>{children}</div> : <div>{children}</div>
+}
+
 function Modal({ children, show, onModalClose, canClose = true }: ModalProps) {
     const closeModal = () => {
         if (canClose && onModalClose) onModalClose()
     }
 
-    const subComponentList = Object.keys(Modal)
-
-    const subComponents = subComponentList.map((key) => {
-        return React.Children.map(children, (child) => {
-            return child && (child as SubComponentNode)?.type?.name === key ? child : null
-        })
+    const title = Children.map(children, (child) => {
+        const item = child as ReactElement
+        if (item.type === Title) return item
     })
 
-    const title = subComponents.filter(
-        (component) => component && (component as SubComponentNode[])[0]?.type?.name === 'Title'
-    )[0]
-    const description = subComponents.filter(
-        (component) =>
-            component && (component as SubComponentNode[])[0]?.type?.name === 'Description'
-    )[0]
-    const content = subComponents.filter(
-        (component) => component && (component as SubComponentNode[])[0]?.type?.name === 'Content'
-    )[0]
+    const description = Children.map(children, (child) => {
+        const item = child as ReactElement
+        if (item.type === Description) return item
+    })
+
+    const content = Children.map(children, (child) => {
+        const item = child as ReactElement
+        if (item.type === Content) return item
+    })
 
     useEffect(() => {
         document.addEventListener('keydown', (e) => {
@@ -96,19 +97,8 @@ function Modal({ children, show, onModalClose, canClose = true }: ModalProps) {
     )
 }
 
-const Title = ({ children }: WithChildren) => {
-    return <h1 className='text-2xl font-bold'>{children}</h1>
-}
 Modal.Title = Title
-
-const Description = ({ children }: WithChildren) => {
-    return <p className='text-md'>{children}</p>
-}
 Modal.Description = Description
-
-const Content = ({ children, flex = false }: ContentProps) => {
-    return flex ? <div className='flex flex-col gap-4'>{children}</div> : <div>{children}</div>
-}
 Modal.Content = Content
 
 export default Modal
