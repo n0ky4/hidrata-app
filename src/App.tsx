@@ -12,14 +12,21 @@ import ConfirmModal from './components/Modal/ConfirmModal'
 import CustomWaterIntakeModal from './components/Modal/CustomWaterIntakeModal'
 import EditItemModal, { ItemEditDataType } from './components/Modal/EditItemModal'
 import FirstUsePopup from './components/Modal/FirstUseModal'
-import SettingsModal, { SettingsDataType } from './components/Modal/SettingsModal'
+import SettingsModal from './components/Modal/SettingsModal'
 import { RecordCard } from './components/RecordCard'
 import Tag from './components/Tag'
 import { WaterIntakeDropdown } from './components/WaterIntakeDropdown'
 import { clamp, getRecommendedWaterIntake } from './utils/helpers'
 import log from './utils/log'
 import { EditChangesType, useStorage } from './utils/storage'
-import { ContainerType, ItemsType, RecordItemType, StorageType } from './utils/storage/schema'
+import {
+    ContainerType,
+    ItemsType,
+    RecordItemType,
+    SettingsDataType,
+    StorageType,
+    TodaySettingsDataType,
+} from './utils/storage/schema'
 
 function App() {
     const storage = useStorage()
@@ -32,6 +39,7 @@ function App() {
         weight: 0,
         containers: [],
     })
+    const [ageWeightToEdit, setAgeWeightToEdit] = useState<TodaySettingsDataType | null>(null)
 
     const [debug, setDebug] = useState(false)
     const [showFirstUse, setShowFirstUse] = useState(false)
@@ -258,13 +266,22 @@ function App() {
         await storage.setSettings(settings)
         await checkData()
 
-        if (ageWeightChanged) setTimeout(() => setShowSettingsConfirmModal(true), 500)
+        if (ageWeightChanged) {
+            setAgeWeightToEdit({
+                age: settings.age,
+                weight: settings.weight,
+            })
+            setTimeout(() => setShowSettingsConfirmModal(true), 300)
+        }
     }
 
     const handleSettingsConfirm = async () => {
-        // TODO
+        if (!ageWeightToEdit) return
 
+        await storage.setTodaySettings(ageWeightToEdit)
         setShowSettingsConfirmModal(false)
+        setAgeWeightToEdit(null)
+
         await checkData()
     }
 

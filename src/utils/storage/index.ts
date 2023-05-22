@@ -1,7 +1,14 @@
 import localforage from 'localforage'
-import { SettingsDataType } from '../../components/SettingsModal'
 import { getWaterMLFromType } from '../helpers'
-import { ItemsType, RecordItemType, SettingsType, StorageSchema, StorageType } from './schema'
+import {
+    ItemsType,
+    RecordItemType,
+    SettingsDataType,
+    SettingsType,
+    StorageSchema,
+    StorageType,
+    TodaySettingsDataType,
+} from './schema'
 
 export function useStorage() {
     return new Storage()
@@ -108,6 +115,16 @@ export class Storage {
         const data = await this.getSafeData()
         if (!data) return
         data.settings = { ...data.settings, ...settings }
+        await this.setData(data)
+    }
+
+    async setTodaySettings(settings: TodaySettingsDataType) {
+        const data = await this.getSafeData()
+        if (!data) return
+        const today = new Date().toISOString().split('T')[0]
+        const record = data.records.find((x) => x.date === today)
+        if (!record) return
+        record.settings = { ...record.settings, ...settings }
         await this.setData(data)
     }
 

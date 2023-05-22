@@ -61,6 +61,15 @@ export const StorageSchema = z.object({
 })
 
 export type StorageType = z.infer<typeof StorageSchema>
+export type SettingsDataType = {
+    age: number
+    weight: number
+    containers: ContainerType
+}
+export type TodaySettingsDataType = {
+    age: number
+    weight: number
+}
 export type RecordItemType = StorageType['records'][0]['items']
 export type ItemsType = StorageType['records'][0]['items'][0]['type']
 export type ContainerType = StorageType['settings']['containers']
