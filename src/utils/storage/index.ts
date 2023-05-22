@@ -1,4 +1,5 @@
 import localforage from 'localforage'
+import { SettingsDataType } from '../../components/SettingsModal'
 import { getWaterMLFromType } from '../helpers'
 import { ItemsType, RecordItemType, SettingsType, StorageSchema, StorageType } from './schema'
 
@@ -81,12 +82,12 @@ export class Storage {
         })
     }
 
-    async getTodayRecordItems(data?: StorageType): Promise<RecordItemType> {
+    async getTodayRecord(data?: StorageType): Promise<StorageType['records'][0]> {
         return await this.dataMethodHandler(data, async (data) => {
             const today = new Date().toISOString().split('T')[0]
             const record = data.records.find((x) => x.date === today)
             if (!record) return []
-            return record.items
+            return record
         })
     }
 
@@ -101,6 +102,13 @@ export class Storage {
         return await this.dataMethodHandler(data, (data) => {
             return data.settings
         })
+    }
+
+    async setSettings(settings: SettingsDataType) {
+        const data = await this.getSafeData()
+        if (!data) return
+        data.settings = { ...data.settings, ...settings }
+        await this.setData(data)
     }
 
     async getItemById(id: string, data?: StorageType): Promise<RecordItemType[0] | null> {

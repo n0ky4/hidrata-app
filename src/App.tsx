@@ -12,6 +12,7 @@ import EditItemModal, { ItemEditDataType } from './components/EditItemModal'
 import EmptyRecords from './components/EmptyRecords'
 import FirstUsePopup from './components/FirstUsePopup'
 import { RecordCard } from './components/RecordCard'
+import SettingsModal, { SettingsDataType } from './components/SettingsModal'
 import Tag from './components/Tag'
 import { WaterIntakeDropdown } from './components/WaterIntakeDropdown'
 import { clamp, getRecommendedWaterIntake } from './utils/helpers'
@@ -22,16 +23,24 @@ import { ContainerType, ItemsType, RecordItemType, StorageType } from './utils/s
 function App() {
     const storage = useStorage()
     const [data, setData] = useState<StorageType | null>(null)
+    const [todayRecords, setTodayRecords] = useState<RecordItemType>([])
+    const [containers, setContainers] = useState<ContainerType>([])
+    const [itemEditData, setItemEditData] = useState<ItemEditDataType | null>(null)
+    const [settingsData, setSettingsData] = useState<SettingsDataType>({
+        age: 0,
+        weight: 0,
+        containers: [],
+    })
+
     const [debug, setDebug] = useState(false)
     const [showFirstUse, setShowFirstUse] = useState(false)
-    const [todayRecords, setTodayRecords] = useState<RecordItemType>([])
+    const [showCustomWaterIntakeModal, setShowCustomWaterIntakeModal] = useState(false)
+    const [showEditItemModal, setShowEditItemModal] = useState(false)
+    const [showSettingsModal, setShowSettingsModal] = useState(false)
+
     const [percent, setPercent] = useState(0)
     const [waterIntake, setWaterIntake] = useState(0)
     const [recommendedWater, setRecommendedWater] = useState(0)
-    const [showCustomWaterIntakeModal, setShowCustomWaterIntakeModal] = useState(false)
-    const [containers, setContainers] = useState<ContainerType>([])
-    const [itemEditData, setItemEditData] = useState<ItemEditDataType | null>(null)
-    const [showEditItemModal, setShowEditItemModal] = useState(false)
 
     // Data refresh
     const refreshData = async (): Promise<boolean> => {
@@ -103,17 +112,18 @@ function App() {
             window.location.reload()
         }
 
-        const { age, weight, containers } = data.settings
+        const { containers } = data.settings
         setContainers(containers)
-
-        const dailyWater = getRecommendedWaterIntake(age, weight)
-        setRecommendedWater(dailyWater)
         ;(async () => {
             const waterIntake = await storage.calculateTodayWaterIntake()
             setWaterIntake(waterIntake)
 
-            const items = await storage.getTodayRecordItems(data)
-            if (!items) return
+            const { items, settings } = await storage.getTodayRecord(data)
+            if (!items || !settings) return
+
+            const { age, weight } = settings
+            const dailyWater = getRecommendedWaterIntake(age, weight)
+            setRecommendedWater(dailyWater)
 
             // Ordenar por data de criação, do mais recente para o mais antigo
             setTodayRecords(
@@ -208,6 +218,52 @@ function App() {
         setShowEditItemModal(true)
     }
 
+    const getParsedSettings = async () => {
+        const settings = await storage.getCurrentSettings()
+        if (!settings) return null
+
+        const { age, weight, containers } = settings
+        return {
+            age,
+            weight,
+            containers,
+        }
+    }
+
+    const handleOpenSettingsModal = async () => {
+        const settings = await getParsedSettings()
+        if (!settings) return
+
+        const { age, weight, containers } = settings
+        setSettingsData({
+            age,
+            weight,
+            containers,
+        })
+        setShowSettingsModal(true)
+    }
+
+    const handleSaveSettings = async (settings: SettingsDataType, ageWeightChanged?: boolean) => {
+        const ogSettings = await getParsedSettings()
+        if (!ogSettings) return
+
+        // Checar se as configurações são iguais às antigas
+        if (JSON.stringify(ogSettings) === JSON.stringify(settings)) return
+
+        // Salvar novas configurações
+        await storage.setSettings(settings)
+        await checkData()
+
+        // TODO
+        if (ageWeightChanged) {
+            setTimeout(() => {
+                const conf = confirm(
+                    'Você alterou sua idade ou peso. Deseja recalcular a ingestão diária de água de hoje?'
+                )
+            }, 500)
+        }
+    }
+
     return (
         <>
             {/* Modal de debug */}
@@ -233,6 +289,13 @@ function App() {
                     </div>
                 </Debug>
             )}
+            {/* Modal de configurações */}
+            <SettingsModal
+                data={settingsData}
+                show={showSettingsModal}
+                onSave={handleSaveSettings}
+                onModalClose={() => setShowSettingsModal(false)}
+            />
             {/* Modal para adicionar um registro */}
             <CustomWaterIntakeModal
                 onSaveCustomContainer={handleAddCustomContainer}
@@ -256,7 +319,7 @@ function App() {
                         </Tag>
                     </h1>
                     <div className='flex items-center gap-2'>
-                        <Button ghost>
+                        <Button ghost onClick={handleOpenSettingsModal}>
                             <GearSix size={24} weight='bold' />
                         </Button>
                     </div>
