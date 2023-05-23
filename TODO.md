@@ -17,6 +17,7 @@ Coisas que preciso/planejo fazer no projeto.
 -   [ ] Internacionalização
     -   [ ] Idiomas
     -   [ ] Unidades de medida
+-   [ ] Open Graph/Meta Tags
 
 ## ✨ Aparência
 
