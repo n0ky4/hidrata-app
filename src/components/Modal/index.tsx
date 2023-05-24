@@ -93,7 +93,7 @@ function Modal({ children, show, onModalClose, canClose = true }: ModalProps) {
                     leaveTo='opacity-0'
                 >
                     <div
-                        className='fixed top-0 left-0 w-full h-full bg-black/50'
+                        className='fixed top-0 left-0 w-full h-full bg-black/50 backdrop-blur'
                         onClick={() => closeModal()}
                     ></div>
                 </Transition.Child>
