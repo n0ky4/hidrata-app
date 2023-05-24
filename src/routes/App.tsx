@@ -342,7 +342,7 @@ function App() {
                 onModalClose={() => setShowEditItemModal(false)}
             />
             <NavBar>
-                <Button ghost onClick={handleOpenSettingsModal}>
+                <Button ghost onClick={handleOpenSettingsModal} title='Configurações'>
                     <GearSix size={24} weight='bold' />
                 </Button>
             </NavBar>

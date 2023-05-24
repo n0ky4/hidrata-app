@@ -54,7 +54,12 @@ const ContainerItem = ({ container, onDelete, isDisabled }: ContainerItemProps) 
                 </span>
             </div>
             <div>
-                <Button className='hover:!bg-red-500' ghost onClick={() => onDelete(container.id)}>
+                <Button
+                    className='hover:!bg-red-500'
+                    ghost
+                    onClick={() => onDelete(container.id)}
+                    title={isDisabled ? 'Desfazer deletar item' : 'Deletar item'}
+                >
                     {isDisabled ? (
                         <ArrowCounterClockwise size={24} weight='bold' />
                     ) : (
@@ -160,7 +165,7 @@ export default function SettingsModal({
                 <div className='flex items-center gap-2'>
                     <h1 className='text-2xl font-bold'>Configurações</h1>
                     <Link to='/about'>
-                        <Button ghost className='!rounded-full !p-1'>
+                        <Button ghost className='!rounded-full !p-1' title='Sobre'>
                             <Question size={24} weight='bold' />
                         </Button>
                     </Link>

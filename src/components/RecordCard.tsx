@@ -87,10 +87,15 @@ export function RecordCard({ item, onDelete, onEdit }: RecordCardProps) {
                 </span>
             </div>
             <div className='flex items-center gap-2'>
-                <Button onClick={() => onEdit(item.id)} ghost>
+                <Button onClick={() => onEdit(item.id)} ghost title='Editar'>
                     <Pencil size={22} weight='bold' />
                 </Button>
-                <Button onClick={() => onDelete(item.id)} ghost className='hover:!bg-red-500'>
+                <Button
+                    onClick={() => onDelete(item.id)}
+                    ghost
+                    className='hover:!bg-red-500'
+                    title='Deletar'
+                >
                     <Trash size={22} weight='bold' />
                 </Button>
             </div>

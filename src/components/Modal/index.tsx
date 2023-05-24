@@ -74,7 +74,7 @@ function Modal({ children, show, onModalClose, canClose = true }: ModalProps) {
                         <div className='flex items-center justify-between'>
                             {title}
                             {canClose ? (
-                                <Button onClick={() => closeModal()} ghost>
+                                <Button onClick={() => closeModal()} ghost title='Fechar'>
                                     <X weight='bold' size={24} />
                                 </Button>
                             ) : null}
