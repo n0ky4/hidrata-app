@@ -15,8 +15,13 @@ interface ContentProps {
     flex?: boolean
 }
 
-const Title = ({ children }: PropsWithChildren) => {
-    return <h1 className='text-2xl font-bold'>{children}</h1>
+interface TitleProps {
+    children: React.ReactNode
+    custom?: boolean
+}
+
+const Title = ({ children, custom = false }: TitleProps) => {
+    return custom ? <>{children}</> : <h1 className='text-2xl font-bold'>{children}</h1>
 }
 
 const Description = ({ children }: PropsWithChildren) => {
