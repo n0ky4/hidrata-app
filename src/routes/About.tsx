@@ -8,7 +8,7 @@ import Stagger from '../components/Stagger'
 export default function About() {
     return (
         <>
-            <NavBar title='Sobre' noTitle>
+            <NavBar noTitle>
                 <Link to='/'>
                     <Button>
                         <ArrowLeft size={24} weight='bold' /> Voltar
