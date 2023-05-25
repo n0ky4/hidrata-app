@@ -8,7 +8,7 @@ export default function Input({ name, register, validationSchema, ...rest }: Inp
     const reg = register ? register(name, validationSchema) : null
     return (
         <input
-            className='font-lg bg-zinc-900 border-2 border-zinc-700 rounded p-2'
+            className='font-lg bg-zinc-900 border-2 border-zinc-700 rounded p-2 ring-focus'
             {...rest}
             {...reg}
         />
