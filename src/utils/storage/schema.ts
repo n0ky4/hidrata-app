@@ -13,17 +13,17 @@ export const StorageSchema = z.object({
             })
             .array()
             .default([]),
-        notify: z
-            .object({
-                enabled: z.coerce.boolean(),
-                everyMinutes: z.coerce.number().int().positive(),
-                sound: z.union([z.literal('bells'), z.literal('drop'), z.literal('marimba')]),
-            })
-            .default({
-                enabled: false,
-                everyMinutes: 120,
-                sound: 'bells',
-            }),
+        // notify: z
+        //     .object({
+        //         enabled: z.coerce.boolean(),
+        //         everyMinutes: z.coerce.number().int().positive(),
+        //         sound: z.union([z.literal('bells'), z.literal('drop'), z.literal('marimba')]),
+        //     })
+        //     .default({
+        //         enabled: false,
+        //         everyMinutes: 120,
+        //         sound: 'bells',
+        //     }),
     }),
     records: z
         .object({
