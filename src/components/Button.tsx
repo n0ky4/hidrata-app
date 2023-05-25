@@ -13,7 +13,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         <button
             ref={ref}
             className={clsx(
-                'rounded-lg transition-colors font-semibold',
+                'rounded-lg transition-colors font-semibold select-none',
                 ghost
                     ? 'p-2 bg-transparent text-zinc-300 hover:text-white hover:bg-white/20'
                     : 'py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700',

@@ -1,8 +1,10 @@
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import App from './routes/App'
 
 import About from './routes/About'
+import App from './routes/App'
+import Error404 from './routes/Error404'
+
 import './styles/global.css'
 
 const router = createBrowserRouter([
@@ -13,6 +15,10 @@ const router = createBrowserRouter([
     {
         path: '/about',
         element: <About />,
+    },
+    {
+        path: '*',
+        element: <Error404 />,
     },
 ])
 
