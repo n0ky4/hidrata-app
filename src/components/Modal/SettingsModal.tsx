@@ -163,7 +163,7 @@ export default function SettingsModal({
         <Modal show={show} onModalClose={onModalClose}>
             <Modal.Title custom>
                 <div className='flex items-center gap-2'>
-                    <h1 className='text-2xl font-bold'>Configurações</h1>
+                    <h1 className='font-bold sm:text-2xl text-xl'>Configurações</h1>
                     <Link to='/about'>
                         <Button ghost className='!rounded-full !p-1' title='Sobre'>
                             <Question size={24} weight='bold' />
@@ -173,7 +173,7 @@ export default function SettingsModal({
             </Modal.Title>
             <Modal.Content>
                 <form className='flex flex-col gap-4' onSubmit={handleFormSubmit}>
-                    <div className='flex gap-3'>
+                    <div className='flex gap-3 flex-wrap'>
                         <div className='flex flex-col gap-1 flex-grow'>
                             <label htmlFor='quantity_cwim' className='font-semibold'>
                                 Idade:
