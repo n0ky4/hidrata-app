@@ -15,8 +15,13 @@ interface ContentProps {
     flex?: boolean
 }
 
-const Title = ({ children }: PropsWithChildren) => {
-    return <h1 className='text-2xl font-bold'>{children}</h1>
+interface TitleProps {
+    children: React.ReactNode
+    custom?: boolean
+}
+
+const Title = ({ children, custom = false }: TitleProps) => {
+    return custom ? <>{children}</> : <h1 className='text-2xl font-bold'>{children}</h1>
 }
 
 const Description = ({ children }: PropsWithChildren) => {
@@ -69,7 +74,7 @@ function Modal({ children, show, onModalClose, canClose = true }: ModalProps) {
                         <div className='flex items-center justify-between'>
                             {title}
                             {canClose ? (
-                                <Button onClick={() => closeModal()} ghost>
+                                <Button onClick={() => closeModal()} ghost title='Fechar'>
                                     <X weight='bold' size={24} />
                                 </Button>
                             ) : null}
@@ -88,7 +93,7 @@ function Modal({ children, show, onModalClose, canClose = true }: ModalProps) {
                     leaveTo='opacity-0'
                 >
                     <div
-                        className='fixed top-0 left-0 w-full h-full bg-black/50'
+                        className='fixed top-0 left-0 w-full h-full bg-black/50 backdrop-blur'
                         onClick={() => closeModal()}
                     ></div>
                 </Transition.Child>

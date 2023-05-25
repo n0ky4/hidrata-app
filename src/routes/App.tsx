@@ -5,20 +5,20 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import { useEffect, useState } from 'react'
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar'
 import colors from 'tailwindcss/colors'
-import Button from './components/Button'
-import { Debug } from './components/Debug'
-import EmptyRecords from './components/EmptyRecords'
-import ConfirmModal from './components/Modal/ConfirmModal'
-import CustomWaterIntakeModal from './components/Modal/CustomWaterIntakeModal'
-import EditItemModal, { ItemEditDataType } from './components/Modal/EditItemModal'
-import FirstUsePopup from './components/Modal/FirstUseModal'
-import SettingsModal from './components/Modal/SettingsModal'
-import { RecordCard } from './components/RecordCard'
-import Tag from './components/Tag'
-import { WaterIntakeDropdown } from './components/WaterIntakeDropdown'
-import { clamp, getRecommendedWaterIntake } from './utils/helpers'
-import log from './utils/log'
-import { EditChangesType, useStorage } from './utils/storage'
+import Button from '../components/Button'
+import { Debug } from '../components/Debug'
+import EmptyRecords from '../components/EmptyRecords'
+import ConfirmModal from '../components/Modal/ConfirmModal'
+import CustomWaterIntakeModal from '../components/Modal/CustomWaterIntakeModal'
+import EditItemModal, { ItemEditDataType } from '../components/Modal/EditItemModal'
+import FirstUsePopup from '../components/Modal/FirstUseModal'
+import SettingsModal from '../components/Modal/SettingsModal'
+import NavBar from '../components/NavBar'
+import { RecordCard } from '../components/RecordCard'
+import { WaterIntakeDropdown } from '../components/WaterIntakeDropdown'
+import { clamp, getRecommendedWaterIntake } from '../utils/helpers'
+import log from '../utils/log'
+import { EditChangesType, useStorage } from '../utils/storage'
 import {
     ContainerType,
     ItemsType,
@@ -26,7 +26,7 @@ import {
     SettingsDataType,
     StorageType,
     TodaySettingsDataType,
-} from './utils/storage/schema'
+} from '../utils/storage/schema'
 
 function App() {
     const storage = useStorage()
@@ -341,21 +341,11 @@ function App() {
                 onEdit={handleItemEdit}
                 onModalClose={() => setShowEditItemModal(false)}
             />
-            <nav>
-                <div className='max-w-screen-md mx-auto p-4 border-b-2 flex items-center justify-between border-zinc-700'>
-                    <h1 className='text-2xl font-white font-semibold'>
-                        hidrata-app{' '}
-                        <Tag color='blue' shadow translate>
-                            Beta
-                        </Tag>
-                    </h1>
-                    <div className='flex items-center gap-2'>
-                        <Button ghost onClick={handleOpenSettingsModal}>
-                            <GearSix size={24} weight='bold' />
-                        </Button>
-                    </div>
-                </div>
-            </nav>
+            <NavBar>
+                <Button ghost onClick={handleOpenSettingsModal} title='Configurações'>
+                    <GearSix size={24} weight='bold' />
+                </Button>
+            </NavBar>
             <main className='max-w-screen-md mx-auto px-4 py-6 flex flex-col gap-6'>
                 <section className='flex flex-col gap-4 text-center'>
                     <p className='font-semibold text-lg text-zinc-200 uppercase'>
