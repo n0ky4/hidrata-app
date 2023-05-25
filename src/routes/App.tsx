@@ -119,20 +119,23 @@ function App() {
         if (!isValid) {
             log.info('dados inválidos, limpando dados e recarregando página.', 'data')
             storage.clearData()
-            window.location.reload()
+            setShowFirstUse(true)
         }
 
+        // Setar recipientes personalizados
         const { containers } = data.settings
         setContainers(containers)
         ;(async () => {
             const waterIntake = await storage.calculateTodayWaterIntake()
             setWaterIntake(waterIntake)
 
-            const { items, settings } = await storage.getTodayRecord(data)
+            const { items, settings } = await storage.getTodayRecord()
             if (!items || !settings) return
 
             const { age, weight } = settings
             const dailyWater = getRecommendedWaterIntake(age, weight)
+
+            // Setar quantidade de água diária recomendada
             setRecommendedWater(dailyWater)
 
             // Ordenar por data de criação, do mais recente para o mais antigo
@@ -142,17 +145,22 @@ function App() {
                 })
             )
 
-            // Calcular porcentagem com decimais
+            // Calcular porcentagem sem decimais
             const percent = Number(((waterIntake / dailyWater) * 100).toFixed(0))
             setPercent(percent)
         })()
     }, [data])
 
+    const handleSetFirstSettings = async (data: StorageType) => {
+        await storage.setData(data)
+        await checkData()
+    }
+
     // Popup de primeiro uso caso o state seja true
     if (showFirstUse)
         return (
             <main>
-                <FirstUsePopup storage={storage} />
+                <FirstUsePopup onSaveSettings={handleSetFirstSettings} />
             </main>
         )
     else if (!data) return null

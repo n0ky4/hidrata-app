@@ -7,6 +7,7 @@ interface ModalProps {
     children: React.ReactNode
     show: boolean
     canClose?: boolean
+    showCloseButton?: boolean
     onModalClose?: () => void
 }
 
@@ -32,7 +33,13 @@ const Content = ({ children, flex = false }: ContentProps) => {
     return flex ? <div className='flex flex-col gap-4'>{children}</div> : <div>{children}</div>
 }
 
-function Modal({ children, show, onModalClose, canClose = true }: ModalProps) {
+function Modal({
+    children,
+    show,
+    onModalClose,
+    showCloseButton = true,
+    canClose = true,
+}: ModalProps) {
     const closeModal = () => {
         if (canClose && onModalClose) onModalClose()
     }
@@ -73,7 +80,7 @@ function Modal({ children, show, onModalClose, canClose = true }: ModalProps) {
                     <div className='max-w-xl mx-auto z-10 relative p-6 rounded-xl bg-zinc-800 flex flex-col gap-4'>
                         <div className='flex items-center justify-between'>
                             {title}
-                            {canClose ? (
+                            {showCloseButton ? (
                                 <Button onClick={() => closeModal()} ghost title='Fechar'>
                                     <X weight='bold' size={24} />
                                 </Button>

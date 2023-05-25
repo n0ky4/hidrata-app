@@ -2,8 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import Modal from '.'
-import { Storage } from '../../utils/storage'
-import { StorageSchema } from '../../utils/storage/schema'
+import { StorageSchema, StorageType } from '../../utils/storage/schema'
 import Button from '../Button'
 import Input from '../Input'
 
@@ -30,10 +29,10 @@ const FirstSettingsSchema = z.object({
 export type FirstSettingsType = z.infer<typeof FirstSettingsSchema>
 
 interface FirstUseModalProps {
-    storage: Storage
+    onSaveSettings: (settings: StorageType) => void
 }
 
-export default function FirstUseModal({ storage }: FirstUseModalProps) {
+export default function FirstUseModal({ onSaveSettings }: FirstUseModalProps) {
     const {
         register,
         handleSubmit,
@@ -50,13 +49,12 @@ export default function FirstUseModal({ storage }: FirstUseModalProps) {
             },
         })
 
-        // Salvar os dados e recarregar a página
-        await storage.setData(parsed)
-        window.location.reload()
+        if (!parsed) return
+        onSaveSettings(parsed)
     }
 
     return (
-        <Modal show={true} canClose={false}>
+        <Modal show={true} showCloseButton={false} canClose={false}>
             <Modal.Title>Primeiras configurações</Modal.Title>
             <Modal.Description>
                 Olá, seja bem-vindo(a) ao <b>hidrata-app</b>, vamos começar? Informe sua idade e seu
