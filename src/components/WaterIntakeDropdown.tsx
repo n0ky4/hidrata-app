@@ -102,7 +102,7 @@ export function WaterIntakeDropdown({ onAdd, onOpenModal, containers }: WaterInt
         <DropdownMenuPrimitive.Root>
             <DropdownMenuPrimitive.Trigger asChild>
                 <button
-                    className='p-1.5 rounded-md bg-transparent hover:bg-white/20 transition-colors'
+                    className='p-1.5 rounded-md bg-transparent hover:bg-white/20 transition-colors ring-focus'
                     title='Novo registro'
                 >
                     <Plus size={18} weight='bold' />

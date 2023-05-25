@@ -17,7 +17,8 @@ export default function Checkbox({ id, children, onClick, checked }: CheckboxTyp
                 id={id}
                 className={clsx(
                     'flex h-6 w-6 items-center justify-center rounded-md',
-                    'radix-state-checked:bg-blue-600 radix-state-unchecked:bg-zinc-900'
+                    'radix-state-checked:bg-blue-600 radix-state-unchecked:bg-zinc-900',
+                    'ring-focus'
                 )}
                 onCheckedChange={onClick}
                 checked={checked}

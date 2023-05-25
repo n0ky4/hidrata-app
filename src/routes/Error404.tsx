@@ -1,7 +1,6 @@
 import { ArrowLeft } from '@phosphor-icons/react'
-import { Link } from 'react-router-dom'
 import { P } from '../components/About/AboutComponents'
-import Button from '../components/Button'
+import LinkButton from '../components/LinkButton'
 import NavBar from '../components/NavBar'
 import Stagger from '../components/Stagger'
 
@@ -19,11 +18,9 @@ export default function Error404() {
                 >
                     <h1 className='text-6xl font-white font-semibold'>Ops...</h1>
                     <P>Essa página não existe!</P>
-                    <Link to='/'>
-                        <Button className='mt-10'>
-                            <ArrowLeft size={24} weight='bold' /> Voltar
-                        </Button>
-                    </Link>
+                    <LinkButton to='/' className='mt-10'>
+                        <ArrowLeft size={24} weight='bold' /> Voltar
+                    </LinkButton>
                 </Stagger>
             </main>
         </>

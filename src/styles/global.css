@@ -21,3 +21,9 @@ input::-webkit-inner-spin-button {
     background: theme('colors.zinc.600');
     border-radius: 999px;
 }
+
+@layer components {
+    .ring-focus {
+        @apply !transition-shadow focus:outline-none focus-visible:border-transparent focus-visible:ring focus-visible:ring-blue-300 focus-visible:ring-opacity-100;
+    }
+}

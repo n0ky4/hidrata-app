@@ -2,9 +2,9 @@ import { Transition } from '@headlessui/react'
 import { ArrowCounterClockwise, Question, Trash } from '@phosphor-icons/react'
 import clsx from 'clsx'
 import { ChangeEvent, Fragment, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { z } from 'zod'
 import { ContainerType, SettingsDataType } from '../../utils/storage/schema'
+import LinkButton from '../LinkButton'
 import Button from './../Button'
 import Input from './../Input'
 import Modal from './index'
@@ -164,11 +164,9 @@ export default function SettingsModal({
             <Modal.Title custom>
                 <div className='flex items-center gap-2'>
                     <h1 className='font-bold sm:text-2xl text-xl'>Configurações</h1>
-                    <Link to='/about'>
-                        <Button ghost className='!rounded-full !p-1' title='Sobre'>
-                            <Question size={24} weight='bold' />
-                        </Button>
-                    </Link>
+                    <LinkButton to='/about' ghost className='!rounded-full !p-1' title='Sobre'>
+                        <Question size={24} weight='bold' />
+                    </LinkButton>
                 </div>
             </Modal.Title>
             <Modal.Content>

@@ -1,7 +1,7 @@
 import { ArrowLeft } from '@phosphor-icons/react'
 import { Link } from 'react-router-dom'
 import { A, GitVersion, P } from '../components/About/AboutComponents'
-import Button from '../components/Button'
+import LinkButton from '../components/LinkButton'
 import NavBar from '../components/NavBar'
 import Stagger from '../components/Stagger'
 
@@ -9,11 +9,9 @@ export default function About() {
     return (
         <>
             <NavBar noTitle>
-                <Link to='/'>
-                    <Button>
-                        <ArrowLeft size={24} weight='bold' /> Voltar
-                    </Button>
-                </Link>
+                <LinkButton to='/'>
+                    <ArrowLeft size={24} weight='bold' /> Voltar
+                </LinkButton>
             </NavBar>
 
             <main className='max-w-screen-md mx-auto px-4 py-6 flex flex-col gap-6'>
