@@ -24,9 +24,12 @@ export default function NavBar({
                         <h1 className='text-2xl font-white font-semibold select-none'>
                             <Link to='/'>{title}</Link>
                             {!noTag && (
-                                <Tag color='blue' shadow translate>
-                                    Beta
-                                </Tag>
+                                <>
+                                    {' '}
+                                    <Tag color='blue' shadow translate>
+                                        Beta
+                                    </Tag>
+                                </>
                             )}
                         </h1>
                     )}
