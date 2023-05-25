@@ -40,6 +40,9 @@ export default function About() {
                         <P>
                             Autor: <A href='https://github.com/umgustavo'>Gustavo Rocha</A>
                         </P>
+                        <P>
+                            Ilustrações: <A href='https://twitter.com/fluoritemonkey'>Fluorite</A>
+                        </P>
                     </div>
                 </Stagger>
             </main>
