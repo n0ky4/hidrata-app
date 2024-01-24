@@ -423,14 +423,14 @@ function App() {
                             <EmptyRecords />
                         )}
                     </div>
-                    {/* <div className='flex items-center justify-center w-full'>
+                    <div className='flex items-center justify-center w-full'>
                         <a
                             href='#'
                             className='block text-sm text-zinc-400 underline hover:text-white transition-colors'
                         >
                             ver registros anteriores
                         </a>
-                    </div> */}
+                    </div>
                 </section>
             </main>
         </>
