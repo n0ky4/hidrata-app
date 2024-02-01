@@ -9,7 +9,7 @@ export const baseStyle = twMerge(
 
 export const themes = {
     primary: 'py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700',
-    ghost: 'py-2 px-4 bg-transparent text-zinc-300 hover:text-white hover:bg-white/20',
+    ghost: 'py-2 px-4 bg-transparent text-zinc-300 hover:text-white hover:bg-white/20 focus-visible:bg-white/20 focus-visible:text-white focus-visible:ring-white/75',
 } as const
 export type Theme = keyof typeof themes
 
