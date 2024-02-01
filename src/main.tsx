@@ -6,6 +6,7 @@ import App from './routes/App'
 import Error404 from './routes/Error404'
 
 import './styles/global.css'
+import './utils/i18n'
 
 const router = createBrowserRouter([
     {

@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 import Modal from '.'
 import { StorageSchema, StorageType } from '../../utils/storage/schema'
@@ -33,6 +34,7 @@ interface FirstUseModalProps {
 }
 
 export default function FirstUseModal({ onSaveSettings }: FirstUseModalProps) {
+    const { t } = useTranslation()
     const {
         register,
         handleSubmit,
@@ -64,7 +66,7 @@ export default function FirstUseModal({ onSaveSettings }: FirstUseModalProps) {
                 <form className='flex flex-col gap-4' onSubmit={handleSubmit(setSettings)}>
                     <div className='flex flex-col gap-2'>
                         <label htmlFor='age_fup' className='font-semibold'>
-                            Idade
+                            {t('age')}
                         </label>
                         <Input
                             type='number'

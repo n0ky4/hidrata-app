@@ -1,7 +1,7 @@
 import { ItemsType } from './storage/schema'
 
 // source: Agência de Nutrição do Distrito Federal (ANDF) [https://bit.ly/3MChWPU]
-export function getRecommendedWaterIntake(age: number, weight: number) {
+export function getAdequateIntake(age: number, weight: number) {
     if (age <= 17) return weight * 40
     if (age <= 55) return weight * 35
     if (age <= 65) return weight * 30

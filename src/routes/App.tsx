@@ -4,6 +4,7 @@ import 'dayjs/locale/pt-br'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { useEffect, useState } from 'react'
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar'
+import { useTranslation } from 'react-i18next'
 import colors from 'tailwindcss/colors'
 import Button from '../components/Button'
 import { Debug } from '../components/Debug'
@@ -16,7 +17,7 @@ import SettingsModal from '../components/Modal/SettingsModal'
 import NavBar from '../components/NavBar'
 import { RecordCard } from '../components/RecordCard'
 import { WaterIntakeDropdown } from '../components/WaterIntakeDropdown'
-import { clamp, getRecommendedWaterIntake } from '../utils/helpers'
+import { clamp, getAdequateIntake } from '../utils/helpers'
 import log from '../utils/log'
 import { EditChangesType, useStorage } from '../utils/storage'
 import {
@@ -29,6 +30,7 @@ import {
 } from '../utils/storage/schema'
 
 function App() {
+    const { t, i18n } = useTranslation()
     const storage = useStorage()
     const [data, setData] = useState<StorageType | null>(null)
     const [todayRecords, setTodayRecords] = useState<RecordItemType>([])
@@ -50,24 +52,23 @@ function App() {
 
     const [percent, setPercent] = useState(0)
     const [waterIntake, setWaterIntake] = useState(0)
-    const [recommendedWater, setRecommendedWater] = useState(0)
+    const [adequateIntake, setAdequateIntake] = useState(0)
 
     // Data refresh
     const refreshData = async (): Promise<boolean> => {
         const data = await storage.getSafeData()
         if (!data) return false
 
-        // Checar se o registro diário existe, se não existir, criar
+        // check if daily record exists, if not, create it
         const hasToday = await storage.hasTodayRecord(data)
         if (!hasToday) await storage.createRecord(new Date())
 
-        // Setar o state
         setData(data as StorageType)
         return true
     }
 
-    // Validação de dados, detecta se os dados são válidos.
-    // Caso não sejam, mostra o popup de primeiro uso.
+    // check if data is valid
+    // if not, show first use screen
     const checkData = async () => {
         log.info('checando dados...', 'validation')
         if (!storage) {
@@ -88,11 +89,11 @@ function App() {
     }
 
     useEffect(() => {
-        // Setup do dayjs
+        // dayjs setup
         dayjs.extend(relativeTime)
-        dayjs.locale('pt-BR')
+        dayjs.locale(i18n.language.toLowerCase())
 
-        // Atalho do modal de debug
+        // debug modal
         if (import.meta.env.DEV) {
             document.addEventListener('keydown', (e) => {
                 if (e.ctrlKey && e.key === 'd') {
@@ -107,7 +108,7 @@ function App() {
         })()
     }, [])
 
-    // Hook de update dos dados (data), para atualizar outros states
+    // on data change effect
     useEffect(() => {
         log.info('checando dados...', 'data')
         if (!data) {
@@ -116,13 +117,14 @@ function App() {
         }
 
         const isValid = storage.isDataValid(data)
+        // if data is invalid, clear data and reload page
         if (!isValid) {
             log.info('dados inválidos, limpando dados e recarregando página.', 'data')
             storage.clearData()
             setShowFirstUse(true)
         }
 
-        // Setar recipientes personalizados
+        // set custom containers
         const { containers } = data.settings
         setContainers(containers)
         ;(async () => {
@@ -133,20 +135,20 @@ function App() {
             if (!items || !settings) return
 
             const { age, weight } = settings
-            const dailyWater = getRecommendedWaterIntake(age, weight)
+            const adequateIntake = getAdequateIntake(age, weight)
 
-            // Setar quantidade de água diária recomendada
-            setRecommendedWater(dailyWater)
+            // set adequate intake
+            setAdequateIntake(adequateIntake)
 
-            // Ordenar por data de criação, do mais recente para o mais antigo
+            // sort items by date
             setTodayRecords(
                 items.sort((a, b) => {
                     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
                 })
             )
 
-            // Calcular porcentagem sem decimais
-            const percent = Number(((waterIntake / dailyWater) * 100).toFixed(0))
+            // calculate percent
+            const percent = Number(((waterIntake / adequateIntake) * 100).toFixed(0))
             setPercent(percent)
         })()
     }, [data])
@@ -156,7 +158,7 @@ function App() {
         await checkData()
     }
 
-    // Popup de primeiro uso caso o state seja true
+    // first use screen
     if (showFirstUse)
         return (
             <main>
@@ -167,14 +169,13 @@ function App() {
 
     const { age, weight } = data.settings
 
-    // Dados do modal de debug
+    // debug data (for the debug modal)
     const dataList = [
-        ['Idade', age],
-        ['Peso', weight],
-        ['Qtd. Água Diária', `${recommendedWater} ml`],
+        ['age', age],
+        ['weight', weight],
+        ['adequate intake', `${adequateIntake} ml`],
     ]
 
-    // Handler para adicionar um registro de ingestão de água
     const handleAddWaterIntake = async (type: ItemsType, quantity?: number, label?: string) => {
         log.info(`adicionando água; tipo: ${type}, ml: ${quantity}, label: ${label}`)
         await storage.addItem({
@@ -185,30 +186,24 @@ function App() {
         await checkData()
     }
 
-    // Handler para adicionar um recipiente personalizado
     const handleAddCustomContainer = async (quantity: number, label?: string) => {
         log.info(`adicionando container customizado; ml: ${quantity}, label: ${label}`)
         await storage.addContainer(quantity, label)
         await handleAddWaterIntake('custom', quantity, label)
     }
 
-    // Handler para deletar um registro de ingestão de água
     const handleItemDelete = async (id: string) => {
         log.info(`deletando item ${id}`)
         await storage.deleteItem(id)
         await checkData()
     }
 
-    // Handler para editar um registro de ingestão de água
     const handleItemEdit = async (id: string, edit: EditChangesType) => {
         log.info(`editando item ${id}; edit: ${JSON.stringify(edit)}`)
         await storage.editItem(id, edit)
         await checkData()
     }
 
-    // Handler para abrir o modal de editar um registro. Aqui,
-    // pegamos o id do registro, retornamos os dados e setamos
-    // o state "itemEditData", que é usado no modal de edição.
     const handleOpenItemEditModal = async (id: string) => {
         log.info(`editando item ${id}`)
 
@@ -216,8 +211,6 @@ function App() {
         if (!item) return
 
         if (item.type === 'custom') {
-            // Se o tipo do registro for "custom", adicionar "quantity" e "label"
-            // (propriedades típicas de um registro "custom")
             setItemEditData({
                 id: item.id,
                 type: item.type,
@@ -225,14 +218,12 @@ function App() {
                 label: item.label,
             })
         } else {
-            // Caso não for custom, apenas adicionar o id e o tipo.
             setItemEditData({
                 id: item.id,
                 type: item.type,
             })
         }
 
-        // Abrir o modal
         setShowEditItemModal(true)
     }
 
@@ -248,7 +239,6 @@ function App() {
         }
     }
 
-    // Handler para abrir o modal de configurações
     const handleOpenSettingsModal = async () => {
         const settings = await getParsedSettings()
         if (!settings) return
@@ -262,15 +252,13 @@ function App() {
         setShowSettingsModal(true)
     }
 
-    // Handler para salvar as configurações
     const handleSaveSettings = async (settings: SettingsDataType, ageWeightChanged?: boolean) => {
         const ogSettings = await getParsedSettings()
         if (!ogSettings) return
 
-        // Checar se as configurações são iguais às antigas
+        // check if nothing changed
         if (JSON.stringify(ogSettings) === JSON.stringify(settings)) return
 
-        // Salvar novas configurações
         await storage.setSettings(settings)
         await checkData()
 
@@ -295,7 +283,7 @@ function App() {
 
     return (
         <>
-            {/* Modal de debug */}
+            {/* debug modal */}
             {debug && import.meta.env.DEV && (
                 <Debug>
                     <div className='my-5'>
@@ -318,31 +306,31 @@ function App() {
                     </div>
                 </Debug>
             )}
-            {/* Modal de confirmação do `SettingsModal` */}
+            {/* confirm modal for the `SettingsModal` */}
             <ConfirmModal
-                title='Recalcular?'
+                title={t('recalculateTitle')}
                 show={showSettingsConfirmModal}
                 onConfirm={handleSettingsConfirm}
                 onCancel={() => setShowSettingsConfirmModal(false)}
                 onModalClose={() => setShowSettingsConfirmModal(false)}
             >
-                Você alterou a idade ou peso. Deseja recalcular a quantidade de água diária?
+                {t('recalculateText')}
             </ConfirmModal>
-            {/* Modal de configurações */}
+            {/* config modal */}
             <SettingsModal
                 data={settingsData}
                 show={showSettingsModal}
                 onSave={handleSaveSettings}
                 onModalClose={() => setShowSettingsModal(false)}
             />
-            {/* Modal para adicionar um registro */}
+            {/* add new record modal */}
             <CustomWaterIntakeModal
                 onSaveCustomContainer={handleAddCustomContainer}
                 onAddWaterIntake={(quantity: number) => handleAddWaterIntake('custom', quantity)}
                 show={showCustomWaterIntakeModal}
                 onModalClose={() => setShowCustomWaterIntakeModal(false)}
             />
-            {/* Modal para editar um registro */}
+            {/* edit record modal */}
             <EditItemModal
                 data={itemEditData}
                 show={showEditItemModal}
@@ -357,7 +345,7 @@ function App() {
             <main className='max-w-screen-md mx-auto px-4 py-6 flex flex-col gap-6'>
                 <section className='flex flex-col gap-4 text-center'>
                     <p className='font-semibold text-lg text-zinc-200 uppercase'>
-                        Consumo Diário de Água
+                        {t('adequateIntake')}
                     </p>
                     <div className='mx-auto w-full max-w-[300px] select-none'>
                         <CircularProgressbarWithChildren
@@ -374,11 +362,10 @@ function App() {
                             <div className='flex items-center gap-2'>
                                 <div className='relative group'>
                                     <h1 className='text-6xl font-bold text-blue-100'>
-                                        {/* Mostra a porcentagem. Se for maior que 999, mostra +999 */}
                                         {percent <= 999 ? percent : '+999'}%
                                     </h1>
                                     <span className='absolute -bottom-3 left-0 text-sm font-mono text-zinc-500 opacity-0 transition-opacity group-hover:opacity-100'>
-                                        {waterIntake}/{recommendedWater}ml
+                                        {waterIntake}/{adequateIntake}ml
                                     </span>
                                 </div>
                                 <WaterIntakeDropdown
@@ -391,23 +378,22 @@ function App() {
                     </div>
 
                     <p className='text-sm text-zinc-400'>
-                        {recommendedWater - waterIntake > 0 ? (
+                        {adequateIntake - waterIntake > 0 ? (
                             <>
-                                Vamos lá! Ainda faltam <b>{recommendedWater - waterIntake} ml</b> de
-                                água💧
+                                {t('letsGo').replaceAll(
+                                    '{ml}',
+                                    (adequateIntake - waterIntake).toString()
+                                )}
                             </>
                         ) : (
-                            <>
-                                Parabéns! Você ingeriu a quantidade de água recomendada de hoje 😊👏
-                            </>
+                            <>{t('youGotIt')}</>
                         )}
                     </p>
                 </section>
                 <section className='flex flex-col gap-2'>
-                    <h1 className='text-xl font-bold'>Histórico</h1>
+                    <h1 className='text-xl font-bold'>{t('history')}</h1>
                     <div className='flex flex-col gap-2'>
                         {todayRecords.length ? (
-                            // Caso tenha registros
                             todayRecords.map((x) => {
                                 return (
                                     <RecordCard
@@ -419,7 +405,6 @@ function App() {
                                 )
                             })
                         ) : (
-                            // Caso não tenha registros
                             <EmptyRecords />
                         )}
                     </div>
@@ -428,7 +413,7 @@ function App() {
                             href='#'
                             className='block text-sm text-zinc-400 underline hover:text-white transition-colors'
                         >
-                            ver registros anteriores
+                            {t('viewPreviousRecords')}
                         </a>
                     </div>
                 </section>

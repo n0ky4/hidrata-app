@@ -1,0 +1,27 @@
+{
+    "translation": {
+        "dailyWaterIntake": "Consumo Diário de Água",
+        "config": "Configurações",
+        "age": "Idade",
+        "weight": "Peso",
+        "insertYourAge": "Insira sua idade",
+        "insertYourWeight": "Insira seu peso",
+        "save": "Salvar",
+        "warning": "Cuidado!",
+        "unsaveChanges": "Você tem alterações não salvas",
+        "about": "é um projeto open-source disponível neste {repositório do GitHub} e está licenciado sob a {AGPLv3 License}.",
+        "credits": "Créditos",
+        "author": "Autor",
+        "illustrations": "Ilustrações",
+        "letsGo": "Vamos lá! Ainda faltam {ml} ml de água💧",
+        "youGotIt": "Parabéns! Você ingeriu a quantidade de água recomendada de hoje 😊👏",
+        "history": "Histórico",
+        "viewPreviousRecords": "ver registros anteriores",
+        "whoops": "Ops...",
+        "pageDoesntExist": "Essa página não existe!",
+        "goBack": "Voltar",
+        "recalculateTitle": "Recalcular?",
+        "recalculateText": "Você alterou a idade ou peso. Deseja recalcular a quantidade de água diária?",
+        "noRecords": "Não há nenhum registro de hoje... Que tal começar tomando um copo d'água? 😊💧"
+    }
+}

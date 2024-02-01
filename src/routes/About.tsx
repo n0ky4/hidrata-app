@@ -1,4 +1,5 @@
 import { ArrowLeft } from '@phosphor-icons/react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { A, GitVersion, P } from '../components/About/AboutComponents'
 import LinkButton from '../components/LinkButton'
@@ -6,11 +7,34 @@ import NavBar from '../components/NavBar'
 import Stagger from '../components/Stagger'
 
 export default function About() {
+    const { t } = useTranslation()
+
+    const getAboutText = () => {
+        const [prefix, githubRepoPlaceholder, licensePlaceholder] = t('about').split('{')
+
+        const [githubRepo, suffixAfterRepo] = githubRepoPlaceholder.split('}')
+        const [license, suffixAfterLicense] = licensePlaceholder.split('}')
+
+        const repoUrl = `${__REPO__}`
+        const licenseUrl = `${repoUrl}/blob/main/LICENSE`
+
+        return (
+            <P>
+                {'hidrata-app '}
+                {prefix}
+                <A href={repoUrl}>{githubRepo}</A>
+                {suffixAfterRepo}
+                <A href={licenseUrl}>{license}</A>
+                {suffixAfterLicense}
+            </P>
+        )
+    }
+
     return (
         <>
             <NavBar noTitle>
                 <LinkButton to='/'>
-                    <ArrowLeft size={24} weight='bold' /> Voltar
+                    <ArrowLeft size={24} weight='bold' /> {t('goBack')}
                 </LinkButton>
             </NavBar>
 
@@ -28,18 +52,15 @@ export default function About() {
                         </Link>
                         <GitVersion />
                     </div>
-                    <P>
-                        hidrata-app é um projeto open-source disponível neste{' '}
-                        <A href={__REPO__}>repositório do GitHub</A> e está licenciado sob a{' '}
-                        <A href={`${__REPO__}/blob/main/LICENSE`}>Licença MIT</A>.
-                    </P>
+                    {getAboutText()}
                     <div>
-                        <h2 className='text-lg text-white font-semibold'>Créditos</h2>
+                        <h2 className='text-lg text-white font-semibold'>{t('credits')}</h2>
                         <P>
-                            Autor: <A href='https://github.com/gukodev'>guko</A>
+                            {t('author')}: <A href='https://github.com/gukodev'>guko</A>
                         </P>
                         <P>
-                            Ilustrações: <A href='https://twitter.com/fluoritemonkey'>Fluorite</A>
+                            {t('illustrations')}:{' '}
+                            <A href='https://twitter.com/fluoritemonkey'>Fluorite</A>
                         </P>
                     </div>
                 </Stagger>

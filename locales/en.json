@@ -1,0 +1,27 @@
+{
+    "translation": {
+        "adequateIntake": "Adequate Intake",
+        "config": "Settings",
+        "age": "Age",
+        "weight": "Weight",
+        "insertYourAge": "Insert your age",
+        "insertYourWeight": "Insert your weight",
+        "save": "Save",
+        "warning": "Warning!",
+        "unsaveChanges": "You have unsaved changes",
+        "about": "is an open-source project available on this {GitHub repository} and is licensed under the {AGPLv3 License}.",
+        "credits": "Credits",
+        "author": "Author",
+        "illustrations": "Illustrations",
+        "letsGo": "Let's go! Still missing {ml} ml of water 💧",
+        "youGotIt": "Congratulations! You have consumed the recommended amount of water for today 😊👏",
+        "history": "History",
+        "viewPreviousRecords": "view previous records",
+        "whoops": "Whoops...",
+        "pageDoesntExist": "This page doesn't exist!",
+        "goBack": "Go back",
+        "recalculateTitle": "Recalculate?",
+        "recalculateText": "You changed your age or weight. Would you like to recalculate your adequate intake?",
+        "noRecords": "No records for today... How about starting by drinking a glass of water? 😊💧"
+    }
+}

@@ -1,8 +1,10 @@
 import { Transition } from '@headlessui/react'
 import { Fragment, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ReactComponent as Illustration } from './../assets/empty.svg'
 
 export default function EmptyRecords() {
+    const { t } = useTranslation()
     const [show, setShow] = useState<boolean>(false)
 
     useEffect(() => {
@@ -20,10 +22,7 @@ export default function EmptyRecords() {
             <div className='flex items-center justify-center pb-6'>
                 <div className='flex flex-wrap items-center justify-center max-w-md text-center gap-5'>
                     <Illustration width='192px' className='text-white' opacity={0.25} />
-                    <span className='text-zinc-500'>
-                        Não há nenhum registro de hoje... Que tal começar tomando um copo d'água?
-                        😊💧
-                    </span>
+                    <span className='text-zinc-500'>{t('noRecords')}</span>
                 </div>
             </div>
         </Transition>
