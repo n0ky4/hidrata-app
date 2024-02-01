@@ -1,6 +1,6 @@
 import { Plus, PlusCircle } from '@phosphor-icons/react'
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu'
-import clsx from 'clsx'
+import { twMerge } from 'tailwind-merge'
 import { getWaterMLFromType } from '../utils/helpers'
 import { ContainerType, ItemsType } from '../utils/storage/schema'
 
@@ -45,7 +45,7 @@ function DropdownItem({
 
     return (
         <DropdownMenuPrimitive.Item
-            className={clsx(
+            className={twMerge(
                 'flex cursor-default select-none items-center rounded-md px-2 py-2 text-sm outline-none',
                 'text-zinc-500 focus:bg-zinc-800'
             )}
@@ -112,7 +112,7 @@ export function WaterIntakeDropdown({ onAdd, onOpenModal, containers }: WaterInt
                 <DropdownMenuPrimitive.Content
                     align='end'
                     sideOffset={5}
-                    className={clsx(
+                    className={twMerge(
                         'radix-side-top:animate-slide-up radix-side-bottom:animate-slide-down',
                         'w-48 rounded-lg px-1.5 py-1 shadow-md md:w-56',
                         'bg-zinc-900'

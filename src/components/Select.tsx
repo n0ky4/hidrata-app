@@ -1,7 +1,7 @@
 import { Listbox, Transition } from '@headlessui/react'
 import { CaretDown, CheckCircle } from '@phosphor-icons/react'
-import clsx from 'clsx'
 import { Fragment } from 'react'
+import { twMerge } from 'tailwind-merge'
 
 export type SelectOptionType = {
     value: string
@@ -20,10 +20,10 @@ export default function Select({ id, options, value, onChange }: SelectProps) {
         <Listbox value={value} onChange={onChange} as='div' className='relative'>
             <Listbox.Button
                 id={id}
-                className={clsx(
+                className={twMerge(
                     'relative w-full py-2 pl-3 pr-10 rounded-lg cursor-default',
                     'bg-zinc-900 border-2 border-zinc-700',
-                    'text-left font-semibold',
+                    'text-left font-medium',
                     'transition-colors'
                 )}
             >
@@ -42,7 +42,7 @@ export default function Select({ id, options, value, onChange }: SelectProps) {
                 leaveTo='opacity-0'
             >
                 <Listbox.Options
-                    className={clsx(
+                    className={twMerge(
                         'absolute w-full mt-2 overflow-auto text-base max-h-60',
                         'bg-zinc-900 border-2 border-zinc-700 rounded-lg shadow-xl'
                     )}
@@ -52,7 +52,7 @@ export default function Select({ id, options, value, onChange }: SelectProps) {
                             key={option.value}
                             value={option}
                             className={({ active }) =>
-                                clsx(
+                                twMerge(
                                     active ? 'text-white bg-zinc-800' : 'text-zinc-400',
                                     'cursor-default select-none relative py-2 pl-10 pr-4'
                                 )
@@ -61,7 +61,7 @@ export default function Select({ id, options, value, onChange }: SelectProps) {
                             {({ selected }) => (
                                 <>
                                     <span
-                                        className={clsx(
+                                        className={twMerge(
                                             selected ? 'font-medium text-white' : 'font-normal',
                                             'block truncate'
                                         )}
@@ -70,7 +70,7 @@ export default function Select({ id, options, value, onChange }: SelectProps) {
                                     </span>
                                     {selected && (
                                         <span
-                                            className={clsx(
+                                            className={twMerge(
                                                 'text-white',
                                                 'absolute inset-y-0 left-0 flex items-center pl-3'
                                             )}

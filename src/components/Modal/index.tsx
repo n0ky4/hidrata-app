@@ -1,7 +1,7 @@
 import { Transition } from '@headlessui/react'
 import { X } from '@phosphor-icons/react'
 import React, { Children, Fragment, PropsWithChildren, ReactElement, useEffect } from 'react'
-import Button from '../Button'
+import Button from '../Button/Button'
 
 interface ModalProps {
     children: React.ReactNode

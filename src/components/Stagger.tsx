@@ -2,20 +2,20 @@ import { Transition } from '@headlessui/react'
 import { useEffect, useState } from 'react'
 
 interface StaggerProps {
-    delay: number
-    show: boolean
-    enter: string
-    enterFrom: string
-    enterTo: string
+    delay?: number
+    show?: boolean
+    enter?: string
+    enterFrom?: string
+    enterTo?: string
     children: React.ReactNode[]
 }
 
 export default function Stagger({
-    delay,
-    show,
-    enter,
-    enterFrom,
-    enterTo,
+    delay = 200,
+    show = true,
+    enter = 'transition-all duration-200 ease-out',
+    enterFrom = 'opacity-0 -translate-y-2',
+    enterTo = 'opacity-100 translate-y-0',
     children,
 }: StaggerProps) {
     const [childStates, setChildStates] = useState<boolean[]>([])

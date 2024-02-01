@@ -2,28 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Esconder setas dos inputs de número */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+@layer base {
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    ::-webkit-scrollbar {
+        @apply w-1;
+    }
+
+    ::-webkit-scrollbar-track {
+        @apply rounded-[10px];
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply bg-zinc-600 rounded-full;
+    }
+
+    ::selection {
+        @apply bg-blue-600 text-white;
+    }
 }
 
-::-webkit-scrollbar {
-    width: 4px;
-}
-
-::-webkit-scrollbar-track {
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: theme('colors.zinc.600');
-    border-radius: 999px;
-}
-
-@layer components {
+@layer utilities {
     .ring-focus {
-        @apply !transition-shadow focus:outline-none focus-visible:border-transparent focus-visible:ring focus-visible:ring-blue-300 focus-visible:ring-opacity-100;
+        @apply focus:outline-none focus-visible:border-transparent focus-visible:ring focus-visible:ring-blue-300 focus-visible:ring-opacity-100;
     }
 }

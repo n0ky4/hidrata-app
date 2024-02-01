@@ -1,11 +1,11 @@
 import { Transition } from '@headlessui/react'
 import { ArrowCounterClockwise, Question, Trash } from '@phosphor-icons/react'
-import clsx from 'clsx'
 import { ChangeEvent, Fragment, useEffect, useState } from 'react'
+import { twMerge } from 'tailwind-merge'
 import { z } from 'zod'
 import { ContainerType, SettingsDataType } from '../../utils/storage/schema'
-import LinkButton from '../LinkButton'
-import Button from './../Button'
+import Button from '../Button/Button'
+import LinkButton from '../Button/LinkButton'
 import Input from './../Input'
 import Modal from './index'
 
@@ -34,7 +34,7 @@ const AgeWeightSchema = z.object({
 const ContainerItem = ({ container, onDelete, isDisabled }: ContainerItemProps) => {
     return (
         <div
-            className={clsx(
+            className={twMerge(
                 'flex justify-between items-center gap-2 pl-4 rounded-[9px]',
                 'border',
                 'transition-colors',
@@ -43,7 +43,7 @@ const ContainerItem = ({ container, onDelete, isDisabled }: ContainerItemProps) 
         >
             <div className='truncate'>
                 <span
-                    className={clsx(
+                    className={twMerge(
                         'text-sm select-none',
                         isDisabled ? 'text-red-200' : 'text-zinc-300'
                     )}
@@ -56,7 +56,7 @@ const ContainerItem = ({ container, onDelete, isDisabled }: ContainerItemProps) 
             <div>
                 <Button
                     className='hover:!bg-red-500'
-                    ghost
+                    theme='ghost'
                     onClick={() => onDelete(container.id)}
                     title={isDisabled ? 'Desfazer deletar item' : 'Deletar item'}
                 >
@@ -164,7 +164,12 @@ export default function SettingsModal({
             <Modal.Title custom>
                 <div className='flex items-center gap-2'>
                     <h1 className='font-bold sm:text-2xl text-xl'>Configurações</h1>
-                    <LinkButton to='/about' ghost className='!rounded-full !p-1' title='Sobre'>
+                    <LinkButton
+                        to='/about'
+                        theme='ghost'
+                        className='!rounded-full !p-1'
+                        title='Sobre'
+                    >
                         <Question size={24} weight='bold' />
                     </LinkButton>
                 </div>

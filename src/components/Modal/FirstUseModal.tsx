@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 import Modal from '.'
 import { StorageSchema, StorageType } from '../../utils/storage/schema'
-import Button from '../Button'
+import Button from '../Button/Button'
 import Input from '../Input'
 
 // Schema do formulário

@@ -1,5 +1,5 @@
-import clsx from 'clsx'
 import { Link } from 'react-router-dom'
+import { twMerge } from 'tailwind-merge'
 
 interface NavBarProps {
     children?: React.ReactNode
@@ -23,7 +23,7 @@ export default function NavBar({
     return (
         <nav>
             <div
-                className={clsx(
+                className={twMerge(
                     'max-w-screen-md mx-auto p-4 border-b-2 flex items-center border-zinc-700',
                     onlyTitle ? 'justify-center' : 'justify-between'
                 )}

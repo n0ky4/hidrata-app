@@ -6,13 +6,13 @@ import { useEffect, useState } from 'react'
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar'
 import { useTranslation } from 'react-i18next'
 import colors from 'tailwindcss/colors'
-import Button from '../components/Button'
+import Button from '../components/Button/Button'
 import { Debug } from '../components/Debug'
 import EmptyRecords from '../components/EmptyRecords'
+import FirstUseScreen from '../components/FirstUseScreen'
 import ConfirmModal from '../components/Modal/ConfirmModal'
 import CustomWaterIntakeModal from '../components/Modal/CustomWaterIntakeModal'
 import EditItemModal, { ItemEditDataType } from '../components/Modal/EditItemModal'
-import FirstUsePopup from '../components/Modal/FirstUseModal'
 import SettingsModal from '../components/Modal/SettingsModal'
 import NavBar from '../components/NavBar'
 import { RecordCard } from '../components/RecordCard'
@@ -160,11 +160,12 @@ function App() {
 
     // first use screen
     if (showFirstUse)
-        return (
-            <main>
-                <FirstUsePopup onSaveSettings={handleSetFirstSettings} />
-            </main>
-        )
+        // return (
+        //     <main>
+        // <FirstUsePopup onSaveSettings={handleSetFirstSettings} />
+        //     </main>
+        // )
+        return <FirstUseScreen />
     else if (!data) return null
 
     const { age, weight } = data.settings
@@ -338,7 +339,7 @@ function App() {
                 onModalClose={() => setShowEditItemModal(false)}
             />
             <NavBar>
-                <Button ghost onClick={handleOpenSettingsModal} title='Configurações'>
+                <Button theme='ghost' onClick={handleOpenSettingsModal} title='Configurações'>
                     <GearSix size={24} weight='bold' />
                 </Button>
             </NavBar>

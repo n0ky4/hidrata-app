@@ -1,8 +1,8 @@
 import { Check } from '@phosphor-icons/react'
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
 import * as LabelPrimitive from '@radix-ui/react-label'
-import { clsx } from 'clsx'
 import { useEffect, useRef } from 'react'
+import { twMerge } from 'tailwind-merge'
 
 interface CheckboxType {
     id: string
@@ -33,7 +33,7 @@ export default function Checkbox({ id, children, onClick, checked }: CheckboxTyp
         <div className='flex items-center'>
             <CheckboxPrimitive.Root
                 id={id}
-                className={clsx(
+                className={twMerge(
                     'flex h-6 w-6 items-center justify-center rounded-md',
                     'radix-state-checked:bg-blue-600 radix-state-unchecked:bg-zinc-900',
                     'ring-focus'

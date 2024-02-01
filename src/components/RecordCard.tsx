@@ -1,10 +1,10 @@
 import { Pencil, Trash } from '@phosphor-icons/react'
-import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
+import { twMerge } from 'tailwind-merge'
 import { capitalize, getWaterMLFromType } from '../utils/helpers'
 import { RecordItemType } from '../utils/storage/schema'
-import Button from './Button'
+import Button from './Button/Button'
 
 interface RecordCardProps {
     item: RecordItemType[0]
@@ -49,7 +49,7 @@ export function RecordCard({ item, onDelete, onEdit }: RecordCardProps) {
 
     return (
         <div
-            className={clsx(
+            className={twMerge(
                 'flex items-center gap-4 w-full px-4 py-2 rounded-lg',
                 'bg-white/5 hover:bg-white/10 transition-colors',
                 'shadow-lg/20 hover:shadow-lg/40'
@@ -87,12 +87,12 @@ export function RecordCard({ item, onDelete, onEdit }: RecordCardProps) {
                 </span>
             </div>
             <div className='flex items-center gap-2'>
-                <Button onClick={() => onEdit(item.id)} ghost title='Editar'>
+                <Button onClick={() => onEdit(item.id)} theme='ghost' title='Editar'>
                     <Pencil size={22} weight='bold' />
                 </Button>
                 <Button
                     onClick={() => onDelete(item.id)}
-                    ghost
+                    theme='ghost'
                     className='hover:!bg-red-500'
                     title='Deletar'
                 >
