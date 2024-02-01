@@ -94,7 +94,7 @@ export default function FirstUseScreen() {
                     <div className='absolute top-0 left-0 w-full h-1 bg-zinc-700 rounded-t-xl'>
                         <div
                             className={twMerge(
-                                'h-1 bg-blue-400',
+                                'h-1 bg-blue-400 rounded-r-full',
                                 'transition-[width] ease-out duration-500'
                             )}
                             style={{
