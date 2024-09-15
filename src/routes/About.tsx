@@ -50,7 +50,7 @@ export default function About() {
                     <div>
                         <h2 className='text-lg text-white font-semibold'>{t('credits')}</h2>
                         <P>
-                            {t('author')}: <A href='https://github.com/gukodev'>guko</A>
+                            {t('author')}: <A href='https://github.com/n0ky4'>n0ky4</A>
                         </P>
                         <P>
                             {t('illustrations')}:{' '}
