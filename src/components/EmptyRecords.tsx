@@ -1,7 +1,8 @@
+/// <reference types="vite-plugin-svgr/client" />
 import { Transition } from '@headlessui/react'
 import { Fragment, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ReactComponent as Illustration } from './../assets/empty.svg'
+import Illustration from './../assets/empty.svg?react'
 
 export default function EmptyRecords() {
     const { t } = useTranslation()
