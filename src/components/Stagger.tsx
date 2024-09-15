@@ -58,6 +58,7 @@ export default function Stagger({
                     enter={enter}
                     enterFrom={enterFrom}
                     enterTo={enterTo}
+                    as='div'
                 >
                     {child}
                 </Transition>
