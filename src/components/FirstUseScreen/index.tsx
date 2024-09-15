@@ -1,5 +1,5 @@
 import { ArrowRight } from '@phosphor-icons/react'
-import { useEffect, useState } from 'react'
+import { PropsWithChildren, useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import Button from '../Button/Button'
 import Stagger from '../Stagger'
@@ -7,25 +7,30 @@ import { MeasurementSystemStage } from './MeasurementSystemStage'
 import { liquidSystems, weightSystems } from './common'
 
 interface TitleProps extends React.HTMLAttributes<HTMLHeadingElement> {}
-export const Title = ({ children, ...rest }: TitleProps) => (
-    <h1 className='text-3xl font-bold' {...rest}>
-        {children}
-    </h1>
-)
+export function Title({ children, ...rest }: TitleProps) {
+    return (
+        <h1 className='text-3xl font-bold' {...rest}>
+            {children}
+        </h1>
+    )
+}
 
-interface ParagraphProps extends React.HTMLAttributes<HTMLParagraphElement> {}
-export const Paragraph = ({ children, ...rest }: ParagraphProps) => (
-    <p className='text-lg text-zinc-300' {...rest}>
-        {children}
-    </p>
-)
+export function Paragraph({ children }: PropsWithChildren) {
+    return (
+        <div>
+            <p className='text-lg text-zinc-300'>{children}</p>
+        </div>
+    )
+}
 
 interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {}
-export const Label = ({ children, ...rest }: LabelProps) => (
-    <label className='text-zinc-400 text-sm' {...rest}>
-        {children}
-    </label>
-)
+export function Label({ children, ...rest }: LabelProps) {
+    return (
+        <label className='text-zinc-400 text-sm' {...rest}>
+            {children}
+        </label>
+    )
+}
 
 function FirstMessage() {
     return (
