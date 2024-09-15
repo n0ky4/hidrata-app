@@ -81,7 +81,7 @@ function Modal({
                         <div className='flex items-center justify-between'>
                             {title}
                             {showCloseButton ? (
-                                <Button onClick={() => closeModal()} ghost title='Fechar'>
+                                <Button onClick={() => closeModal()} theme='ghost' title='Fechar'>
                                     <X weight='bold' size={24} />
                                 </Button>
                             ) : null}

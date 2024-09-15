@@ -29,7 +29,7 @@ export default function ConfirmModal({
                 <div className='flex flex-col gap-4'>
                     <p className='text-zinc-400'>{children}</p>
                     <div className='flex flex-center gap-2 ml-auto'>
-                        <Button ghost onClick={onCancel} title={cancelText}>
+                        <Button theme='ghost' onClick={onCancel} title={cancelText}>
                             {cancelText}
                         </Button>
                         <Button onClick={onConfirm} title={confirmText}>
