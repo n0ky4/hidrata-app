@@ -36,7 +36,7 @@ export default function About() {
                     <div>
                         <h2 className='text-lg text-white font-semibold'>Créditos</h2>
                         <P>
-                            Autor: <A href='https://github.com/gukodev'>guko</A>
+                            Autor: <A href='https://github.com/n0ky4'>nokya</A>
                         </P>
                         <P>
                             Ilustrações: <A href='https://twitter.com/fluoritemonkey'>Fluorite</A>
