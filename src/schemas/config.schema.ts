@@ -2,11 +2,9 @@ import { z } from 'zod'
 import { notifications } from '../core/notifications'
 import { theme } from '../core/theme'
 import { units } from '../core/units'
-import pkg from './../../package.json'
 import { i18n } from './../core/i18n'
 
 export const configSchema = z.object({
-    version: z.string().default(pkg.version), // Versão do arquivo de configuração
     language: z.enum(Object.keys(i18n.availableLanguages) as [string, ...string[]]).default('en'), // Idioma do aplicativo
     notifications: z
         .object({
@@ -34,7 +32,7 @@ export const configSchema = z.object({
     weight: z.number().positive().min(3).max(350), // Peso deve ser um número positivo
     climate: z
         .object({
-            enabled: z.boolean().default(true), // Usar detecção de condições climáticas
+            enabled: z.boolean().default(false), // Usar detecção de condições climáticas
             latitude: z.number().min(-90).max(90).optional(), // Latitude válida
             longitude: z.number().min(-180).max(180).optional(), // Longitude válida
         })
@@ -42,10 +40,4 @@ export const configSchema = z.object({
 })
 
 export type Config = z.infer<typeof configSchema>
-
-export type InitOptions = {
-    age: Config['age']
-    weight: Config['weight']
-    latitude: Config['climate']['latitude']
-    longitude: Config['climate']['longitude']
-}
+export type ConfigInitOptions = z.input<typeof configSchema>

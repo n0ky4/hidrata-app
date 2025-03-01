@@ -9,7 +9,7 @@ import {
 import { shortId } from '../util/nanoid'
 import { containersSchema } from './../schemas/containers.schema'
 
-const LSKEY_CONTAINERS = 'containers'
+export const LSKEY_CONTAINERS = 'containers'
 
 type States = {
     data: Containers | null
@@ -77,6 +77,7 @@ export const useContainers = create(
         }),
         {
             name: LSKEY_CONTAINERS,
+            version: 1,
         }
     )
 )

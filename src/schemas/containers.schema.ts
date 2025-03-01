@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import pkg from './../../package.json'
 
 export const containerSchema = z.object({
     id: z.string(), // Id do container
@@ -12,7 +11,6 @@ export type ContainerCreateData = Omit<Container, 'id'>
 export type ContainerUpdateData = Partial<Container>
 
 export const containersSchema = z.object({
-    version: z.string().default(pkg.version), // Versão do arquivo de configuração
     containers: z.array(containerSchema).default([]), // Lista de containers
 })
 export type Containers = z.infer<typeof containersSchema>

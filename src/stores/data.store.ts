@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware'
 import { Data, dataSchema, HistoryEntry, Record, RecordCreateData } from '../schemas/data.schema'
 import { shortId } from '../util/nanoid'
 
-const LSKEY_DATA = 'data'
+export const LSKEY_DATA = 'data'
 
 type States = {
     data: Data | null
@@ -26,7 +26,7 @@ type Actions = {
     removeRecord: (date: string, recordId: string) => void
 }
 
-export const useContainers = create(
+export const useData = create(
     persist<States & Actions>(
         (set, get) => ({
             data: null,
@@ -101,9 +101,9 @@ export const useContainers = create(
                     records.filter((r) => r.id !== recordId)
                 ),
         }),
-
         {
             name: LSKEY_DATA,
+            version: 1,
         }
     )
 )

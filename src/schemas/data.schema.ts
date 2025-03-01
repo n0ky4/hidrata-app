@@ -1,6 +1,5 @@
 import { z } from 'zod'
 import { climate } from '../core/climate'
-import pkg from './../../package.json'
 
 export const recordSchema = z.object({
     id: z.string(), // ID do registro
@@ -24,7 +23,6 @@ export const historyEntrySchema = z.object({
 export type HistoryEntry = z.infer<typeof historyEntrySchema>
 
 export const dataSchema = z.object({
-    version: z.string().default(pkg.version), // Versão do arquivo de configuração
     consumption: z
         .object({
             history: z.array(historyEntrySchema).default([]), // Histórico de consumo

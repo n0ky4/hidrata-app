@@ -2,16 +2,16 @@ import deepmerge from 'deepmerge'
 import { produce } from 'immer'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { Config, configSchema, InitOptions } from '../schemas/config.schema'
+import { Config, ConfigInitOptions, configSchema } from '../schemas/config.schema'
 
-const LSKEY_CONFIG = 'config'
+export const LSKEY_CONFIG = 'config'
 
 type State = {
     config: Config | null
 }
 
 type Actions = {
-    init: (initOptions: InitOptions) => void
+    init: (initOptions: ConfigInitOptions) => void
     setConfig: (newConfig: Config) => void
     setter: <T>(key: string, value: T) => void
     updateConfig: (newConfig: Partial<Config>) => void
@@ -34,7 +34,7 @@ export const useConfig = create(
     persist<State & Actions>(
         (set, get) => ({
             config: null,
-            init: (initOptions: InitOptions) =>
+            init: (initOptions: ConfigInitOptions) =>
                 set(() => {
                     const parse = configSchema.parse(initOptions)
                     return {
@@ -114,6 +114,7 @@ export const useConfig = create(
         }),
         {
             name: LSKEY_CONFIG,
+            version: 1,
             // will use localStorage as default
         }
     )
