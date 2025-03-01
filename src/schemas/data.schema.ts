@@ -17,10 +17,10 @@ export const historyEntrySchema = z.object({
 })
 export type HistoryEntry = z.infer<typeof historyEntrySchema>
 
-export const configSchema = z.object({
+export const dataSchema = z.object({
     version: z.string(), // Versão do arquivo de configuração
     consumption: z.object({
         history: z.array(historyEntrySchema), // Histórico de consumo
     }),
 })
-export type Config = z.infer<typeof configSchema>
+export type Data = z.infer<typeof dataSchema>
