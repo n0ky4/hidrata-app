@@ -1,4 +1,5 @@
 import deepmerge from 'deepmerge'
+import { produce } from 'immer'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { Config, configSchema, InitOptions } from '../schemas/config.schema'
@@ -44,6 +45,7 @@ export const useConfig = create(
                 set({
                     config: newConfig,
                 }),
+
             updateConfig: (newConfig: Partial<Config>) =>
                 set((state) => {
                     if (!state.config) return state
@@ -58,30 +60,21 @@ export const useConfig = create(
 
             // global nested setter
             setter: <T>(path: string, value: T) =>
-                set((state) => {
-                    if (!state.config) return state
+                set(
+                    produce((state: State) => {
+                        if (!state.config) return state
 
-                    const keys = path.split('.')
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    const nestedObj: any = {}
-                    let currentObj = nestedObj
+                        const keys = path.split('.')
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        let current: any = state.config
 
-                    // criar objeto aninhado: { a: { b: { c: value } } }
-                    for (let i = 0; i < keys.length - 1; i++) {
-                        currentObj[keys[i]] = {}
-                        currentObj = currentObj[keys[i]]
-                    }
+                        for (let i = 0; i < keys.length - 1; i++) {
+                            current = current[keys[i]]
+                        }
 
-                    // setar o valor final
-                    currentObj[keys[keys.length - 1]] = value
-
-                    const merged = deepmerge(state.config, nestedObj)
-                    const updatedConfig = configSchema.parse(merged)
-
-                    return {
-                        config: updatedConfig,
-                    }
-                }),
+                        current[keys[keys.length - 1]] = value
+                    })
+                ),
 
             // individual setters
             setNotificationsEnabled: (enabled: Config['notifications']['enabled']) =>

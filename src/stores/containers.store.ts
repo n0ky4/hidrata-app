@@ -18,7 +18,7 @@ type States = {
 type Actions = {
     init: () => void
     setContainers: (containers: Containers) => void
-    arrayModifier: (operation: (containers: Container[]) => Container[]) => void
+    containerArrayModifier: (operation: (containers: Container[]) => Container[]) => void
     addContainer: (container: ContainerCreateData) => void
     updateContainer: (container: ContainerUpdateData) => void
     renameContainer: (id: string, name: string) => void
@@ -44,7 +44,7 @@ export const useContainers = create(
                 })),
 
             // função genérica para atualizar o `data.containers` com base em uma operação
-            arrayModifier: (operation: (containers: Container[]) => Container[]) =>
+            containerArrayModifier: (operation: (containers: Container[]) => Container[]) =>
                 set((state) => {
                     if (!state.data) return state
 
@@ -57,23 +57,23 @@ export const useContainers = create(
                 }),
 
             addContainer: (container) =>
-                get().arrayModifier((containers) => [
+                get().containerArrayModifier((containers) => [
                     ...containers,
                     { id: shortId(), ...container },
                 ]),
 
             updateContainer: (container) =>
-                get().arrayModifier((containers) =>
+                get().containerArrayModifier((containers) =>
                     containers.map((c) => (c.id === container.id ? { ...c, ...container } : c))
                 ),
 
             renameContainer: (id, name) =>
-                get().arrayModifier((containers) =>
+                get().containerArrayModifier((containers) =>
                     containers.map((c) => (c.id === id ? { ...c, name } : c))
                 ),
 
             removeContainer: (id) =>
-                get().arrayModifier((containers) => containers.filter((c) => c.id !== id)),
+                get().containerArrayModifier((containers) => containers.filter((c) => c.id !== id)),
         }),
         {
             name: LSKEY_CONTAINERS,
