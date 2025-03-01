@@ -3,7 +3,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { Config, configSchema, InitOptions } from '../schemas/config.schema'
 
-export const LOCAL_STORAGE_KEY = 'config'
+const LSKEY_CONFIG = 'config'
 
 type State = {
     config: Config | null
@@ -120,7 +120,7 @@ export const useConfig = create(
                 get().setter('climate.longitude', longitude),
         }),
         {
-            name: LOCAL_STORAGE_KEY,
+            name: LSKEY_CONFIG,
             // will use localStorage as default
         }
     )
