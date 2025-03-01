@@ -42,3 +42,10 @@ export const configSchema = z.object({
 })
 
 export type Config = z.infer<typeof configSchema>
+
+export type InitOptions = {
+    age: Config['age']
+    weight: Config['weight']
+    latitude: Config['climate']['latitude']
+    longitude: Config['climate']['longitude']
+}
