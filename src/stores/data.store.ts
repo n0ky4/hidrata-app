@@ -1,0 +1,109 @@
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+import { Data, dataSchema, HistoryEntry, Record, RecordCreateData } from '../schemas/data.schema'
+import { shortId } from '../util/nanoid'
+
+const LSKEY_DATA = 'data'
+
+type States = {
+    data: Data | null
+}
+
+type Actions = {
+    init: () => void
+    setData: (data: Data) => void
+    updateData: (data: Partial<Data>) => void
+
+    historyArrayModifier: (operation: (history: HistoryEntry[]) => HistoryEntry[]) => void
+
+    addHistoryEntry: (entry: HistoryEntry) => void
+    updateHistoryEntry: (entry: HistoryEntry) => void
+    removeHistoryEntry: (date: string) => void
+
+    recordsArrayModifier: (date: string, operation: (records: Record[]) => Record[]) => void
+
+    addRecord: (date: string, record: RecordCreateData) => void
+    removeRecord: (date: string, recordId: string) => void
+}
+
+export const useContainers = create(
+    persist<States & Actions>(
+        (set, get) => ({
+            data: null,
+            init: () => {
+                const parsed = dataSchema.parse({})
+                set({ data: parsed })
+            },
+            setData: (data: Data) => {
+                set({ data })
+            },
+            updateData: (data: Partial<Data>) => {
+                set((state) => {
+                    if (!state.data) return state
+                    return { data: { ...state.data, ...data } }
+                })
+            },
+
+            historyArrayModifier: (operation: (history: HistoryEntry[]) => HistoryEntry[]) =>
+                set((state) => {
+                    if (!state.data) return state
+
+                    return {
+                        data: {
+                            ...state.data,
+                            consumption: {
+                                ...state.data.consumption,
+                                history: operation(state.data.consumption.history),
+                            },
+                        },
+                    }
+                }),
+
+            addHistoryEntry: (entry: HistoryEntry) =>
+                get().historyArrayModifier((history) => [...history, entry]),
+
+            updateHistoryEntry: (entry: HistoryEntry) =>
+                get().historyArrayModifier((history) =>
+                    history.map((h) => (h.date === entry.date ? entry : h))
+                ),
+
+            removeHistoryEntry: (date: string) =>
+                get().historyArrayModifier((history) => history.filter((h) => h.date !== date)),
+
+            recordsArrayModifier: (date: string, operation: (records: Record[]) => Record[]) =>
+                set((state) => {
+                    if (!state.data) return state
+
+                    return {
+                        data: {
+                            ...state.data,
+                            consumption: {
+                                ...state.data.consumption,
+                                history: state.data.consumption.history.map((h) =>
+                                    h.date === date ? { ...h, records: operation(h.records) } : h
+                                ),
+                            },
+                        },
+                    }
+                }),
+
+            addRecord: (date: string, record: RecordCreateData) =>
+                get().recordsArrayModifier(date, (records) => [
+                    ...records,
+                    {
+                        id: shortId(),
+                        ...record,
+                    },
+                ]),
+
+            removeRecord: (date: string, recordId: string) =>
+                get().recordsArrayModifier(date, (records) =>
+                    records.filter((r) => r.id !== recordId)
+                ),
+        }),
+
+        {
+            name: LSKEY_DATA,
+        }
+    )
+)
