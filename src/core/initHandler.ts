@@ -8,8 +8,8 @@ export function useInitHandler(setFirstUse: (value: boolean) => void) {
 
     function check() {
         if (!localStorage.getItem(LSKEY_CONFIG)) setFirstUse(true)
-        if (!localStorage.get(LSKEY_CONTAINERS)) initContainers()
-        if (!localStorage.get(LSKEY_DATA)) initData()
+        if (!localStorage.getItem(LSKEY_CONTAINERS)) initContainers()
+        if (!localStorage.getItem(LSKEY_DATA)) initData()
     }
 
     return {
