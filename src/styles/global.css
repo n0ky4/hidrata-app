@@ -1,1 +1,11 @@
 @import 'tailwindcss';
+
+@theme {
+    --font-sans: 'Sora', sans-serif;
+}
+
+@layer base {
+    button {
+        @apply cursor-pointer;
+    }
+}
