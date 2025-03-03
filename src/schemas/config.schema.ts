@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { notifications } from '../core/notifications'
 import { theme } from '../core/theme'
-import { units } from '../core/units'
+import { AvailableVolumes, AvailableWeights, units } from '../core/units'
 import { i18n } from './../core/i18n'
 
 export const configSchema = z.object({
@@ -17,8 +17,12 @@ export const configSchema = z.object({
         .default({}),
     units: z
         .object({
-            weight: z.enum(units.availableWeights as [string, ...string[]]).default('kg'), // Unidade de peso
-            volume: z.enum(units.availableVolumes).default('ml'), // Unidade de volume
+            weight: z
+                .custom<AvailableWeights>((value) => units.availableWeights.includes(value))
+                .default('kg'),
+            volume: z
+                .custom<AvailableVolumes>((value) => units.availableVolumes.includes(value))
+                .default('ml'),
         })
         .default({}),
     theme: z
