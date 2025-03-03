@@ -1,0 +1,38 @@
+{
+    "appName": "hidrata-app",
+    "generic": {
+        "weight": "Weight",
+        "volume": "Volume",
+        "next": "Next",
+        "back": "Back",
+        "age": "Age",
+        "gotIt": "Got it"
+    },
+    "stages": {
+        "stage1": {
+            "title": "Welcome!",
+            "p1": "Before we start, we need to calculate the amount of water you should drink daily.",
+            "p2": "Oh, and don't worry! All data will only be stored on your device."
+        },
+        "stage2": {
+            "title": "Measurement units",
+            "p1": "First, what are the measurement units you prefer to use?"
+        },
+        "stage3": {
+            "title": "Age and Weight",
+            "p1": "In order to calculate the amount of water you should drink daily, we need to know your age and weight."
+        }
+    },
+    "units": {
+        "kg": "Kilogram",
+        "kgP": "Kilograms",
+        "lb": "Pound",
+        "lbP": "Pounds",
+        "st": "Stone",
+        "stP": "Stones",
+        "oz": "Ounce",
+        "ozP": "Ounces",
+        "ml": "Mililiter",
+        "mlP": "Mililiters"
+    }
+}
