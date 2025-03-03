@@ -1,15 +1,15 @@
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { useState } from 'react'
 import { twMerge } from 'tailwind-merge'
-import { StageOne } from './stages/StageOne'
-import { StageTwo } from './stages/StageTwo'
+import { Stage1 } from './stages/Stage1'
+import { Stage2 } from './stages/Stage2'
 
 interface FirstUseProps {
     show: boolean
     onClose: () => void
 }
 
-const stages = [StageOne, StageTwo]
+const stages = [Stage1, Stage2]
 
 export function FirstUseScreen({ show, onClose }: FirstUseProps) {
     const [stageIndex, setStage] = useState(0)

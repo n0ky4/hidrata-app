@@ -14,7 +14,7 @@ const volumeSelectOptions: SelectOption[] = [
     { label: 'Onças (oz)', value: 'oz' },
 ]
 
-export function StageTwo({ nextStage, onSecondStageEnd }: StageProps) {
+export function Stage2({ nextStage, onSecondStageEnd }: StageProps) {
     const [weight, setWeight] = useState<AvailableWeights>('kg')
     const [volume, setVolume] = useState<AvailableVolumes>('ml')
 

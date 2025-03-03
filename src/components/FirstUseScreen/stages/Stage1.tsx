@@ -2,7 +2,7 @@ import { ArrowRight } from 'lucide-react'
 import { Button } from '../../Button'
 import { StageActions, StageContent, StageProps, StageTitle } from './StageModel'
 
-export function StageOne({ nextStage }: StageProps) {
+export function Stage1({ nextStage }: StageProps) {
     return (
         <>
             <StageTitle>👋 Bem-vindo(a)!</StageTitle>
