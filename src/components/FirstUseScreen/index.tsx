@@ -1,22 +1,44 @@
 import { Dialog, DialogPanel } from '@headlessui/react'
+import { produce } from 'immer'
 import { useState } from 'react'
 import { twMerge } from 'tailwind-merge'
+import { AvailableVolumes, AvailableWeights } from '../../core/units'
 import { Stage1 } from './stages/Stage1'
 import { Stage2 } from './stages/Stage2'
+import { Stage3 } from './stages/Stage3'
 
 interface FirstUseProps {
     show: boolean
     onClose: () => void
 }
 
-const stages = [Stage1, Stage2]
+export interface StateType {
+    stage: number
+    weight: number
+    age: number
+    units: {
+        weight: AvailableWeights
+        volume: AvailableVolumes
+    }
+}
+
+const stages = [Stage1, Stage2, Stage3]
 
 export function FirstUseScreen({ show, onClose }: FirstUseProps) {
-    const [stageIndex, setStage] = useState(0)
-    const progress = Math.floor((stageIndex / stages.length) * 100)
+    const [state, setState] = useState<StateType>({
+        stage: 0,
+        weight: 0,
+        age: 0,
+        units: {
+            weight: 'kg',
+            volume: 'ml',
+        },
+    })
+
+    const progress = Math.floor((state.stage / stages.length) * 100)
 
     const Stage =
-        stages[stageIndex] ||
+        stages[state.stage] ||
         (() => (
             <div>
                 <p>Erro: estágio não encontrado.</p>
@@ -24,20 +46,36 @@ export function FirstUseScreen({ show, onClose }: FirstUseProps) {
         ))
 
     const nextStage = () => {
-        setStage((prev) => {
-            const next = prev + 1
-            if (next >= stages.length) {
+        setState((prev) => {
+            const next = prev.stage + 1
+            if (next === stages.length) {
                 onClose()
+                return prev
             }
 
-            return next
+            return produce(prev, (draft) => {
+                draft.stage = next
+            })
+        })
+    }
+
+    const prevStage = () => {
+        setState((prev) => {
+            const next = prev.stage - 1
+            if (next < 0) {
+                return prev
+            }
+
+            return produce(prev, (draft) => {
+                draft.stage = next
+            })
         })
     }
 
     return (
         <Dialog open={show} onClose={() => {}} className='relative z-50'>
             <div className='fixed flex w-screen items-center justify-center p-4 lg:pt-20 pt-10'>
-                <DialogPanel className='relative overflow-hidden max-w-xl flex flex-col gap-4 border border-neutral-800 bg-neutral-900 p-12 rounded-xl'>
+                <DialogPanel className='relative overflow-hidden w-full max-w-lg flex flex-col gap-4 border border-neutral-800 bg-neutral-900 p-12 rounded-xl'>
                     <div
                         className={twMerge(
                             'absolute top-0 left-0 h-1 overflow-hidden',
@@ -51,9 +89,9 @@ export function FirstUseScreen({ show, onClose }: FirstUseProps) {
                     </div>
                     <Stage
                         nextStage={nextStage}
-                        onSecondStageEnd={(data) => {
-                            console.log(data)
-                        }}
+                        prevStage={prevStage}
+                        state={state}
+                        setState={setState}
                     />
                 </DialogPanel>
             </div>

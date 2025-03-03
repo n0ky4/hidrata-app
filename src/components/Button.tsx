@@ -6,6 +6,11 @@ const themes = {
         'hover:bg-blue-700',
         'focus-visible:ring-2 focus-visible:ring-blue-100/75'
     ),
+    ghost: twMerge(
+        'bg-white/5 text-white',
+        'hover:bg-white/10',
+        'focus-visible:ring-2 focus-visible:ring-white/50'
+    ),
 }
 type Theme = keyof typeof themes
 
@@ -23,6 +28,7 @@ export function Button({ theme = 'primary', children, className, ...rest }: Butt
                 'font-medium select-none px-4 py-2 rounded-lg',
                 'focus-visible:outline-none',
                 'flex items-center gap-1.5',
+                'disabled:opacity-50 disabled:cursor-not-allowed',
                 th,
                 className
             )}

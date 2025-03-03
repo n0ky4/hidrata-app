@@ -2,7 +2,16 @@ import { z } from 'zod'
 import { notifications } from '../core/notifications'
 import { theme } from '../core/theme'
 import { AvailableVolumes, AvailableWeights, units } from '../core/units'
-import { i18n } from './../core/i18n'
+import { i18n } from '../i18n'
+
+export const ageSchema = z.number().int().positive().min(1).max(120)
+export const weightSchema = z.number().positive().min(3).max(350)
+
+export const ageWeightSchema = z.object({
+    age: ageSchema,
+    weight: weightSchema,
+})
+export type AgeWeight = z.infer<typeof ageWeightSchema>
 
 export const configSchema = z.object({
     language: z.enum(Object.keys(i18n.availableLanguages) as [string, ...string[]]).default('en'), // Idioma do aplicativo
@@ -32,8 +41,8 @@ export const configSchema = z.object({
             font: z.string().default('default'), // Fonte do aplicativo
         })
         .default({}),
-    age: z.number().int().positive().min(1).max(120), // Idade deve ser um número inteiro positivo
-    weight: z.number().positive().min(3).max(350), // Peso deve ser um número positivo
+    age: ageSchema,
+    weight: weightSchema,
     climate: z
         .object({
             enabled: z.boolean().default(false), // Usar detecção de condições climáticas

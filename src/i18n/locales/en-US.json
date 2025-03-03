@@ -6,13 +6,15 @@
         "next": "Next",
         "back": "Back",
         "age": "Age",
+        "yearsOld": "years old",
         "gotIt": "Got it"
     },
     "stages": {
         "stage1": {
             "title": "Welcome!",
-            "p1": "Before we start, we need to calculate the amount of water you should drink daily.",
-            "p2": "Oh, and don't worry! All data will only be stored on your device."
+            "p1": "You're one step away from using {}!",
+            "p2": "Before we start, we need to calculate the amount of water you should drink daily.",
+            "p3": "Oh, and don't worry! All data will only be stored on your device."
         },
         "stage2": {
             "title": "Measurement units",
@@ -30,8 +32,8 @@
         "lbP": "Pounds",
         "st": "Stone",
         "stP": "Stones",
-        "oz": "Ounce",
-        "ozP": "Ounces",
+        "flOz": "Fluid Ounce",
+        "flOzP": "Fluid Ounces",
         "ml": "Mililiter",
         "mlP": "Mililiters"
     }

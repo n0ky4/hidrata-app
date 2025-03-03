@@ -6,13 +6,15 @@
         "next": "Próximo",
         "back": "Voltar",
         "age": "Idade",
+        "yearsOld": "anos",
         "gotIt": "Entendi"
     },
     "stages": {
         "stage1": {
             "title": "Bem-vindo(a)!",
-            "p1": "Antes de começar, precisamos calcular a quantidade de água que você deve beber diariamente.",
-            "p2": "Ah, e não se preocupe! Todos os dados só serão armazenados no seu dispositivo."
+            "p1": "Você está a um passo de usar o {}!",
+            "p2": "Antes de começar, precisamos calcular a quantidade de água que você deve beber diariamente.",
+            "p3": "Ah, e não se preocupe! Todos os dados só serão armazenados no seu dispositivo."
         },
         "stage2": {
             "title": "Unidades de medida",
@@ -30,8 +32,8 @@
         "lbP": "Libras",
         "st": "Stone",
         "stP": "Stones",
-        "oz": "Onça",
-        "ozP": "Onças",
+        "flOz": "Onça fluida",
+        "flOzP": "Onças fluidas",
         "ml": "Mililitro",
         "mlP": "Mililitros"
     }

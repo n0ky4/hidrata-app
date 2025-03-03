@@ -1,42 +1,81 @@
 const weight = {
     kg: {
-        name: 'kg',
+        symbol: 'kg',
+        name: 'Kilogram',
         factor: 1,
     },
     lb: {
-        name: 'lb',
+        symbol: 'lb',
+        name: 'Pound',
         factor: 2.20462, // 1 kg = 2.20462 lb
     },
     st: {
-        name: 'st',
-        factor: 0.157473, // 1 kg = 0.157473 st
+        symbol: 'st',
+        name: 'Stone',
+        factor: 1 / 6.35029, // 1 kg = 0.157473 st
     },
 } as const
 const availableWeights = Object.keys(weight)
-export type AvailableWeights = 'kg' | 'lb' | 'st'
+export type AvailableWeights = keyof typeof weight
 
 const volume = {
     ml: {
-        name: 'ml',
+        symbol: 'ml',
+        name: 'Milliliter',
         factor: 1,
     },
     l: {
         // only used for display - ml is used instead
-        name: 'l',
         symbol: 'l',
-        factor: 0.001, // 1 l = 1000 ml
+        name: 'Liter',
+        factor: 1 / 1000, // 1000 ml = 1 l
     },
-    oz: {
-        name: 'oz',
-        factor: 0.033814, // 1 ml = 0.033814 oz
+    'fl-oz': {
+        symbol: 'fl oz',
+        name: 'Fluid Ounce',
+        factor: 1 / 29.5735, // 1 ml = 0.033814 fl oz
     },
 } as const
-const availableVolumes = ['ml', 'oz'] as const
-export type AvailableVolumes = 'ml' | 'oz'
+const availableVolumes = ['ml', 'fl-oz'] as const
+export type AvailableVolumes = 'ml' | 'fl-oz'
 
-function getWeight(key: string) {
-    if (!availableWeights.includes(key as AvailableWeights)) return null
-    return weight[key as AvailableWeights]
+function getWeight(key: AvailableWeights) {
+    return weight[key]
+}
+
+interface ConvertOptions {
+    from?: AvailableWeights // if empty, assume "kg"
+    to: AvailableWeights
+    addSymbol?: boolean
+    decimals?: number // decimal places
+}
+interface ConvertOptionsWithSymbol extends Omit<ConvertOptions, 'addSymbol'> {
+    addSymbol: true
+}
+interface ConvertOptionsWithoutSymbol extends Omit<ConvertOptions, 'addSymbol'> {
+    addSymbol?: false
+}
+function convert(value: number, options: ConvertOptionsWithSymbol): string
+function convert(value: number, options: ConvertOptionsWithoutSymbol): number
+function convert(value: number, options: ConvertOptions): string | number {
+    const { from = 'kg', to, addSymbol = false, decimals = 2 } = options
+
+    let converted = value
+
+    const fromUnit = getWeight(from)
+    const toUnit = getWeight(to)
+
+    if (!fromUnit || !toUnit) return NaN
+
+    converted = (value * toUnit.factor) / fromUnit.factor
+
+    if (decimals > 0) {
+        converted = Number(converted.toFixed(decimals))
+    } else {
+        converted = Math.round(converted)
+    }
+
+    return addSymbol ? `${converted} ${toUnit.symbol}` : converted
 }
 
 function autoDetect(): [AvailableWeights, AvailableVolumes] {
@@ -48,7 +87,7 @@ function autoDetect(): [AvailableWeights, AvailableVolumes] {
     switch (lang) {
         case 'en-US': // lb & oz
             weight = 'lb'
-            volume = 'oz'
+            volume = 'fl-oz'
             break
         case 'en-GB': // st & oz
             weight = 'st'
@@ -68,4 +107,5 @@ export const units = {
     availableVolumes,
     autoDetect,
     getWeight,
+    convert,
 }

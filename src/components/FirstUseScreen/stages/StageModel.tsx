@@ -1,15 +1,35 @@
 import { DialogTitle } from '@headlessui/react'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { PropsWithChildren } from 'react'
-import { AvailableVolumes, AvailableWeights } from '../../../core/units'
-
-interface SecondStageData {
-    weight: AvailableWeights
-    volume: AvailableVolumes
-}
+import { StateType } from '..'
+import { useLocale } from '../../../i18n/context/contextHook'
+import { Button } from '../../Button'
 
 export interface StageProps {
     nextStage: () => void
-    onSecondStageEnd: (data: SecondStageData) => void
+    prevStage: () => void
+    state: StateType
+    setState: React.Dispatch<React.SetStateAction<StateType>>
+}
+
+export function BackButton({ onClick, ...rest }: React.HTMLProps<HTMLButtonElement>) {
+    const { t } = useLocale()
+    return (
+        <Button onClick={onClick} theme='ghost' {...rest} type='button'>
+            <ArrowLeft size={18} strokeWidth={3} />
+            {t('generic.back')}
+        </Button>
+    )
+}
+
+export function NextButton({ onClick, ...rest }: React.HTMLProps<HTMLButtonElement>) {
+    const { t } = useLocale()
+    return (
+        <Button onClick={onClick} {...rest} type='button'>
+            {t('generic.next')}
+            <ArrowRight size={18} strokeWidth={3} />
+        </Button>
+    )
 }
 
 export function StageTitle({ children }: PropsWithChildren) {
@@ -21,5 +41,5 @@ export function StageContent({ children }: PropsWithChildren) {
 }
 
 export function StageActions({ children }: PropsWithChildren) {
-    return <div className='flex gap-4 items-center justify-end mt-12'>{children}</div>
+    return <div className='flex gap-4 items-center justify-between mt-12'>{children}</div>
 }

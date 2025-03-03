@@ -9,3 +9,16 @@
         @apply cursor-pointer;
     }
 }
+
+@layer utilities {
+    /* hide number input arrows */
+    .hide-arrows::-webkit-outer-spin-button,
+    .hide-arrows::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    .hide-arrows[type='number'] {
+        appearance: textfield;
+        -moz-appearance: textfield;
+    }
+}

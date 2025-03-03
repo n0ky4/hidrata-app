@@ -98,7 +98,7 @@ O usuário poderá alterar seu peso e idade posteriormente.
 
 #### Unidades de medida
 
-Será possível escolher entre as unidades de medida métricas (mL, kg) e imperiais (oz, lb).
+Será possível escolher entre as unidades de medida métricas (mL, kg) e imperiais (fl oz, lb).
 
 Por questões de precisão e configuração posterior, a aplicação (por baixo dos panos) sempre utilizará as unidades métricas. A conversão para unidades imperiais será feita apenas na interface.
 

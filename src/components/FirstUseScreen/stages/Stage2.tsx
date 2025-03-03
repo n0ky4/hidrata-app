@@ -1,35 +1,64 @@
-import { ArrowRight } from '@phosphor-icons/react'
-import { useEffect, useState } from 'react'
+// Stage 2 - Units
+
+import { produce } from 'immer'
+import { useEffect } from 'react'
+import { StateType } from '..'
 import { AvailableVolumes, AvailableWeights, units } from '../../../core/units'
-import { Button } from '../../Button'
+import { useLocale } from '../../../i18n/context/contextHook'
 import { Select, SelectOption } from '../../Select'
-import { StageActions, StageContent, StageProps, StageTitle } from './StageModel'
+import {
+    BackButton,
+    NextButton,
+    StageActions,
+    StageContent,
+    StageProps,
+    StageTitle,
+} from './StageModel'
 
-const weightSelectOptions: SelectOption[] = [
-    { label: 'Kilogramas (kg)', value: 'kg' },
-    { label: 'Libras (lb)', value: 'lb' },
-]
-const volumeSelectOptions: SelectOption[] = [
-    { label: 'Mililitros (ml)', value: 'ml' },
-    { label: 'Onças (oz)', value: 'oz' },
-]
+export function Stage2({ nextStage, prevStage, state, setState }: StageProps) {
+    const { t } = useLocale()
 
-export function Stage2({ nextStage, onSecondStageEnd }: StageProps) {
-    const [weight, setWeight] = useState<AvailableWeights>('kg')
-    const [volume, setVolume] = useState<AvailableVolumes>('ml')
+    const weightSelectOptions: SelectOption[] = [
+        { label: `${t('units.kgP')} (kg)`, value: 'kg' },
+        { label: `${t('units.lbP')} (lb)`, value: 'lb' },
+    ]
+    const volumeSelectOptions: SelectOption[] = [
+        { label: `${t('units.mlP')} (ml)`, value: 'ml' },
+        { label: `${t('units.flOzP')} (fl oz)`, value: 'fl-oz' },
+    ]
+
+    const weight = state.units.weight
+    const volume = state.units.volume
+
+    const setWeight = (value: AvailableWeights) => {
+        setState((prev: StateType) =>
+            produce(prev, (draft) => {
+                draft.units.weight = value
+            })
+        )
+    }
+
+    const setVolume = (value: AvailableVolumes) => {
+        setState((prev: StateType) =>
+            produce(prev, (draft) => {
+                draft.units.volume = value
+            })
+        )
+    }
 
     const onSetWeight = (value: AvailableWeights) => {
         const find = weightSelectOptions.find((o) => o.value === value)
-        if (find) setWeight(find.value as AvailableWeights)
+        if (!find) return
+        setWeight(find.value as AvailableWeights)
     }
 
     const onSetVolume = (value: AvailableVolumes) => {
         const find = volumeSelectOptions.find((o) => o.value === value)
-        if (find) setVolume(find.value as AvailableVolumes)
+        if (!find) return
+        setVolume(find.value as AvailableVolumes)
     }
 
     const beforeNext = () => {
-        onSecondStageEnd({ weight, volume })
         nextStage()
     }
 
@@ -37,17 +66,20 @@ export function Stage2({ nextStage, onSecondStageEnd }: StageProps) {
         const preferred = units.autoDetect()
         setWeight(preferred[0])
         setVolume(preferred[1])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
         <>
-            <StageTitle>🍶 Unidades de medida</StageTitle>
+            <StageTitle>🍶 {t('stages.stage2.title')}</StageTitle>
             <StageContent>
-                <p>Primeiramente, quais são as unidades de medida que você prefere usar no app?</p>
+                <p>{t('stages.stage2.p1')}</p>
 
                 <div className='flex flex-col gap-4 items-center'>
                     <div>
-                        <label className='mb-1 text-neutral-400 text-sm font-medium'>Peso</label>
+                        <label className='mb-1 text-neutral-400 text-sm font-medium'>
+                            {t('generic.weight')}
+                        </label>
                         <Select
                             options={weightSelectOptions}
                             selected={weight}
@@ -56,7 +88,9 @@ export function Stage2({ nextStage, onSecondStageEnd }: StageProps) {
                         />
                     </div>
                     <div>
-                        <label className='mb-1 text-neutral-400 text-sm font-medium'>Volume</label>
+                        <label className='mb-1 text-neutral-400 text-sm font-medium'>
+                            {t('generic.volume')}
+                        </label>
                         <Select
                             options={volumeSelectOptions}
                             selected={volume}
@@ -67,10 +101,8 @@ export function Stage2({ nextStage, onSecondStageEnd }: StageProps) {
                 </div>
             </StageContent>
             <StageActions>
-                <Button onClick={beforeNext}>
-                    Próximo
-                    <ArrowRight size={18} strokeWidth={3} />
-                </Button>
+                <BackButton onClick={prevStage} />
+                <NextButton onClick={beforeNext} />
             </StageActions>
         </>
     )
