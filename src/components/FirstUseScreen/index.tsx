@@ -2,17 +2,14 @@ import { Dialog, DialogPanel } from '@headlessui/react'
 import { useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { StageOne } from './stages/StageOne'
+import { StageTwo } from './stages/StageTwo'
 
 interface FirstUseProps {
     show: boolean
     onClose: () => void
 }
 
-export interface StageProps {
-    nextStage: () => void
-}
-
-const stages = [StageOne, StageOne]
+const stages = [StageOne, StageTwo]
 
 export function FirstUseScreen({ show, onClose }: FirstUseProps) {
     const [stageIndex, setStage] = useState(0)
@@ -52,7 +49,12 @@ export function FirstUseScreen({ show, onClose }: FirstUseProps) {
                     >
                         <div className='absolute top-0 left-0 w-full h-1 rounded-full bg-gradient-to-r from-blue-500 to-blue-400' />
                     </div>
-                    <Stage nextStage={nextStage} />
+                    <Stage
+                        nextStage={nextStage}
+                        onSecondStageEnd={(data) => {
+                            console.log(data)
+                        }}
+                    />
                 </DialogPanel>
             </div>
         </Dialog>

@@ -13,9 +13,7 @@ function App() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    if (!mounted) {
-        return null
-    }
+    if (!mounted) return null
 
     if (firstRun) {
         return <FirstUseScreen show={firstRun} onClose={() => setFirstRun(false)} />
