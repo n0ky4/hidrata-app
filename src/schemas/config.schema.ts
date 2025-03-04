@@ -8,7 +8,9 @@ export const ageSchema = z.number().int().positive().min(1).max(120)
 export const weightSchema = z.number().positive().min(3).max(350)
 
 export const configSchema = z.object({
-    language: z.enum(Object.keys(i18n.availableLanguages) as [string, ...string[]]).default('en'), // Idioma do aplicativo
+    language: z
+        .enum(Object.keys(i18n.availableLanguages) as [string, ...string[]])
+        .default('en-US'), // Idioma do aplicativo
     notifications: z
         .object({
             enabled: z.boolean().default(true),

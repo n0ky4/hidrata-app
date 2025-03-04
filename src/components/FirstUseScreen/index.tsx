@@ -3,10 +3,10 @@ import { produce } from 'immer'
 import { useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { AvailableVolumes, AvailableWeights } from '../../core/units'
-import { useConfig } from '../../stores/config.store'
 import { Stage1 } from './stages/Stage1'
 import { Stage2 } from './stages/Stage2'
 import { Stage3 } from './stages/Stage3'
+import { Stage4 } from './stages/Stage4'
 
 interface FirstUseProps {
     show: boolean
@@ -22,9 +22,14 @@ export interface StateType {
         weight: AvailableWeights
         volume: AvailableVolumes
     }
+    location: {
+        use: boolean
+        lat: number
+        lon: number
+    }
 }
 
-const stages = [Stage1, Stage2, Stage3]
+const stages = [Stage1, Stage2, Stage3, Stage4]
 
 export function FirstUseScreen({ show, onClose }: FirstUseProps) {
     const [state, setState] = useState<StateType>({
@@ -36,9 +41,12 @@ export function FirstUseScreen({ show, onClose }: FirstUseProps) {
             weight: 'kg',
             volume: 'ml',
         },
+        location: {
+            use: false,
+            lat: 0,
+            lon: 0,
+        },
     })
-
-    const init = useConfig((state) => state.init)
 
     const progress = Math.floor((state.stage / stages.length) * 100)
 
@@ -50,29 +58,11 @@ export function FirstUseScreen({ show, onClose }: FirstUseProps) {
             </div>
         ))
 
-    const onFinish = () => {
-        init({
-            age: state.age,
-            weight: state.weight,
-            units: {
-                volume: state.units.volume,
-                weight: state.units.weight,
-            },
-        })
-    }
-
     const nextStage = () => {
-        setState((prev) => {
-            const next = prev.stage + 1
-            if (next === stages.length) {
-                onFinish()
-                return prev
-            }
-
-            return produce(prev, (draft) => {
-                draft.stage = next
-            })
-        })
+        setState((prev) => ({
+            ...prev,
+            stage: prev.stage + 1,
+        }))
     }
 
     const prevStage = () => {
@@ -91,7 +81,7 @@ export function FirstUseScreen({ show, onClose }: FirstUseProps) {
     return (
         <Dialog open={show} onClose={() => {}} className='relative z-50'>
             <div className='fixed flex w-screen items-center justify-center p-4 lg:pt-20 pt-10'>
-                <DialogPanel className='relative overflow-hidden w-full max-w-lg flex flex-col gap-4 border border-neutral-800 bg-neutral-900 p-12 rounded-xl'>
+                <DialogPanel className='relative overflow-hidden w-full max-w-xl flex flex-col gap-4 border border-neutral-800 bg-neutral-900 p-12 rounded-xl'>
                     <div
                         className={twMerge(
                             'absolute top-0 left-0 h-1 overflow-hidden',
@@ -106,8 +96,8 @@ export function FirstUseScreen({ show, onClose }: FirstUseProps) {
                     <Stage
                         nextStage={nextStage}
                         prevStage={prevStage}
-                        state={state}
                         setState={setState}
+                        state={state}
                     />
                 </DialogPanel>
             </div>

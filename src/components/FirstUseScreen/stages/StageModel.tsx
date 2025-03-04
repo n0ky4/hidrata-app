@@ -37,7 +37,7 @@ export function StageTitle({ children }: PropsWithChildren) {
 }
 
 export function StageContent({ children }: PropsWithChildren) {
-    return <div className='flex flex-col gap-4 text-neutral-300'>{children}</div>
+    return <div className='flex flex-col gap-4 text-neutral-300 text-justify'>{children}</div>
 }
 
 export function StageActions({ children }: PropsWithChildren) {

@@ -7,14 +7,16 @@
         "back": "Back",
         "age": "Age",
         "yearsOld": "years old",
-        "gotIt": "Got it"
+        "gotIt": "Got it",
+        "location": "Location",
+        "coords": "Coordenadas"
     },
     "stages": {
         "stage1": {
             "title": "Welcome!",
             "p1": "You're one step away from using {}!",
-            "p2": "Before we start, we need to calculate the amount of water you should drink daily.",
-            "p3": "Oh, and don't worry! All data will only be stored on your device."
+            "p2": "Before we start, we need to calculate the amount of water you should drink daily and set up some things to make your experience even better!",
+            "p3": "Oh, and don't worry! All data will only be stored on your device, and you can change the settings at any time."
         },
         "stage2": {
             "title": "Measurement units",
@@ -23,6 +25,12 @@
         "stage3": {
             "title": "Age and Weight",
             "p1": "In order to calculate the amount of water you should drink daily, we need to know your age and weight."
+        },
+        "stage4": {
+            "title": "It's so hot!",
+            "p1": "{} can automatically detect the weather conditions in your region and adjust the amount of water you should drink daily. Cool, right?",
+            "p2": "Do you want to use this feature?",
+            "checkbox": "Yes, I want to use this feature!"
         }
     },
     "units": {

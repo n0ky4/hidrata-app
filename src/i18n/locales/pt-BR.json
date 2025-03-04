@@ -7,14 +7,16 @@
         "back": "Voltar",
         "age": "Idade",
         "yearsOld": "anos",
-        "gotIt": "Entendi"
+        "gotIt": "Entendi",
+        "location": "Localização",
+        "coords": "Coordenadas"
     },
     "stages": {
         "stage1": {
             "title": "Bem-vindo(a)!",
             "p1": "Você está a um passo de usar o {}!",
-            "p2": "Antes de começar, precisamos calcular a quantidade de água que você deve beber diariamente.",
-            "p3": "Ah, e não se preocupe! Todos os dados só serão armazenados no seu dispositivo."
+            "p2": "Antes de começar, precisamos calcular a quantidade de água que você deve beber diariamente e configurar algumas coisinhas pra deixar sua experiência ainda mais legal!",
+            "p3": "Ah, e não se preocupe! Todos os dados só serão armazenados no seu dispositivo, e você poderá alterar as configurações a qualquer momento."
         },
         "stage2": {
             "title": "Unidades de medida",
@@ -23,6 +25,12 @@
         "stage3": {
             "title": "Idade e Peso",
             "p1": "Para calcularmos a quantidade de água que você deve beber diariamente, precisamos saber a sua idade e peso."
+        },
+        "stage4": {
+            "title": "Que calor!",
+            "p1": "Se você quiser, o {} pode detectar automaticamente as condições climáticas da sua região e ajustar a quantidade de água que você deve beber diariamente. Legal, né?",
+            "p2": "Você deseja usar essa funcionalidade?",
+            "checkbox": "Sim, eu quero usar essa funcionalidade!"
         }
     },
     "units": {
