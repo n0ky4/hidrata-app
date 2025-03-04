@@ -7,12 +7,6 @@ import { i18n } from '../i18n'
 export const ageSchema = z.number().int().positive().min(1).max(120)
 export const weightSchema = z.number().positive().min(3).max(350)
 
-export const ageWeightSchema = z.object({
-    age: ageSchema,
-    weight: weightSchema,
-})
-export type AgeWeight = z.infer<typeof ageWeightSchema>
-
 export const configSchema = z.object({
     language: z.enum(Object.keys(i18n.availableLanguages) as [string, ...string[]]).default('en'), // Idioma do aplicativo
     notifications: z

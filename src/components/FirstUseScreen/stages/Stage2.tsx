@@ -63,9 +63,15 @@ export function Stage2({ nextStage, prevStage, state, setState }: StageProps) {
     }
 
     useEffect(() => {
+        if (state.units.detected) return
         const preferred = units.autoDetect()
         setWeight(preferred[0])
         setVolume(preferred[1])
+        setState((prev: StateType) =>
+            produce(prev, (draft) => {
+                draft.units.detected = true
+            })
+        )
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

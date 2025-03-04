@@ -3,6 +3,7 @@ import { produce } from 'immer'
 import { useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { AvailableVolumes, AvailableWeights } from '../../core/units'
+import { useConfig } from '../../stores/config.store'
 import { Stage1 } from './stages/Stage1'
 import { Stage2 } from './stages/Stage2'
 import { Stage3 } from './stages/Stage3'
@@ -17,6 +18,7 @@ export interface StateType {
     weight: number
     age: number
     units: {
+        detected: boolean
         weight: AvailableWeights
         volume: AvailableVolumes
     }
@@ -30,10 +32,13 @@ export function FirstUseScreen({ show, onClose }: FirstUseProps) {
         weight: 0,
         age: 0,
         units: {
+            detected: false,
             weight: 'kg',
             volume: 'ml',
         },
     })
+
+    const init = useConfig((state) => state.init)
 
     const progress = Math.floor((state.stage / stages.length) * 100)
 
@@ -45,11 +50,22 @@ export function FirstUseScreen({ show, onClose }: FirstUseProps) {
             </div>
         ))
 
+    const onFinish = () => {
+        init({
+            age: state.age,
+            weight: state.weight,
+            units: {
+                volume: state.units.volume,
+                weight: state.units.weight,
+            },
+        })
+    }
+
     const nextStage = () => {
         setState((prev) => {
             const next = prev.stage + 1
             if (next === stages.length) {
-                onClose()
+                onFinish()
                 return prev
             }
 
