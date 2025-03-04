@@ -3,10 +3,9 @@
 import { ArrowRight } from 'lucide-react'
 import { useLocale } from '../../../i18n/context/contextHook'
 import { Button } from '../../Button'
+import { Kaomoji } from '../../KaoMoji'
 import { AppTitle } from '../AppTitle'
 import { StageActions, StageContent, StageProps, StageTitle } from './StageModel'
-
-const littleGuy = <b className='text-white font-normal'>ദ്ദി ( ᵔ ᗜ ᵔ )</b>
 
 export function Stage1({ nextStage }: StageProps) {
     const { t } = useLocale()
@@ -18,7 +17,7 @@ export function Stage1({ nextStage }: StageProps) {
                 <p>{t('stages.stage1.p1', [<AppTitle />])}</p>
                 <p>{t('stages.stage1.p2')}</p>
                 <p>{t('stages.stage1.p3')}</p>
-                {littleGuy}
+                <Kaomoji k='thumbsUp' />
             </StageContent>
             <StageActions>
                 <div />

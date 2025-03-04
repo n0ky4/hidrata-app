@@ -30,13 +30,33 @@ const fetchLocation = (lang?: string): Promise<IpData> => {
     })
 }
 
-const getCoords = (query: string): Promise<{ lat: number; lon: number }> => {
+export interface Coords {
+    lat: number
+    lon: number
+}
+
+export interface GetCoordsInfo {
+    coords: Coords
+    place: string
+}
+
+const fetchCoords = (query: string, lang?: string): Promise<GetCoordsInfo> => {
     return new Promise((resolve, reject) => {
-        fetch(`https://nominatim.openstreetmap.org/search?q=${query}&format=json`)
+        let options: undefined | object
+
+        if (lang) {
+            options = {
+                headers: {
+                    'Accept-Language': `${lang},${lang.split('-')[0]}`,
+                },
+            }
+        }
+
+        fetch(`https://nominatim.openstreetmap.org/search?q=${query}&format=json`, options)
             .then((res) => res.json())
             .then((data) => {
                 if (!data || data.length === 0) {
-                    console.error(data)
+                    console.log(data)
                     return reject('No data received')
                 }
 
@@ -46,7 +66,10 @@ const getCoords = (query: string): Promise<{ lat: number; lon: number }> => {
                 if (!formattedLat || !formattedLon || isNaN(formattedLat) || isNaN(formattedLon))
                     return reject('Invalid coordinates')
 
-                return resolve({ lat: formattedLat, lon: formattedLon })
+                return resolve({
+                    coords: { lat: formattedLat, lon: formattedLon },
+                    place: data[0].display_name,
+                })
             })
             .catch((err) => {
                 reject(err)
@@ -57,5 +80,5 @@ const getCoords = (query: string): Promise<{ lat: number; lon: number }> => {
 export const location = {
     fetchLocation,
     getLocationValue,
-    getCoords,
+    fetchCoords,
 }

@@ -1,13 +1,12 @@
-// Stage 4 - Climate condition detection
-
 import { produce } from 'immer'
-import { Search } from 'lucide-react'
-import { useRef, useState } from 'react'
-import { IpData, location } from '../../../core/location'
+import { MapPin, Search } from 'lucide-react'
+import React, { useCallback, useRef, useState } from 'react'
+import { Coords, IpData, location } from '../../../core/location'
 import { useLocale } from '../../../i18n/context/contextHook'
 import { Button } from '../../Button'
 import { Checkbox } from '../../Checkbox'
 import { Input } from '../../Input'
+import { Kaomoji } from '../../KaoMoji'
 import { Label } from '../../Label'
 import { AppTitle } from '../AppTitle'
 import {
@@ -19,134 +18,203 @@ import {
     StageTitle,
 } from './StageModel'
 
-const littleGuy = <b className='text-white font-normal'>(˵ •̀ ᴗ - ˵ ) ✧</b>
+interface LocationState {
+    show: boolean
+    inputValue: string
+    placeName: string | null
+    coords: Coords | null
+}
 
-export function Stage4({ setState, nextStage, prevStage }: StageProps) {
-    const { t, lang } = useLocale()
-    const [enabled, _setEnabled] = useState(false)
-
-    const locationDetected = useRef<IpData | null>(null)
-
-    const [showLocation, setShowLocation] = useState(false)
-    const [locValue, setLocValue] = useState('')
+// location management hook
+function useLocationManagement(lang: string) {
+    const [enabled, setEnabled] = useState(false)
     const [canContinue, setCanContinue] = useState(false)
+    const locationDetected = useRef<IpData | null>(null)
+    const [locState, setLocState] = useState<LocationState>({
+        show: false,
+        inputValue: '',
+        placeName: null,
+        coords: null,
+    })
 
-    const [latLon, setLatLon] = useState({ lat: 0, lon: 0 })
+    const updateLocationState = useCallback((updates: Partial<LocationState>) => {
+        setLocState((prev) =>
+            produce(prev, (draft) => {
+                Object.assign(draft, updates)
+            })
+        )
+    }, [])
 
-    const setEnabled = (checked: boolean) => {
-        if (checked) {
-            if (!locationDetected.current) {
-                location
-                    .fetchLocation(lang)
-                    .then((data) => {
-                        const locVal = location.getLocationValue(data)
-                        locationDetected.current = data
+    const fetchLocationData = useCallback(async () => {
+        try {
+            const data = await location.fetchLocation(lang)
+            const locVal = location.getLocationValue(data)
+            locationDetected.current = data
 
-                        setLocValue(locVal)
-                        setLatLon({ lat: data.lat, lon: data.lon })
-                        setShowLocation(true)
-                        setCanContinue(true)
-                    })
-                    .catch((err) => {
-                        console.error(err)
-                        setShowLocation(false)
-                    })
-            } else {
-                setShowLocation(true)
-            }
-        } else {
-            setShowLocation(false)
+            updateLocationState({
+                show: true,
+                inputValue: locVal,
+                placeName: locVal,
+                coords: { lat: data.lat, lon: data.lon },
+            })
+            setCanContinue(true)
+        } catch (err) {
+            console.error(err)
+            updateLocationState({
+                show: false,
+                inputValue: '',
+                placeName: null,
+                coords: null,
+            })
+            setCanContinue(false)
         }
+    }, [lang, updateLocationState])
 
-        _setEnabled(checked)
-    }
+    const handleLocationToggle = useCallback(
+        (checked: boolean) => {
+            setEnabled(checked)
 
-    const fetchCoords = () => {
+            if (checked) {
+                if (!locationDetected.current) {
+                    fetchLocationData()
+                } else {
+                    updateLocationState({ show: true })
+                }
+            } else {
+                updateLocationState({ show: false })
+            }
+        },
+        [fetchLocationData, updateLocationState]
+    )
+
+    const fetchCustomCoords = useCallback(async () => {
         const data = locationDetected.current
         const detectedLoc = data ? location.getLocationValue(data) : null
 
-        if (detectedLoc && locValue === detectedLoc) {
-            const lat = data?.lat
-            const lon = data?.lon
+        if (detectedLoc && locState.inputValue === detectedLoc) {
+            const { lat, lon } = data || {}
             if (!lat || !lon) throw new Error('No coordinates found')
 
-            setLatLon({ lat, lon })
+            updateLocationState({
+                show: true,
+                inputValue: detectedLoc,
+                placeName: detectedLoc,
+                coords: { lat, lon },
+            })
             setCanContinue(true)
             return
         }
 
-        location.getCoords(locValue).then((coords) => {
-            setLatLon(coords)
+        try {
+            const { coords, place } = await location.fetchCoords(locState.inputValue, lang)
+            updateLocationState({
+                show: true,
+                inputValue: place,
+                placeName: place,
+                coords,
+            })
             setCanContinue(true)
-        })
-    }
+        } catch (error) {
+            console.error('Failed to fetch coordinates', error)
+            setCanContinue(false)
+        }
+    }, [lang, locState.inputValue, updateLocationState])
 
-    const onLocChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value
-        setLocValue(value)
-        setCanContinue(false)
-    }
+    const handleLocationChange = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>) => {
+            const value = e.target.value
+            updateLocationState({ inputValue: value })
+            setCanContinue(false)
+        },
+        [updateLocationState]
+    )
 
-    const handleNext = () => {
+    return {
+        enabled,
+        canContinue,
+        locState,
+        handleLocationToggle,
+        handleLocationChange,
+        fetchCustomCoords,
+    }
+}
+
+export function Stage4({ setState, nextStage, prevStage }: StageProps) {
+    const { t, lang } = useLocale()
+
+    const {
+        enabled,
+        canContinue,
+        locState,
+        handleLocationToggle,
+        handleLocationChange,
+        fetchCustomCoords,
+    } = useLocationManagement(lang)
+
+    const handleNext = useCallback(() => {
         if (!canContinue) return
 
-        if (enabled) {
-            setState((prev) =>
-                produce(prev, (draft) => {
-                    draft.location.use = true
-                    draft.location.lat = latLon.lat
-                    draft.location.lon = latLon.lon
-                })
-            )
-        } else {
-            setState((prev) =>
-                produce(prev, (draft) => {
-                    draft.location.use = false
-                })
-            )
-        }
+        setState((prev) =>
+            produce(prev, (draft) => {
+                draft.location.use = enabled
+                if (enabled && locState.coords) {
+                    draft.location.lat = locState.coords.lat
+                    draft.location.lon = locState.coords.lon
+                }
+            })
+        )
 
         nextStage()
-    }
+    }, [canContinue, enabled, locState.coords, setState, nextStage])
 
     return (
         <>
             <StageTitle>🥵 {t('stages.stage4.title')}</StageTitle>
             <StageContent>
                 <p>
-                    {t('stages.stage4.p1', [<AppTitle />])} {littleGuy}
+                    {t('stages.stage4.p1', [<AppTitle />])} <Kaomoji k='happy' />
                 </p>
                 <p>{t('stages.stage4.p2')}</p>
                 <div className='mt-8 flex flex-col gap-8'>
                     <div className='flex items-center justify-center gap-2'>
                         <Checkbox
                             checked={enabled}
-                            onChange={setEnabled}
+                            onChange={handleLocationToggle}
                             label={t('stages.stage4.checkbox')}
                         />
                     </div>
-                    {showLocation && (
+                    {locState.show && (
                         <div>
                             <Label>{t('generic.location')}</Label>
-                            <div className='flex items-center gap-2'>
+                            <form
+                                className='flex items-center gap-2'
+                                onSubmit={(e) => {
+                                    e.preventDefault()
+                                    fetchCustomCoords()
+                                }}
+                            >
                                 <Input
                                     placeholder={t('generic.location') as string}
-                                    value={locValue}
-                                    onChange={onLocChange}
+                                    value={locState.inputValue}
+                                    onChange={handleLocationChange}
                                     className='w-full'
                                 />
                                 <Button
                                     theme='ghost'
                                     className='p-0 min-w-[42px] min-h-[42px] flex items-center justify-center'
-                                    onClick={fetchCoords}
+                                    type='submit'
                                 >
                                     <Search size={22} strokeWidth={3} />
                                 </Button>
-                            </div>
-                            {latLon.lat !== 0 && latLon.lon !== 0 && (
-                                <p className='text-neutral-400 text-sm mt-2'>
-                                    {t('generic.coords')}: {latLon.lat}, {latLon.lon}
-                                </p>
+                            </form>
+                            {locState.coords && (
+                                <div className='text-neutral-400 text-xs mt-2 flex items-center gap-1'>
+                                    <MapPin size={16} />
+                                    <span>
+                                        {locState.placeName} ({locState.coords.lat},{' '}
+                                        {locState.coords.lon})
+                                    </span>
+                                </div>
                             )}
                         </div>
                     )}
