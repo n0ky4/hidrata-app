@@ -1,12 +1,14 @@
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { produce } from 'immer'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { AvailableVolumes, AvailableWeights } from '../../core/units'
+import { useConfig } from '../../stores/config.store'
 import { Stage1 } from './stages/Stage1'
 import { Stage2 } from './stages/Stage2'
 import { Stage3 } from './stages/Stage3'
 import { Stage4 } from './stages/Stage4'
+import { Stage5 } from './stages/Stage5'
 
 interface FirstUseProps {
     show: boolean
@@ -27,9 +29,13 @@ export interface StateType {
         lat: number
         lon: number
     }
+    remind: {
+        enabled: boolean
+        minutes: number
+    }
 }
 
-const stages = [Stage1, Stage2, Stage3, Stage4]
+const stages = [Stage1, Stage2, Stage3, Stage4, Stage5]
 
 export function FirstUseScreen({ show, onClose }: FirstUseProps) {
     const [state, setState] = useState<StateType>({
@@ -46,7 +52,13 @@ export function FirstUseScreen({ show, onClose }: FirstUseProps) {
             lat: 0,
             lon: 0,
         },
+        remind: {
+            enabled: false,
+            minutes: 20,
+        },
     })
+
+    const init = useConfig((state) => state.init)
 
     const progress = Math.floor((state.stage / stages.length) * 100)
 
@@ -58,12 +70,41 @@ export function FirstUseScreen({ show, onClose }: FirstUseProps) {
             </div>
         ))
 
-    const nextStage = () => {
-        setState((prev) => ({
-            ...prev,
-            stage: prev.stage + 1,
-        }))
-    }
+    const handleFinish = useCallback(() => {
+        init({
+            age: state.age,
+            weight: state.weight,
+            units: {
+                weight: state.units.weight,
+                volume: state.units.volume,
+            },
+            climate: {
+                enabled: state.location.use,
+                latitude: state.location.lat,
+                longitude: state.location.lon,
+            },
+            notifications: {
+                enabled: state.remind.enabled,
+                interval: state.remind.minutes,
+            },
+        })
+        onClose()
+    }, [onClose, state, init])
+
+    const nextStage = useCallback(() => {
+        const next = state.stage + 1
+
+        if (next >= stages.length) {
+            handleFinish()
+            return
+        }
+
+        return setState((prev) =>
+            produce(prev, (draft) => {
+                draft.stage = next
+            })
+        )
+    }, [handleFinish, state.stage])
 
     const prevStage = () => {
         setState((prev) => {

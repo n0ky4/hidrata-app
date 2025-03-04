@@ -9,7 +9,10 @@
         "yearsOld": "years old",
         "gotIt": "Got it",
         "location": "Location",
-        "coords": "Coordenadas"
+        "coords": "Coordenadas",
+        "remindMeIn": "Remind me in",
+        "minutes": "minutes",
+        "notificationsDenied": "Browser notifications are disabled! Please enable them to receive reminders."
     },
     "stages": {
         "stage1": {
@@ -31,6 +34,11 @@
             "p1": "{} can automatically detect the weather conditions in your region and adjust the amount of water you should drink daily. Cool, right?",
             "p2": "Do you want to use this feature?",
             "checkbox": "Yes, I want to use this feature!"
+        },
+        "stage5": {
+            "title": "Reminders",
+            "p1": "Do you want to receive notifications to remind you to drink water?",
+            "checkbox": "Yes, I want to receive notifications!"
         }
     },
     "units": {

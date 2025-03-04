@@ -1,3 +1,5 @@
+// Stage 4 - Location
+
 import { produce } from 'immer'
 import { MapPin, Search } from 'lucide-react'
 import React, { useCallback, useRef, useState } from 'react'
@@ -28,7 +30,7 @@ interface LocationState {
 // location management hook
 function useLocationManagement(lang: string) {
     const [enabled, setEnabled] = useState(false)
-    const [canContinue, setCanContinue] = useState(false)
+    const [canContinue, setCanContinue] = useState(true)
     const locationDetected = useRef<IpData | null>(null)
     const [locState, setLocState] = useState<LocationState>({
         show: false,
@@ -176,13 +178,12 @@ export function Stage4({ setState, nextStage, prevStage }: StageProps) {
                 </p>
                 <p>{t('stages.stage4.p2')}</p>
                 <div className='mt-8 flex flex-col gap-8'>
-                    <div className='flex items-center justify-center gap-2'>
-                        <Checkbox
-                            checked={enabled}
-                            onChange={handleLocationToggle}
-                            label={t('stages.stage4.checkbox')}
-                        />
-                    </div>
+                    <Checkbox
+                        checked={enabled}
+                        onChange={handleLocationToggle}
+                        label={t('stages.stage4.checkbox')}
+                        center
+                    />
                     {locState.show && (
                         <div>
                             <Label>{t('generic.location')}</Label>

@@ -7,9 +7,10 @@ interface CheckboxProps {
     checked: boolean
     onChange: (checked: boolean) => void
     label?: ReactNode
+    center?: boolean
 }
 
-export function Checkbox({ checked, label, onChange }: CheckboxProps) {
+export function Checkbox({ checked, label, center = false, onChange }: CheckboxProps) {
     const checkbox = (
         <HeadlessCheckbox
             checked={checked}
@@ -39,7 +40,7 @@ export function Checkbox({ checked, label, onChange }: CheckboxProps) {
     if (!label) return checkbox
 
     return (
-        <Field className='flex items-center gap-2'>
+        <Field className={twMerge('flex items-center gap-2', center && 'justify-center')}>
             {checkbox}
             <Label
                 className={twMerge(

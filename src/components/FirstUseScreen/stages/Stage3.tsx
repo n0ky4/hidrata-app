@@ -1,5 +1,6 @@
 // Stage 3 - Weight and Age
 
+import { produce } from 'immer'
 import { useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { units } from '../../../core/units'
@@ -18,7 +19,7 @@ import {
 
 const commonInputStyle = 'w-32 text-center hide-arrows'
 
-export function Stage3({ state, nextStage, prevStage }: StageProps) {
+export function Stage3({ state, setState, nextStage, prevStage }: StageProps) {
     const { t } = useLocale()
 
     const [btnDisabled, setBtnDisabled] = useState(true)
@@ -58,14 +59,32 @@ export function Stage3({ state, nextStage, prevStage }: StageProps) {
 
     const setInput = (type: 'age' | 'weight', value: string) => {
         const num = Number(value)
+
         if (type === 'age') {
             setAge(value)
             validateAge(num)
         }
+
         if (type === 'weight') {
             setWeight(value)
             validateWeight(num)
         }
+    }
+
+    const handleNextStage = () => {
+        const ageNum = Number(age)
+        const weightNum = Number(weight)
+
+        if (!validateAge(ageNum) || !validateWeight(weightNum)) return
+
+        setState((prev) =>
+            produce(prev, (draft) => {
+                draft.age = ageNum
+                draft.weight = weightNum
+            })
+        )
+
+        nextStage()
     }
 
     useEffect(() => {
@@ -124,7 +143,7 @@ export function Stage3({ state, nextStage, prevStage }: StageProps) {
             </StageContent>
             <StageActions>
                 <BackButton onClick={prevStage} />
-                <NextButton onClick={nextStage} disabled={btnDisabled} />
+                <NextButton onClick={handleNextStage} disabled={btnDisabled} />
             </StageActions>
         </>
     )

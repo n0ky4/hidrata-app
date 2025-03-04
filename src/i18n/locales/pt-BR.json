@@ -9,7 +9,10 @@
         "yearsOld": "anos",
         "gotIt": "Entendi",
         "location": "Localização",
-        "coords": "Coordenadas"
+        "coords": "Coordenadas",
+        "remindMeIn": "Me lembre em",
+        "minutes": "minutos",
+        "notificationsDenied": "As notificações do navegador foram desativadas! Por favor, ative-as para receber lembretes."
     },
     "stages": {
         "stage1": {
@@ -31,6 +34,11 @@
             "p1": "Se você quiser, o {} pode detectar automaticamente as condições climáticas da sua região e ajustar a quantidade de água que você deve beber diariamente. Legal, né?",
             "p2": "Você deseja usar essa funcionalidade?",
             "checkbox": "Sim, eu quero usar essa funcionalidade!"
+        },
+        "stage5": {
+            "title": "Lembretes",
+            "p1": "Você deseja receber notificações para lembrá-lo(a) de beber água?",
+            "checkbox": "Sim, eu quero receber notificações!"
         }
     },
     "units": {
