@@ -37,7 +37,7 @@ function recommendedWater(options: CalculatorOptions): number {
     return calc({ weight, age })
 }
 
-interface ClimateRecommendedWaterResponse {
+export interface ClimateRecommendedWaterResponse {
     water: number
     condition: Condition
     temperatureData: TemperatureData

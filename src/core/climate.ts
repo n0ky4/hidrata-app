@@ -31,7 +31,7 @@ const conditions = {
 } as const
 export type Condition = (typeof conditions)[keyof typeof conditions]
 
-type TemperatureLabels = 'SUPER_COLD' | 'COLD' | 'NORMAL' | 'HOT' | 'SUPER_HOT'
+export type TemperatureLabels = 'SUPER_COLD' | 'COLD' | 'NORMAL' | 'HOT' | 'SUPER_HOT'
 function getLabel(temp: number): TemperatureLabels {
     if (temp <= 0) return 'SUPER_COLD'
     if (temp < 10) return 'COLD'

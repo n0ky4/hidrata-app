@@ -5,8 +5,8 @@ import { HistoryEntry } from '../components/HistoryEntry'
 import { MainSection } from '../components/MainSection'
 import { NavBar } from '../components/NavBar'
 import { NoEntry } from '../components/NoEntry'
-import { calculator } from '../core/calculator'
-import { TemperatureData } from '../core/climate'
+import { TemperatureLabelTag } from '../components/TemperatureLabelTag'
+import { calculator, ClimateRecommendedWaterResponse } from '../core/calculator'
 import { useInitHandler } from '../core/initHandler'
 import { useConfig } from '../stores/config.store'
 import { log } from '../util/logger'
@@ -21,7 +21,7 @@ function App() {
     const age = useConfig((state) => state.config?.age) as number
     const weight = useConfig((state) => state.config?.weight) as number
 
-    const [climateData, setClimateData] = useState<TemperatureData | null>(null)
+    const [climateData, setClimateData] = useState<ClimateRecommendedWaterResponse | null>(null)
     const useClimate = useConfig((state) => state.config?.climate.enabled) as boolean
     const latitude = useConfig((state) => state.config?.climate.latitude) as number
     const longitude = useConfig((state) => state.config?.climate.longitude) as number
@@ -55,7 +55,7 @@ function App() {
                     .then((res) => {
                         log.info('recommended water calculated', res)
 
-                        setClimateData(res.temperatureData)
+                        setClimateData(res)
                         setRecommended(res.water)
                         resolve()
                     })
@@ -74,8 +74,6 @@ function App() {
     }, [age, useClimate, weight, latitude, longitude])
 
     useEffect(() => {
-        log.info('running first effect')
-
         const firstUse = setupData()
         log.info('first use', firstUse)
 
@@ -104,7 +102,30 @@ function App() {
                     percentage={percentage}
                     recommended={recommended}
                     onAdd={() => console.log('add')}
-                />
+                >
+                    {climateData && (
+                        <div className='text-center w-fit flex items-center gap-4 mb-1 text-sm text-neutral-400 cursor-default'>
+                            {climateData.condition === 'favorable' ? (
+                                <p>
+                                    <TemperatureLabelTag
+                                        temperature={
+                                            climateData.temperatureData.apparentTemperature
+                                        }
+                                    />
+                                    <b>Clima favorável</b>{' '}
+                                </p>
+                            ) : (
+                                <p>
+                                    <b>Clima desfavorável</b>
+                                </p>
+                            )}
+                            <p title='Sensação térmica'>
+                                {climateData.temperatureData.apparentTemperature}°C
+                            </p>
+                            <p title='Umidade relativa'>{climateData.temperatureData.humidity}%</p>
+                        </div>
+                    )}
+                </MainSection>
                 <div className='flex flex-col gap-2'>
                     <h3 className='text-lg font-semibold text-neutral-300 text-center'>
                         Histórico

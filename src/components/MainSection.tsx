@@ -8,6 +8,7 @@ interface MainSectionProps {
     percentage: number
     onAdd: () => void
     className?: ClassNameValue
+    children?: React.ReactNode
 }
 
 export function MainSection({
@@ -17,13 +18,14 @@ export function MainSection({
     percentage,
     onAdd,
     className,
+    children,
 }: MainSectionProps) {
     const remaining = recommended - drank
     const opacityTransition = twMerge('common-transition', calculated ? 'opacity-100' : 'opacity-0')
 
     return (
         <div className={twMerge('flex justify-center items-center flex-col gap-6', className)}>
-            <h2 className='uppercase font-semibold text-lg text-neutral-300'>
+            <h2 className='uppercase font-semibold text-lg text-neutral-100'>
                 Consumo Diário de Água
             </h2>
             <div className={twMerge('relative', opacityTransition)}>
@@ -53,9 +55,12 @@ export function MainSection({
                     </button>
                 </div>
             </div>
-            <p className={twMerge('text-neutral-400 text-center', opacityTransition)}>
-                Vamos lá! Ainda faltam <b className='text-neutral-100'>{remaining} ml</b> 💧
-            </p>
+            <div className='flex items-center justify-center flex-col'>
+                {children}
+                <p className={twMerge('text-neutral-400 text-center', opacityTransition)}>
+                    Vamos lá! Ainda faltam <b className='text-neutral-100'>{remaining} ml</b> 💧
+                </p>
+            </div>
         </div>
     )
 }

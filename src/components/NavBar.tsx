@@ -1,4 +1,5 @@
 import { Settings2 } from 'lucide-react'
+import { NavLink } from 'react-router'
 import { useLocale } from '../i18n/context/contextHook'
 import { Button } from './Button'
 
@@ -7,9 +8,9 @@ export function NavBar() {
 
     return (
         <nav className='flex items-center justify-between pb-6 border-b-2 border-neutral-900'>
-            <div>
+            <NavLink to='/'>
                 <h1 className='text-3xl font-bold'>{t('appName')}</h1>
-            </div>
+            </NavLink>
             <div>
                 <Button className='p-0 w-10 h-10' theme='ghost'>
                     <Settings2 size={24} strokeWidth={2} />
