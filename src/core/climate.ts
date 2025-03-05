@@ -134,7 +134,7 @@ function storeData(data: TemperatureData, coords: Coords) {
         data,
     }
 
-    localStorage.setItem(LSK_TEMPERATURE, JSON.stringify(response))
+    localStorage.setItem(LSKEY.TEMPERATURE, JSON.stringify(response))
 }
 
 export const climate = {
