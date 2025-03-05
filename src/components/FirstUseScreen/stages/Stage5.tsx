@@ -45,7 +45,7 @@ export function Stage5({ state, setState, nextStage, prevStage }: StageProps) {
     }
 
     useEffect(() => {
-        if (Notification.permission === 'granted') setRemind(true)
+        if (Notification.permission === 'denied') return setRemind(false)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -65,10 +65,8 @@ export function Stage5({ state, setState, nextStage, prevStage }: StageProps) {
                 return setRemind(true)
             }
 
-            if (!alreadyAsked.current) {
-                alert(t('generic.notificationsDenied'))
-                alreadyAsked.current = true
-            }
+            alert(t('generic.notificationsDenied'))
+            alreadyAsked.current = true
 
             setRemind(false)
         })
