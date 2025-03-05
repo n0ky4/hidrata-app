@@ -1,9 +1,8 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { Data, dataSchema, HistoryEntry, Record, RecordCreateData } from '../schemas/data.schema'
+import { LSKEY } from '../util/localStorageKeys'
 import { shortId } from '../util/nanoid'
-
-export const LSKEY_DATA = 'data'
 
 type States = {
     data: Data | null
@@ -102,7 +101,7 @@ export const useData = create(
                 ),
         }),
         {
-            name: LSKEY_DATA,
+            name: LSKEY.DATA,
             version: 1,
         }
     )

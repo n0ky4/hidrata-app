@@ -3,8 +3,7 @@ import { produce } from 'immer'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { Config, ConfigInitOptions, configSchema } from '../schemas/config.schema'
-
-export const LSKEY_CONFIG = 'config'
+import { LSKEY } from '../util/localStorageKeys'
 
 type State = {
     config: Config | null
@@ -113,7 +112,7 @@ export const useConfig = create(
                 get().setter('climate.longitude', longitude),
         }),
         {
-            name: LSKEY_CONFIG,
+            name: LSKEY.CONFIG,
             version: 1,
             // will use localStorage as default
         }

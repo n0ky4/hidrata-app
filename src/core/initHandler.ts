@@ -1,18 +1,20 @@
-import { LSKEY_CONFIG } from '../stores/config.store'
-import { LSKEY_CONTAINERS, useContainers } from '../stores/containers.store'
-import { LSKEY_DATA, useData } from '../stores/data.store'
+import { useContainers } from '../stores/containers.store'
+import { useData } from '../stores/data.store'
+import { LSKEY } from '../util/localStorageKeys'
 
-export function useInitHandler(setFirstUse: (value: boolean) => void) {
+export function useInitHandler() {
     const initContainers = useContainers((state) => state.init)
     const initData = useData((state) => state.init)
 
-    function check() {
-        if (!localStorage.getItem(LSKEY_CONFIG)) setFirstUse(true)
-        if (!localStorage.getItem(LSKEY_CONTAINERS)) initContainers()
-        if (!localStorage.getItem(LSKEY_DATA)) initData()
+    function setupData() {
+        let firstUse = false
+        if (!localStorage.getItem(LSKEY.CONFIG)) firstUse = true
+        if (!localStorage.getItem(LSKEY.CONTAINERS)) initContainers()
+        if (!localStorage.getItem(LSKEY.DATA)) initData()
+        return firstUse
     }
 
     return {
-        check,
+        setupData,
     }
 }

@@ -6,10 +6,9 @@ import {
     Containers,
     ContainerUpdateData,
 } from '../schemas/containers.schema'
+import { LSKEY } from '../util/localStorageKeys'
 import { shortId } from '../util/nanoid'
 import { containersSchema } from './../schemas/containers.schema'
-
-export const LSKEY_CONTAINERS = 'containers'
 
 type States = {
     data: Containers | null
@@ -76,7 +75,7 @@ export const useContainers = create(
                 get().containerArrayModifier((containers) => containers.filter((c) => c.id !== id)),
         }),
         {
-            name: LSKEY_CONTAINERS,
+            name: LSKEY.CONTAINERS,
             version: 1,
         }
     )

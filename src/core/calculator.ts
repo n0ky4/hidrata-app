@@ -1,4 +1,5 @@
-import { climate } from './climate'
+import { log } from '../util/logger'
+import { climate, Condition, TemperatureData } from './climate'
 
 interface WeightAgeOptions {
     weight: number
@@ -36,7 +37,15 @@ function recommendedWater(options: CalculatorOptions): number {
     return calc({ weight, age })
 }
 
-async function recommendedWaterClimate(options: CalculatorOptions): Promise<number> {
+interface ClimateRecommendedWaterResponse {
+    water: number
+    condition: Condition
+    temperatureData: TemperatureData
+}
+
+async function recommendedWaterClimate(
+    options: CalculatorOptions
+): Promise<ClimateRecommendedWaterResponse> {
     const { weight, age } = options
 
     if (
@@ -48,10 +57,29 @@ async function recommendedWaterClimate(options: CalculatorOptions): Promise<numb
         throw new Error('Invalid climate options')
 
     const { latitude, longitude } = options.climate
-    const data = await climate.getTemperature({ lat: latitude, lon: longitude })
 
-    const coeficient = climate.getCondition(data) === climate.conditions.favorable ? 0 : 10
-    return calc({ weight, age }, coeficient)
+    let data
+
+    const coords = { lat: latitude, lon: longitude }
+    const storedData = climate.getStoredData(coords)
+
+    if (storedData) {
+        log.info('using stored temperature data')
+        data = storedData.data
+    } else {
+        log.info('fetching temperature data')
+        data = await climate.getTemperature(coords)
+        climate.storeData(data, coords)
+    }
+
+    const condition = climate.getCondition(data)
+    const coeficient = condition === climate.conditions.favorable ? 0 : 10
+
+    return {
+        water: calc({ weight, age }, coeficient),
+        condition,
+        temperatureData: data,
+    }
 }
 
 export const calculator = {
