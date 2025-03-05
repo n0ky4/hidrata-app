@@ -33,7 +33,7 @@ export function Select({ options, selected, w = 'sm', onSelect }: SelectProps) {
             <ListboxButton
                 className={twMerge(
                     commonStyles,
-                    'transition-all ease-out duration-200',
+                    'common-transition',
                     'flex items-center gap-2 justify-between',
                     wd
                 )}
@@ -51,7 +51,7 @@ export function Select({ options, selected, w = 'sm', onSelect }: SelectProps) {
                         key={option.value}
                         value={option.value}
                         className={twMerge(
-                            'group transition-all ease-out duration-200',
+                            'group common-transition',
                             'cursor-pointer w-full p-2',
                             'hover:text-neutral-100 hover:bg-neutral-800/50',
                             'text-neutral-400 data-[selected]:text-neutral-100',
@@ -59,7 +59,7 @@ export function Select({ options, selected, w = 'sm', onSelect }: SelectProps) {
                             'flex items-center gap-1.5'
                         )}
                     >
-                        <div className='group-data-[selected]:block hidden text-white'>
+                        <div className='group-data-[selected]:block hidden text-neutral-100'>
                             <CheckCircle2Icon size={18} strokeWidth={2} />
                         </div>
                         {option.label}

@@ -4,9 +4,9 @@ export function Input({ className, ...rest }: React.InputHTMLAttributes<HTMLInpu
     return (
         <input
             className={twMerge(
-                'bg-neutral-950 text-white p-2 rounded-lg',
+                'bg-neutral-950 text-neutral-100 p-2 rounded-lg',
                 'focus:outline-none focus-visible:ring-2 ring-blue-500',
-                'transition-all ease-out duration-200',
+                'common-transition',
                 'border border-neutral-800',
                 className
             )}

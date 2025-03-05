@@ -103,7 +103,7 @@ export function FirstUseScreen({ show, onClose }: FirstUseProps) {
                     <div
                         className={twMerge(
                             'absolute top-0 left-0 h-1 overflow-hidden',
-                            'transition-all ease-out duration-300'
+                            'common-transition'
                         )}
                         style={{
                             width: `${progress}%`,

@@ -16,7 +16,7 @@ export function Checkbox({ checked, label, center = false, onChange }: CheckboxP
             checked={checked}
             onChange={onChange}
             className={twMerge(
-                'transition-all ease-out',
+                'common-transition',
                 'flex items-center justify-center',
                 'group size-6 rounded-md cursor-pointer',
                 'bg-neutral-950 border border-neutral-800',
@@ -27,7 +27,7 @@ export function Checkbox({ checked, label, center = false, onChange }: CheckboxP
             <CheckIcon
                 className={twMerge(
                     'block',
-                    'transition-all ease-out duration-200',
+                    'common-transition',
                     'opacity-0 group-data-[checked]:opacity-100',
                     'text-black'
                 )}
@@ -44,9 +44,9 @@ export function Checkbox({ checked, label, center = false, onChange }: CheckboxP
             {checkbox}
             <Label
                 className={twMerge(
-                    'transition-all ease-out',
+                    'common-transition',
                     'cursor-pointer select-none text-neutral-400',
-                    checked && 'text-white hover:text-white'
+                    checked && 'text-neutral-100 hover:text-neutral-100'
                 )}
             >
                 {label}

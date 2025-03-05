@@ -8,6 +8,16 @@
     button {
         @apply cursor-pointer;
     }
+
+    .CircularProgressbar {
+        overflow: visible;
+    }
+
+    .CircularProgressbar .CircularProgressbar-path {
+        /* filter: drop-shadow(
+            2px 3px 10px color-mix(in oklab, var(--color-blue-400) 20%, transparent)
+        ); */
+    }
 }
 
 @layer utilities {
@@ -20,5 +30,9 @@
     .hide-arrows[type='number'] {
         appearance: textfield;
         -moz-appearance: textfield;
+    }
+
+    .common-transition {
+        @apply transition-all ease-out duration-300;
     }
 }
