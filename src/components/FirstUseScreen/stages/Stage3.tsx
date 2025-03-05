@@ -41,6 +41,8 @@ export function Stage3({ state, setState, nextStage, prevStage }: StageProps) {
     }
 
     const validateWeight = (weight: number) => {
+        if (!state.units) return
+
         const kgWeight =
             state.units.weight === 'kg'
                 ? weight
@@ -130,7 +132,10 @@ export function Stage3({ state, setState, nextStage, prevStage }: StageProps) {
                                 errors.weight && 'border-red-500 ring-red-500/50'
                             )}
                             placeholder={units.convert(70, {
-                                to: state.units.weight,
+                                to:
+                                    state.units && state.units.weight != null
+                                        ? state.units.weight
+                                        : 'kg',
                                 decimals: 0,
                                 addSymbol: true,
                             })}

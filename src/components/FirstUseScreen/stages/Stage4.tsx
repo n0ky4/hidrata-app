@@ -158,10 +158,13 @@ export function Stage4({ setState, nextStage, prevStage }: StageProps) {
 
         setState((prev) =>
             produce(prev, (draft) => {
-                draft.location.use = enabled
+                if (!draft.climate) draft.climate = {}
+
+                draft.climate.enabled = enabled
+
                 if (enabled && locState.coords) {
-                    draft.location.lat = locState.coords.lat
-                    draft.location.lon = locState.coords.lon
+                    draft.climate.latitude = locState.coords.lat
+                    draft.climate.longitude = locState.coords.lon
                 }
             })
         )

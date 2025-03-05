@@ -27,12 +27,13 @@ export function Stage2({ nextStage, prevStage, state, setState }: StageProps) {
         { label: `${t('units.flOzP')} (fl oz)`, value: 'fl-oz' },
     ]
 
-    const weight = state.units.weight
-    const volume = state.units.volume
+    const weight = state.units ? state.units.weight : ''
+    const volume = state.units ? state.units.volume : ''
 
     const setWeight = (value: AvailableWeights) => {
         setState((prev: StateType) =>
             produce(prev, (draft) => {
+                if (draft.units === undefined) draft.units = {}
                 draft.units.weight = value
             })
         )
@@ -41,6 +42,7 @@ export function Stage2({ nextStage, prevStage, state, setState }: StageProps) {
     const setVolume = (value: AvailableVolumes) => {
         setState((prev: StateType) =>
             produce(prev, (draft) => {
+                if (draft.units === undefined) draft.units = {}
                 draft.units.volume = value
             })
         )
@@ -63,7 +65,7 @@ export function Stage2({ nextStage, prevStage, state, setState }: StageProps) {
     }
 
     useEffect(() => {
-        if (state.units.detected) return
+        if (state.unitsDetected) return
         const preferred = units.autoDetect()
 
         setWeight(preferred[0])
@@ -71,7 +73,7 @@ export function Stage2({ nextStage, prevStage, state, setState }: StageProps) {
 
         setState((prev: StateType) =>
             produce(prev, (draft) => {
-                draft.units.detected = true
+                draft.unitsDetected = true
             })
         )
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -90,7 +92,7 @@ export function Stage2({ nextStage, prevStage, state, setState }: StageProps) {
                         </label>
                         <Select
                             options={weightSelectOptions}
-                            selected={weight}
+                            selected={weight || 'kg'}
                             onSelect={(value) => onSetWeight(value as AvailableWeights)}
                             w='lg'
                         />
@@ -101,7 +103,7 @@ export function Stage2({ nextStage, prevStage, state, setState }: StageProps) {
                         </label>
                         <Select
                             options={volumeSelectOptions}
-                            selected={volume}
+                            selected={volume || 'ml'}
                             onSelect={(value) => onSetVolume(value as AvailableVolumes)}
                             w='lg'
                         />

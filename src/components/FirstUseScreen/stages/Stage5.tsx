@@ -19,8 +19,8 @@ import {
 export function Stage5({ state, setState, nextStage, prevStage }: StageProps) {
     const { t } = useLocale()
 
-    const remind = state.remind.enabled
-    const minutes = state.remind.minutes
+    const remind = state.notifications?.enabled
+    const minutes = state.notifications?.interval || 0
 
     const alreadyAsked = useRef<boolean>(false)
 
@@ -29,7 +29,8 @@ export function Stage5({ state, setState, nextStage, prevStage }: StageProps) {
     const setRemind = (newValue: boolean) => {
         setState((prev) =>
             produce(prev, (draft) => {
-                draft.remind.enabled = newValue
+                if (!draft.notifications) draft.notifications = {}
+                draft.notifications.enabled = newValue
             })
         )
     }
@@ -37,7 +38,8 @@ export function Stage5({ state, setState, nextStage, prevStage }: StageProps) {
     const setMinutes = (newValue: string) => {
         setState((prev) =>
             produce(prev, (draft) => {
-                draft.remind.minutes = Number(newValue)
+                if (!draft.notifications) draft.notifications = {}
+                draft.notifications.interval = Number(newValue)
             })
         )
     }
@@ -79,7 +81,7 @@ export function Stage5({ state, setState, nextStage, prevStage }: StageProps) {
                 <p>{t('stages.stage5.p1')}</p>
                 <div className='mt-8 flex flex-col gap-8 items-center'>
                     <Checkbox
-                        checked={remind}
+                        checked={remind || false}
                         onChange={onClickEnable}
                         label={t('stages.stage5.checkbox')}
                         center
