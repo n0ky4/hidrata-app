@@ -18,6 +18,17 @@
             2px 3px 10px color-mix(in oklab, var(--color-blue-400) 20%, transparent)
         ); */
     }
+
+    /* custom scrollbar */
+    ::-webkit-scrollbar {
+        @apply w-1;
+    }
+    ::-webkit-scrollbar-thumb {
+        @apply bg-neutral-700 rounded-full;
+    }
+    ::-webkit-scrollbar-track {
+        @apply bg-transparent;
+    }
 }
 
 @layer utilities {
