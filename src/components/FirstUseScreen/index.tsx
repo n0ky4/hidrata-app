@@ -1,9 +1,9 @@
-import { Dialog, DialogPanel } from '@headlessui/react'
 import { produce } from 'immer'
 import { useCallback, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { ConfigInitOptions } from '../../schemas/config.schema'
 import { useConfig } from '../../stores/config.store'
+import { Modal } from '../Modal/Modal'
 import { Stage1 } from './stages/Stage1'
 import { Stage2 } from './stages/Stage2'
 import { Stage3 } from './stages/Stage3'
@@ -97,28 +97,19 @@ export function FirstUseScreen({ show, onClose }: FirstUseProps) {
     }
 
     return (
-        <Dialog open={show} onClose={() => {}} className='relative z-50'>
-            <div className='fixed flex w-screen items-center justify-center p-4 lg:pt-20 pt-10'>
-                <DialogPanel className='relative overflow-hidden w-full max-w-xl flex flex-col gap-4 border border-neutral-800 bg-neutral-900 p-12 rounded-xl'>
-                    <div
-                        className={twMerge(
-                            'absolute top-0 left-0 h-1 overflow-hidden',
-                            'common-transition'
-                        )}
-                        style={{
-                            width: `${progress}%`,
-                        }}
-                    >
-                        <div className='absolute top-0 left-0 w-full h-1 rounded-full bg-gradient-to-r from-blue-500 to-blue-400' />
-                    </div>
-                    <Stage
-                        nextStage={nextStage}
-                        prevStage={prevStage}
-                        setState={setState}
-                        state={state}
-                    />
-                </DialogPanel>
+        <Modal show={show} onClose={() => {}} noBackdrop>
+            <div
+                className={twMerge(
+                    'absolute top-0 left-0 h-1 overflow-hidden',
+                    'common-transition'
+                )}
+                style={{
+                    width: `${progress}%`,
+                }}
+            >
+                <div className='absolute top-0 left-0 w-full h-1 rounded-full bg-gradient-to-r from-blue-500 to-blue-400' />
             </div>
-        </Dialog>
+            <Stage nextStage={nextStage} prevStage={prevStage} setState={setState} state={state} />
+        </Modal>
     )
 }
