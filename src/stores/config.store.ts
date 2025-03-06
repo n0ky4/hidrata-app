@@ -27,6 +27,7 @@ interface Actions {
     setClimateEnabled: (enabled: Config['climate']['enabled']) => void
     setClimateLatitude: (latitude: Config['climate']['latitude']) => void
     setClimateLongitude: (longitude: Config['climate']['longitude']) => void
+    setLanguage: (language: Config['language']) => void
 }
 
 type ConfigStore = State & Actions
@@ -112,6 +113,8 @@ export const useConfig = create(
 
             setClimateLongitude: (longitude: Config['climate']['longitude']) =>
                 get().setter('climate.longitude', longitude),
+
+            setLanguage: (language: Config['language']) => get().setter('language', language),
         }),
         {
             name: LSKEY.CONFIG,

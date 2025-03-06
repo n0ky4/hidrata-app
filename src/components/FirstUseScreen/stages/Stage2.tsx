@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { StateType } from '..'
 import { AvailableVolumes, AvailableWeights, units } from '../../../core/units'
 import { useLocale } from '../../../i18n/context/contextHook'
-import { Select, SelectOption } from '../../Select'
+import { Select } from '../../Select'
 import {
     BackButton,
     NextButton,
@@ -17,15 +17,6 @@ import {
 
 export function Stage2({ nextStage, prevStage, state, setState }: StageProps) {
     const { t } = useLocale()
-
-    const weightSelectOptions: SelectOption[] = [
-        { label: `${t('units.kgP')} (kg)`, value: 'kg' },
-        { label: `${t('units.lbP')} (lb)`, value: 'lb' },
-    ]
-    const volumeSelectOptions: SelectOption[] = [
-        { label: `${t('units.mlP')} (ml)`, value: 'ml' },
-        { label: `${t('units.flOzP')} (fl oz)`, value: 'fl-oz' },
-    ]
 
     const weight = state.units ? state.units.weight : ''
     const volume = state.units ? state.units.volume : ''
@@ -48,17 +39,8 @@ export function Stage2({ nextStage, prevStage, state, setState }: StageProps) {
         )
     }
 
-    const onSetWeight = (value: AvailableWeights) => {
-        const find = weightSelectOptions.find((o) => o.value === value)
-        if (!find) return
-        setWeight(find.value as AvailableWeights)
-    }
-
-    const onSetVolume = (value: AvailableVolumes) => {
-        const find = volumeSelectOptions.find((o) => o.value === value)
-        if (!find) return
-        setVolume(find.value as AvailableVolumes)
-    }
+    const weightSelectOptions = units.getWeightSelectOptions(t)
+    const volumeSelectOptions = units.getVolumeSelectOptions(t)
 
     const beforeNext = () => {
         nextStage()
@@ -93,7 +75,13 @@ export function Stage2({ nextStage, prevStage, state, setState }: StageProps) {
                         <Select
                             options={weightSelectOptions}
                             selected={weight || 'kg'}
-                            onSelect={(value) => onSetWeight(value as AvailableWeights)}
+                            onSelect={(value) =>
+                                units.onSetWeight(
+                                    value as AvailableWeights,
+                                    setWeight,
+                                    weightSelectOptions
+                                )
+                            }
                             w='lg'
                         />
                     </div>
@@ -104,7 +92,13 @@ export function Stage2({ nextStage, prevStage, state, setState }: StageProps) {
                         <Select
                             options={volumeSelectOptions}
                             selected={volume || 'ml'}
-                            onSelect={(value) => onSetVolume(value as AvailableVolumes)}
+                            onSelect={(value) =>
+                                units.onSetVolume(
+                                    value as AvailableVolumes,
+                                    setVolume,
+                                    volumeSelectOptions
+                                )
+                            }
                             w='lg'
                         />
                     </div>

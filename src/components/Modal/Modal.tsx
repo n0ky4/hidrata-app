@@ -4,16 +4,24 @@ import { PropsWithChildren } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { Button } from '../Button'
 
-interface ModalProps {
+export interface CommonModalProps {
     show: boolean
     onClose: () => void
-    children: React.ReactNode
     noBackdrop?: boolean
+}
+
+interface ModalProps extends CommonModalProps {
+    children: React.ReactNode
 }
 
 interface ModalTitleProps {
     children: React.ReactNode
     onClose?: () => void
+}
+
+interface ModalSectionProps {
+    title: string
+    children: React.ReactNode
 }
 
 export function ModalTitle({ children, onClose }: ModalTitleProps) {
@@ -37,6 +45,15 @@ export function ModalDescription({ children }: PropsWithChildren) {
 
 export function ModalActions({ children }: PropsWithChildren) {
     return <div className='flex items-center justify-end gap-4 mt-8'>{children}</div>
+}
+
+export function ModalSection({ title, children }: ModalSectionProps) {
+    return (
+        <div className='flex flex-col gap-1'>
+            <h3 className='text-lg font-semibold text-neutral-100'>{title}</h3>
+            {children}
+        </div>
+    )
 }
 
 export function Modal({ onClose, show, children, noBackdrop = false }: ModalProps) {

@@ -4,7 +4,7 @@ import { AvailableLanguages } from '..'
 interface LocaleContext {
     t: (path: string, components?: ReactNode[]) => string | (string | ReactNode)[]
     lang: AvailableLanguages
-    setLang: (lang: AvailableLanguages) => void
+    setAppLanguage: (lang: AvailableLanguages) => void
     detectLang: () => AvailableLanguages
 }
 

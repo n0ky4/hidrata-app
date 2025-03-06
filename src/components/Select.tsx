@@ -11,12 +11,13 @@ interface SelectProps {
     options: SelectOption[]
     selected: string
     onSelect: (value: string) => void
-    w?: 'sm' | 'md' | 'lg'
+    w?: 'sm' | 'md' | 'md+' | 'lg'
 }
 
 const widths = {
     sm: 'w-32',
     md: 'w-48',
+    'md+': 'w-56',
     lg: 'w-64',
 } as const
 

@@ -6,7 +6,7 @@ import { LocaleContext } from './contextHook'
 export function LocaleProvider({ children }: PropsWithChildren) {
     const [lang, _setLang] = useState<AvailableLanguages>('en-US')
 
-    const setLang = useCallback((lang: AvailableLanguages) => {
+    const setAppLanguage = useCallback((lang: AvailableLanguages) => {
         _setLang(lang)
         localStorage.setItem('lang', lang)
     }, [])
@@ -49,10 +49,10 @@ export function LocaleProvider({ children }: PropsWithChildren) {
     useEffect(() => {
         const lang = localStorage.getItem('lang')
         if (lang && i18n.hasLanguage(lang)) {
-            setLang(lang as AvailableLanguages)
+            setAppLanguage(lang as AvailableLanguages)
         } else {
             const detected = detectLang()
-            setLang(detected)
+            setAppLanguage(detected)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -60,7 +60,7 @@ export function LocaleProvider({ children }: PropsWithChildren) {
     const value = {
         t,
         lang,
-        setLang,
+        setAppLanguage,
         detectLang,
     }
 

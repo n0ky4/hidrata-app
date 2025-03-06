@@ -1,3 +1,6 @@
+import { ReactNode } from 'react'
+import { SelectOption } from '../components/Select'
+
 const weight = {
     kg: {
         symbol: 'kg',
@@ -100,6 +103,36 @@ function autoDetect(): [AvailableWeights, AvailableVolumes] {
     return [weight, volume]
 }
 
+const getWeightSelectOptions = (t: (key: string) => string | ReactNode): SelectOption[] => [
+    { label: `${t('units.kgP')} (kg)`, value: 'kg' },
+    { label: `${t('units.lbP')} (lb)`, value: 'lb' },
+]
+
+const getVolumeSelectOptions = (t: (key: string) => string | ReactNode): SelectOption[] => [
+    { label: `${t('units.mlP')} (ml)`, value: 'ml' },
+    { label: `${t('units.flOzP')} (fl oz)`, value: 'fl-oz' },
+]
+
+const onSetWeight = (
+    value: AvailableWeights,
+    setWeight: (value: AvailableWeights) => void,
+    weightSelectOptions: SelectOption[]
+) => {
+    const find = weightSelectOptions.find((o) => o.value === value)
+    if (!find) return
+    setWeight(find.value as AvailableWeights)
+}
+
+const onSetVolume = (
+    value: AvailableVolumes,
+    setVolume: (value: AvailableVolumes) => void,
+    volumeSelectOptions: SelectOption[]
+) => {
+    const find = volumeSelectOptions.find((o) => o.value === value)
+    if (!find) return
+    setVolume(find.value as AvailableVolumes)
+}
+
 export const units = {
     weight,
     volume,
@@ -108,4 +141,8 @@ export const units = {
     autoDetect,
     getWeight,
     convert,
+    getWeightSelectOptions,
+    getVolumeSelectOptions,
+    onSetWeight,
+    onSetVolume,
 }
