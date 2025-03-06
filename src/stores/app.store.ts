@@ -3,19 +3,6 @@ import { create } from 'zustand'
 import { calculator, ClimateRecommendedWaterResponse } from '../core/calculator'
 import { log } from '../util/logger'
 
-interface State {
-    // state
-    climateData: ClimateRecommendedWaterResponse | null
-    mounted: boolean
-    water: {
-        wasCalculated: boolean
-        recommended: number
-        drank: number
-    }
-    // computed
-    percentage: number
-}
-
 interface CalculateDailyWaterOptions {
     age: number
     weight: number
@@ -26,6 +13,21 @@ interface CalculateDailyWaterOptions {
     }
 }
 
+interface State {
+    // state
+    climateData: ClimateRecommendedWaterResponse | null
+    mounted: boolean
+    showSettingsModal: boolean
+    showAddWaterModal: boolean
+    water: {
+        wasCalculated: boolean
+        recommended: number
+        drank: number
+    }
+    // computed
+    percentage: number
+}
+
 interface Actions {
     setMounted: (mounted: boolean) => void
     setClimateData: (data: ClimateRecommendedWaterResponse | null) => void
@@ -33,6 +35,8 @@ interface Actions {
     setDrankWater: (value: number) => void
     calculateDailyWater: (options: CalculateDailyWaterOptions) => Promise<number>
     reset: () => void
+    setShowSettingsModal: (value: boolean) => void
+    setShowAddWaterModal: (value: boolean) => void
 }
 
 type Store = State & Actions
@@ -45,6 +49,8 @@ export const useStore = create<Store>((set, get) => ({
         recommended: 0,
         drank: 0,
     },
+    showSettingsModal: false,
+    showAddWaterModal: false,
 
     get percentage() {
         const { water } = get()
@@ -71,6 +77,10 @@ export const useStore = create<Store>((set, get) => ({
         ),
 
     setClimateData: (data) => set({ climateData: data }),
+
+    setShowSettingsModal: (value: boolean) => set({ showSettingsModal: value }),
+
+    setShowAddWaterModal: (value: boolean) => set({ showAddWaterModal: value }),
 
     calculateDailyWater: async (options) => {
         const { age, weight, climate } = options
