@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect } from 'react'
 import 'react-circular-progressbar/dist/styles.css'
 import { useNavigate } from 'react-router'
 import { HistoryEntry } from '../components/HistoryEntry'
@@ -6,72 +6,34 @@ import { MainSection } from '../components/MainSection'
 import { NavBar } from '../components/NavBar'
 import { NoEntry } from '../components/NoEntry'
 import { TemperatureLabelTag } from '../components/TemperatureLabelTag'
-import { calculator, ClimateRecommendedWaterResponse } from '../core/calculator'
 import { useInitHandler } from '../core/initHandler'
+import { useStore } from '../stores/app.store'
 import { useConfig } from '../stores/config.store'
 import { log } from '../util/logger'
 
 function App() {
     const navigate = useNavigate()
-
-    const [mounted, setMounted] = useState(false)
-    const [dailyWaterCalculated, setDailyWaterCalculated] = useState(false)
     const { setupData } = useInitHandler()
 
     const age = useConfig((state) => state.config?.age) as number
     const weight = useConfig((state) => state.config?.weight) as number
 
-    const [climateData, setClimateData] = useState<ClimateRecommendedWaterResponse | null>(null)
-    const useClimate = useConfig((state) => state.config?.climate.enabled) as boolean
+    const isClimateEnabled = useConfig((state) => state.config?.climate.enabled) as boolean
     const latitude = useConfig((state) => state.config?.climate.latitude) as number
     const longitude = useConfig((state) => state.config?.climate.longitude) as number
 
-    const [recommended, setRecommended] = useState(0)
-    const [drank, setDrank] = useState(0)
+    const mounted = useStore((state) => state.mounted)
+    const setMounted = useStore((state) => state.setMounted)
+    const climateData = useStore((state) => state.climateData)
+    const drank = useStore((state) => state.water.drank)
+    const recommended = useStore((state) => state.water.recommended)
+    const percentage = useStore((state) => state.percentage)
+    const calculateDailyWater = useStore((state) => state.calculateDailyWater)
+    const wasCalculated = useStore((state) => state.water.wasCalculated)
 
-    const percentage = useMemo(() => {
-        if (!drank || !recommended) return 0
-        const percentage = (drank / recommended) * 100
-        return Math.max(0, percentage)
-    }, [drank, recommended])
-
-    const setupDailyWater = useCallback(() => {
-        return new Promise<void>((resolve) => {
-            log.info('setting up daily water')
-
-            if (useClimate) {
-                log.info('using climate check')
-
-                calculator
-                    .recommendedWaterClimate({
-                        age,
-                        weight,
-                        climate: {
-                            use: true,
-                            latitude,
-                            longitude,
-                        },
-                    })
-                    .then((res) => {
-                        log.info('recommended water calculated', res)
-
-                        setClimateData(res)
-                        setRecommended(res.water)
-                        resolve()
-                    })
-            } else {
-                log.info('using default calculation')
-
-                log.info({ age, weight })
-
-                const value = calculator.recommendedWater({ age, weight })
-                log.info('recommended water calculated', value)
-
-                setRecommended(value)
-                resolve()
-            }
-        })
-    }, [age, useClimate, weight, latitude, longitude])
+    // const setDrankWater = useStore((state) => state.setDrankWater)
+    // const setRecommendedWater = useStore((state) => state.setRecommendedWater)
+    // const setClimateData = useStore((state) => state.setClimateData)
 
     useEffect(() => {
         const firstUse = setupData()
@@ -81,10 +43,18 @@ function App() {
             navigate('/setup')
             return
         } else {
-            setupDailyWater().then(() => setDailyWaterCalculated(true))
+            calculateDailyWater({
+                age,
+                weight,
+                climate: {
+                    enabled: isClimateEnabled,
+                    latitude,
+                    longitude,
+                },
+            })
         }
-        setMounted(true)
 
+        setMounted(true)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -97,7 +67,7 @@ function App() {
             <NavBar />
             <main className='py-8 flex flex-col gap-8'>
                 <MainSection
-                    calculated={dailyWaterCalculated}
+                    calculated={wasCalculated}
                     drank={drank}
                     percentage={percentage}
                     recommended={recommended}
