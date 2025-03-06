@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
 import 'react-circular-progressbar/dist/styles.css'
 import { useNavigate } from 'react-router'
+import { ClimateData } from '../components/ClimateData'
 import { HistoryEntry } from '../components/HistoryEntry'
 import { MainSection } from '../components/MainSection'
 import { NavBar } from '../components/NavBar'
 import { NoEntry } from '../components/NoEntry'
-import { TemperatureLabelTag } from '../components/TemperatureLabelTag'
 import { useInitHandler } from '../core/initHandler'
 import { useStore } from '../stores/app.store'
 import { useConfig } from '../stores/config.store'
@@ -73,24 +73,7 @@ function App() {
                     recommended={recommended}
                     onAdd={() => console.log('add')}
                 >
-                    {climateData && (
-                        <div className='text-center w-fit flex items-center gap-4 mb-1 text-sm text-neutral-400 cursor-default'>
-                            <p>
-                                <TemperatureLabelTag
-                                    temperature={climateData.temperatureData.apparentTemperature}
-                                />
-                                {climateData.condition === 'favorable' ? (
-                                    <b>Clima favorável</b>
-                                ) : (
-                                    <b>Clima desfavorável</b>
-                                )}
-                            </p>
-                            <p title='Sensação térmica'>
-                                {climateData.temperatureData.apparentTemperature}°C
-                            </p>
-                            <p title='Umidade relativa'>{climateData.temperatureData.humidity}%</p>
-                        </div>
-                    )}
+                    {climateData && <ClimateData data={climateData} />}
                 </MainSection>
                 <div className='flex flex-col gap-2'>
                     <h3 className='text-lg font-semibold text-neutral-300 text-center'>
