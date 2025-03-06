@@ -6,30 +6,30 @@ interface TemperatureLabelTagProps {
 }
 
 interface LabelData {
-    color: string
     label: string
+    style: string
 }
 
 const labelData: Record<TemperatureLabels, LabelData> = {
     SUPER_COLD: {
         label: 'Muito Frio',
-        color: 'bg-blue-700 text-blue-50',
+        style: twMerge('bg-blue-700 text-blue-50'),
     },
     COLD: {
         label: 'Frio',
-        color: 'bg-blue-400 text-blue-50',
+        style: twMerge('bg-blue-400 text-blue-50'),
     },
     NORMAL: {
         label: 'Normal',
-        color: 'bg-neutral-800',
+        style: twMerge('bg-neutral-800 text-neutral-50'),
     },
     HOT: {
         label: 'Quente',
-        color: 'bg-orange-500 text-white-50',
+        style: twMerge('bg-orange-500 text-white'),
     },
     SUPER_HOT: {
         label: 'Muito Quente',
-        color: 'bg-red-500 text-red-50',
+        style: twMerge('bg-red-500 text-red-50'),
     },
 }
 
@@ -41,7 +41,7 @@ export function TemperatureLabelTag({ temperature }: TemperatureLabelTagProps) {
         <span
             className={twMerge(
                 'text-xs py-0.5 px-1.5 rounded font-semibold select-none mr-1.5',
-                data.color
+                data.style
             )}
         >
             {data.label}
