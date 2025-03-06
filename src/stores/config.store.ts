@@ -5,11 +5,11 @@ import { persist } from 'zustand/middleware'
 import { Config, ConfigInitOptions, configSchema } from '../schemas/config.schema'
 import { LSKEY } from '../util/localStorageKeys'
 
-type State = {
+interface State {
     config: Config | null
 }
 
-type Actions = {
+interface Actions {
     init: (initOptions: ConfigInitOptions) => void
     setConfig: (newConfig: Config) => void
     setter: <T>(key: string, value: T) => void
@@ -29,8 +29,10 @@ type Actions = {
     setClimateLongitude: (longitude: Config['climate']['longitude']) => void
 }
 
+type ConfigStore = State & Actions
+
 export const useConfig = create(
-    persist<State & Actions>(
+    persist<ConfigStore>(
         (set, get) => ({
             config: null,
             init: (initOptions: ConfigInitOptions) =>

@@ -4,11 +4,11 @@ import { Data, dataSchema, HistoryEntry, Record, RecordCreateData } from '../sch
 import { LSKEY } from '../util/localStorageKeys'
 import { shortId } from '../util/nanoid'
 
-type States = {
+interface State {
     data: Data | null
 }
 
-type Actions = {
+interface Actions {
     init: () => void
     setData: (data: Data) => void
     updateData: (data: Partial<Data>) => void
@@ -25,8 +25,10 @@ type Actions = {
     removeRecord: (date: string, recordId: string) => void
 }
 
+type DataStore = State & Actions
+
 export const useData = create(
-    persist<States & Actions>(
+    persist<DataStore>(
         (set, get) => ({
             data: null,
             init: () => {

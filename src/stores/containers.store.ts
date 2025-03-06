@@ -10,11 +10,11 @@ import { LSKEY } from '../util/localStorageKeys'
 import { shortId } from '../util/nanoid'
 import { containersSchema } from './../schemas/containers.schema'
 
-type States = {
+interface States {
     data: Containers | null
 }
 
-type Actions = {
+interface Actions {
     init: () => void
     setContainers: (containers: Containers) => void
     containerArrayModifier: (operation: (containers: Container[]) => Container[]) => void
@@ -24,8 +24,10 @@ type Actions = {
     removeContainer: (id: string) => void
 }
 
+type ContainersStore = States & Actions
+
 export const useContainers = create(
-    persist<States & Actions>(
+    persist<ContainersStore>(
         (set, get) => ({
             data: null,
             init: () =>
