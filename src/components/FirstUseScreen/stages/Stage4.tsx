@@ -211,10 +211,12 @@ export function Stage4({ setState, nextStage, prevStage }: StageProps) {
                                     <Search size={22} strokeWidth={3} />
                                 </Button>
                             </form>
-                            {locState.coords && (
+                            {locState.coords && locState.placeName && (
                                 <div className='text-neutral-400 text-xs mt-2 flex items-center gap-1'>
-                                    <MapPin size={16} />
-                                    <span>
+                                    <div>
+                                        <MapPin size={16} />
+                                    </div>
+                                    <span className='truncate' title={locState.placeName}>
                                         {locState.placeName} ({locState.coords.lat},{' '}
                                         {locState.coords.lon})
                                     </span>
