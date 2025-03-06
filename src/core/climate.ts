@@ -35,7 +35,7 @@ export type TemperatureLabels = 'SUPER_COLD' | 'COLD' | 'NORMAL' | 'HOT' | 'SUPE
 function getLabel(temp: number): TemperatureLabels {
     if (temp <= 0) return 'SUPER_COLD'
     if (temp < 10) return 'COLD'
-    if (temp < 25) return 'NORMAL'
+    if (temp < 29) return 'NORMAL'
     if (temp < 32) return 'HOT'
     return 'SUPER_HOT'
 }
