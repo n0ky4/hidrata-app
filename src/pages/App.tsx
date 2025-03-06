@@ -105,20 +105,16 @@ function App() {
                 >
                     {climateData && (
                         <div className='text-center w-fit flex items-center gap-4 mb-1 text-sm text-neutral-400 cursor-default'>
-                            {climateData.condition === 'favorable' ? (
-                                <p>
-                                    <TemperatureLabelTag
-                                        temperature={
-                                            climateData.temperatureData.apparentTemperature
-                                        }
-                                    />
-                                    <b>Clima favorável</b>{' '}
-                                </p>
-                            ) : (
-                                <p>
+                            <p>
+                                <TemperatureLabelTag
+                                    temperature={climateData.temperatureData.apparentTemperature}
+                                />
+                                {climateData.condition === 'favorable' ? (
+                                    <b>Clima favorável</b>
+                                ) : (
                                     <b>Clima desfavorável</b>
-                                </p>
-                            )}
+                                )}
+                            </p>
                             <p title='Sensação térmica'>
                                 {climateData.temperatureData.apparentTemperature}°C
                             </p>
