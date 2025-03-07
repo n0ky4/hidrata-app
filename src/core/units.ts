@@ -46,27 +46,66 @@ function getWeight(key: AvailableWeights) {
     return weight[key]
 }
 
-interface ConvertOptions {
+function getVolume(key: AvailableVolumes) {
+    return volume[key]
+}
+
+interface ConvertWeightOptions {
     from?: AvailableWeights // if empty, assume "kg"
     to: AvailableWeights
     addSymbol?: boolean
     decimals?: number // decimal places
 }
-interface ConvertOptionsWithSymbol extends Omit<ConvertOptions, 'addSymbol'> {
+interface ConvertWeightOptionsWithSymbol extends Omit<ConvertWeightOptions, 'addSymbol'> {
     addSymbol: true
 }
-interface ConvertOptionsWithoutSymbol extends Omit<ConvertOptions, 'addSymbol'> {
+interface ConvertWeightOptionsWithoutSymbol extends Omit<ConvertWeightOptions, 'addSymbol'> {
     addSymbol?: false
 }
-function convert(value: number, options: ConvertOptionsWithSymbol): string
-function convert(value: number, options: ConvertOptionsWithoutSymbol): number
-function convert(value: number, options: ConvertOptions): string | number {
+function convertWeight(value: number, options: ConvertWeightOptionsWithSymbol): string
+function convertWeight(value: number, options: ConvertWeightOptionsWithoutSymbol): number
+function convertWeight(value: number, options: ConvertWeightOptions): string | number {
     const { from = 'kg', to, addSymbol = false, decimals = 2 } = options
 
     let converted = value
 
     const fromUnit = getWeight(from)
     const toUnit = getWeight(to)
+
+    if (!fromUnit || !toUnit) return NaN
+
+    converted = (value * toUnit.factor) / fromUnit.factor
+
+    if (decimals > 0) {
+        converted = Number(converted.toFixed(decimals))
+    } else {
+        converted = Math.round(converted)
+    }
+
+    return addSymbol ? `${converted} ${toUnit.symbol}` : converted
+}
+
+interface ConvertVolumeOptions {
+    from?: AvailableVolumes // if empty, assume "ml"
+    to: AvailableVolumes
+    addSymbol?: boolean
+    decimals?: number // decimal places
+}
+interface ConvertVolumeOptionsWithSymbol extends Omit<ConvertVolumeOptions, 'addSymbol'> {
+    addSymbol: true
+}
+interface ConvertVolumeOptionsWithoutSymbol extends Omit<ConvertVolumeOptions, 'addSymbol'> {
+    addSymbol?: false
+}
+function convertVolume(value: number, options: ConvertVolumeOptionsWithSymbol): string
+function convertVolume(value: number, options: ConvertVolumeOptionsWithoutSymbol): number
+function convertVolume(value: number, options: ConvertVolumeOptions): string | number {
+    const { from = 'ml', to, addSymbol = false, decimals = 2 } = options
+
+    let converted = value
+
+    const fromUnit = getVolume(from)
+    const toUnit = getVolume(to)
 
     if (!fromUnit || !toUnit) return NaN
 
@@ -140,7 +179,9 @@ export const units = {
     availableVolumes,
     autoDetect,
     getWeight,
-    convert,
+    getVolume,
+    convertWeight,
+    convertVolume,
     getWeightSelectOptions,
     getVolumeSelectOptions,
     onSetWeight,
