@@ -1,5 +1,6 @@
 import { buildStyles, CircularProgressbar } from 'react-circular-progressbar'
 import { ClassNameValue, twMerge } from 'tailwind-merge'
+import { PercentButton } from './PercentButton'
 
 interface MainSectionProps {
     drank: number
@@ -39,20 +40,12 @@ export function MainSection({
                     })}
                 />
                 <div className='absolute inset-0 flex items-center justify-center'>
-                    <button
-                        className='common-transition select-none hover:bg-white/5 p-8 rounded-3xl group min-w-48'
-                        onClick={onAdd}
-                    >
-                        <div className='leading-none'>
-                            <h3 className='text-6xl font-bold leading-none'>
-                                {percentage < 999 ? `${percentage.toFixed(0)}%` : '+999%'}
-                            </h3>
-                            <span className='text-sm leading-none font-medium text-neutral-700 group-hover:text-neutral-300 common-transition'>
-                                {new Intl.NumberFormat().format(drank)} /{' '}
-                                {new Intl.NumberFormat().format(recommended)} ml
-                            </span>
-                        </div>
-                    </button>
+                    <PercentButton
+                        drank={drank}
+                        recommended={recommended}
+                        percentage={percentage}
+                        onAdd={onAdd}
+                    />
                 </div>
             </div>
             <div className='flex items-center justify-center flex-col'>

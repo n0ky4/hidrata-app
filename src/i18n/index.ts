@@ -1,4 +1,4 @@
-import { SelectOption } from '../components/Select'
+import { SelectOptionProps } from '../components/Select'
 import enUS from './locales/en-US.json'
 import ptBR from './locales/pt-BR.json'
 
@@ -34,7 +34,7 @@ function getString(path: string, lang: AvailableLanguages = fallback) {
     return value
 }
 
-function getLanguageOptions(): SelectOption[] {
+function getLanguageOptions(): SelectOptionProps[] {
     return languageKeys.map((lang) => ({
         label: getString('language', lang as AvailableLanguages),
         value: lang,

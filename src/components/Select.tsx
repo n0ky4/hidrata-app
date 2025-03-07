@@ -2,16 +2,19 @@ import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headless
 import { CheckCircle2Icon, ChevronDown } from 'lucide-react'
 import { twMerge } from 'tailwind-merge'
 
-export interface SelectOption {
+export interface SelectOptionProps {
     label?: string
     value: string
 }
 
-interface SelectProps {
-    options: SelectOption[]
+interface WidthProps {
+    w?: 'sm' | 'md' | 'md+' | 'lg'
+}
+
+interface SelectProps extends WidthProps {
+    options: SelectOptionProps[]
     selected: string
     onSelect: (value: string) => void
-    w?: 'sm' | 'md' | 'md+' | 'lg'
 }
 
 const widths = {
@@ -21,52 +24,78 @@ const widths = {
     lg: 'w-64',
 } as const
 
-export function Select({ options, selected, w = 'sm', onSelect }: SelectProps) {
+const commonStyles = twMerge(
+    'font-medium select-none px-4 py-2 rounded-lg',
+    'bg-neutral-950 border border-neutral-800'
+)
+export const styles = {
+    selectOptions: twMerge('mt-2 overflow-auto shadow-xl', commonStyles, 'px-0 py-0'),
+    selectOption: twMerge(
+        'group common-transition',
+        'cursor-pointer w-full p-2',
+        'hover:text-neutral-100 hover:bg-neutral-800/50',
+        'text-neutral-400 data-[selected]:text-neutral-100',
+        'data-[selected]:bg-neutral-800',
+        'flex items-center gap-1.5'
+    ),
+}
+
+interface SelectOptionsProps extends WidthProps {
+    children?: React.ReactNode
+}
+
+export function SelectOptions({ children, w = 'sm' }: SelectOptionsProps) {
     const wd = widths[w]
 
-    const commonStyles = twMerge(
-        'font-medium select-none px-4 py-2 rounded-lg',
-        'bg-neutral-950 border border-neutral-800'
+    return (
+        <ListboxOptions anchor='bottom start' className={twMerge(selectOptionsStyle, wd)}>
+            {children}
+        </ListboxOptions>
     )
+}
 
+export function SelectOption({ option }: { option: SelectOptionProps }) {
+    return (
+        <ListboxOption key={option.value} value={option.value} className={styles.selectOption}>
+            <div className='group-data-[selected]:block hidden text-neutral-100'>
+                <CheckCircle2Icon size={18} strokeWidth={2} />
+            </div>
+            {option.label}
+        </ListboxOption>
+    )
+}
+
+interface SelectButtonProps extends WidthProps {
+    selected: string
+    options: SelectOptionProps[]
+}
+
+export function SelectButton({ selected, options, w = 'sm' }: SelectButtonProps) {
+    const wd = widths[w]
+    return (
+        <ListboxButton
+            className={twMerge(
+                commonStyles,
+                'common-transition',
+                'flex items-center gap-2 justify-between',
+                wd
+            )}
+        >
+            {options.find((o) => o.value === selected)?.label}
+            <ChevronDown />
+        </ListboxButton>
+    )
+}
+
+export function Select({ options, selected, w = 'sm', onSelect }: SelectProps) {
     return (
         <Listbox value={selected} onChange={(value) => onSelect(value as string)}>
-            <ListboxButton
-                className={twMerge(
-                    commonStyles,
-                    'common-transition',
-                    'flex items-center gap-2 justify-between',
-                    wd
-                )}
-            >
-                {options.find((o) => o.value === selected)?.label}
-                <ChevronDown />
-            </ListboxButton>
-
-            <ListboxOptions
-                anchor='bottom start'
-                className={twMerge('mt-2 overflow-auto shadow-xl', commonStyles, wd, 'px-0 py-0')}
-            >
+            <SelectButton selected={selected} options={options} w={w} />
+            <SelectOptions w={w}>
                 {options.map((option) => (
-                    <ListboxOption
-                        key={option.value}
-                        value={option.value}
-                        className={twMerge(
-                            'group common-transition',
-                            'cursor-pointer w-full p-2',
-                            'hover:text-neutral-100 hover:bg-neutral-800/50',
-                            'text-neutral-400 data-[selected]:text-neutral-100',
-                            'data-[selected]:bg-neutral-800',
-                            'flex items-center gap-1.5'
-                        )}
-                    >
-                        <div className='group-data-[selected]:block hidden text-neutral-100'>
-                            <CheckCircle2Icon size={18} strokeWidth={2} />
-                        </div>
-                        {option.label}
-                    </ListboxOption>
+                    <SelectOption key={option.value} option={option} />
                 ))}
-            </ListboxOptions>
+            </SelectOptions>
         </Listbox>
     )
 }

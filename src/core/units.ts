@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { SelectOption } from '../components/Select'
+import { SelectOptionProps } from '../components/Select'
 
 const weight = {
     kg: {
@@ -103,12 +103,12 @@ function autoDetect(): [AvailableWeights, AvailableVolumes] {
     return [weight, volume]
 }
 
-const getWeightSelectOptions = (t: (key: string) => string | ReactNode): SelectOption[] => [
+const getWeightSelectOptions = (t: (key: string) => string | ReactNode): SelectOptionProps[] => [
     { label: `${t('units.kgP')} (kg)`, value: 'kg' },
     { label: `${t('units.lbP')} (lb)`, value: 'lb' },
 ]
 
-const getVolumeSelectOptions = (t: (key: string) => string | ReactNode): SelectOption[] => [
+const getVolumeSelectOptions = (t: (key: string) => string | ReactNode): SelectOptionProps[] => [
     { label: `${t('units.mlP')} (ml)`, value: 'ml' },
     { label: `${t('units.flOzP')} (fl oz)`, value: 'fl-oz' },
 ]
@@ -116,7 +116,7 @@ const getVolumeSelectOptions = (t: (key: string) => string | ReactNode): SelectO
 const onSetWeight = (
     value: AvailableWeights,
     setWeight: (value: AvailableWeights) => void,
-    weightSelectOptions: SelectOption[]
+    weightSelectOptions: SelectOptionProps[]
 ) => {
     const find = weightSelectOptions.find((o) => o.value === value)
     if (!find) return
@@ -126,7 +126,7 @@ const onSetWeight = (
 const onSetVolume = (
     value: AvailableVolumes,
     setVolume: (value: AvailableVolumes) => void,
-    volumeSelectOptions: SelectOption[]
+    volumeSelectOptions: SelectOptionProps[]
 ) => {
     const find = volumeSelectOptions.find((o) => o.value === value)
     if (!find) return
