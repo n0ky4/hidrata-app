@@ -48,7 +48,7 @@ export function SelectOptions({ children, w = 'sm' }: SelectOptionsProps) {
     const wd = widths[w]
 
     return (
-        <ListboxOptions anchor='bottom start' className={twMerge(selectOptionsStyle, wd)}>
+        <ListboxOptions anchor='bottom start' className={twMerge(styles.selectOptions, wd)}>
             {children}
         </ListboxOptions>
     )
