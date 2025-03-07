@@ -33,7 +33,7 @@ export function FirstUseScreen({ show, onClose }: FirstUseProps) {
             weight: 'kg',
             volume: 'ml',
         },
-        climate: {
+        weather: {
             enabled: false,
             latitude: 0,
             longitude: 0,
@@ -62,7 +62,7 @@ export function FirstUseScreen({ show, onClose }: FirstUseProps) {
             age: state.age,
             weight: state.weight,
             units: state.units,
-            climate: state.climate,
+            weather: state.weather,
             notifications: state.notifications,
         })
         onClose()

@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
 import 'react-circular-progressbar/dist/styles.css'
 import { useNavigate } from 'react-router'
-import { ClimateData } from '../components/ClimateData'
 import { HistoryEntry } from '../components/HistoryEntry'
 import { MainSection } from '../components/MainSection'
 import { SettingsModal } from '../components/Modal/SettingsModal'
 import { NavBar } from '../components/NavBar'
 import { NoEntry } from '../components/NoEntry'
+import { WeatherData } from '../components/WeatherData'
 import { useInitHandler } from '../core/initHandler'
 import { useLocale } from '../i18n/context/contextHook'
 import { useStore } from '../stores/app.store'
@@ -22,9 +22,9 @@ function App() {
     const age = useConfig((state) => state.config?.age) as number
     const weight = useConfig((state) => state.config?.weight) as number
 
-    const isClimateEnabled = useConfig((state) => state.config?.climate.enabled) as boolean
-    const latitude = useConfig((state) => state.config?.climate.latitude) as number
-    const longitude = useConfig((state) => state.config?.climate.longitude) as number
+    const isWeatherEnabled = useConfig((state) => state.config?.weather.enabled) as boolean
+    const latitude = useConfig((state) => state.config?.weather.latitude) as number
+    const longitude = useConfig((state) => state.config?.weather.longitude) as number
 
     // app store
     const mounted = useStore((state) => state.mounted)
@@ -33,7 +33,7 @@ function App() {
     const calculateDailyWater = useStore((state) => state.calculateDailyWater)
     const wasCalculated = useStore((state) => state.water.wasCalculated)
 
-    const climateData = useStore((state) => state.climateData)
+    const weatherData = useStore((state) => state.weatherData)
     const drank = useStore((state) => state.water.drank)
     const recommended = useStore((state) => state.water.recommended)
     const percentage = useStore((state) => state.percentage)
@@ -46,7 +46,7 @@ function App() {
 
     // const setDrankWater = useStore((state) => state.setDrankWater)
     // const setRecommendedWater = useStore((state) => state.setRecommendedWater)
-    // const setClimateData = useStore((state) => state.setClimateData)
+    // const setWeatherData = useStore((state) => state.setWeatherData)
 
     useEffect(() => {
         const firstUse = setupData()
@@ -59,8 +59,8 @@ function App() {
             calculateDailyWater({
                 age,
                 weight,
-                climate: {
-                    enabled: isClimateEnabled,
+                weather: {
+                    enabled: isWeatherEnabled,
                     latitude,
                     longitude,
                 },
@@ -88,7 +88,7 @@ function App() {
                         recommended={recommended}
                         onAdd={() => console.log('add')}
                     >
-                        {climateData && <ClimateData data={climateData} />}
+                        {weatherData && <WeatherData data={weatherData} />}
                     </MainSection>
                     <div className='flex flex-col gap-2'>
                         <h3 className='text-lg font-semibold text-neutral-300 text-center'>

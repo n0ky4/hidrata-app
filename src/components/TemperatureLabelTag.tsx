@@ -1,5 +1,5 @@
 import { twMerge } from 'tailwind-merge'
-import { climate } from '../core/climate'
+import { weather } from '../core/weather'
 import { useLocale } from '../i18n/context/contextHook'
 
 interface TemperatureLabelTagProps {
@@ -7,16 +7,16 @@ interface TemperatureLabelTagProps {
 }
 
 const labelData = {
-    SUPER_COLD: twMerge('bg-blue-700 text-blue-50'),
+    VERY_COLD: twMerge('bg-blue-700 text-blue-50'),
     COLD: twMerge('bg-blue-400 text-blue-50'),
-    NORMAL: twMerge('bg-neutral-800 text-neutral-50'),
+    MILD: twMerge('bg-neutral-800 text-neutral-50'),
     HOT: twMerge('bg-orange-500 text-white'),
-    SUPER_HOT: twMerge('bg-red-500 text-red-50'),
+    VERY_HOT: twMerge('bg-red-500 text-red-50'),
 }
 
 export function TemperatureLabelTag({ temperature }: TemperatureLabelTagProps) {
     const { t } = useLocale()
-    const labelKey = climate.getLabel(temperature)
+    const labelKey = weather.getLabel(temperature)
     const style = labelData[labelKey]
     const label = t(`weather.labels.${labelKey}`)
 

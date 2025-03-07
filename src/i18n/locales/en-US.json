@@ -40,11 +40,11 @@
         "apparentTemperature": "Apparent temperature",
         "relativeHumidity": "Relative humidity",
         "labels": {
-            "SUPER_COLD": "Very Cold",
+            "VERY_COLD": "Very Cold",
             "COLD": "Cold",
-            "NORMAL": "Mild",
+            "MILD": "Mild",
             "HOT": "Hot",
-            "SUPER_HOT": "Very Hot"
+            "VERY_HOT": "Very Hot"
         }
     },
     "stages": {

@@ -50,14 +50,14 @@ export function SettingsModal({ show, onClose }: CommonModalProps) {
     const font = useConfig((state) => state.config?.theme.font) as string
     const setFont = useConfig((state) => state.setThemeFont)
 
-    const climateEnabled = useConfig((state) => state.config?.climate.enabled) as boolean
-    const setClimateEnabled = useConfig((state) => state.setClimateEnabled)
+    const weatherEnabled = useConfig((state) => state.config?.weather.enabled) as boolean
+    const setWeatherEnabled = useConfig((state) => state.setWeatherEnabled)
 
-    const latitude = useConfig((state) => state.config?.climate.latitude) as number
-    const setLatitude = useConfig((state) => state.setClimateLatitude)
+    const latitude = useConfig((state) => state.config?.weather.latitude) as number
+    const setLatitude = useConfig((state) => state.setWeatherLatitude)
 
-    const longitude = useConfig((state) => state.config?.climate.longitude) as number
-    const setLongitude = useConfig((state) => state.setClimateLongitude)
+    const longitude = useConfig((state) => state.config?.weather.longitude) as number
+    const setLongitude = useConfig((state) => state.setWeatherLongitude)
 
     const handleLangChange = (lang: AvailableLanguages) => {
         setLanguage(lang)
@@ -156,11 +156,11 @@ export function SettingsModal({ show, onClose }: CommonModalProps) {
                 <ModalSection title={t('generic.weather') as string}>
                     <Checkbox
                         label={t('settings.enableWeatherDetection') as string}
-                        checked={climateEnabled}
-                        onChange={setClimateEnabled}
+                        checked={weatherEnabled}
+                        onChange={setWeatherEnabled}
                         className='mb-2'
                     />
-                    {climateEnabled && (
+                    {weatherEnabled && (
                         <div className='flex flex-col gap-2'>
                             <div>
                                 <Label>Latitude</Label>

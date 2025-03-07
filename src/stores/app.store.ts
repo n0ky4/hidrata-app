@@ -1,12 +1,12 @@
 import { produce } from 'immer'
 import { create } from 'zustand'
-import { calculator, ClimateRecommendedWaterResponse } from '../core/calculator'
+import { calculator, WeatherRecommendedWaterResponse } from '../core/calculator'
 import { log } from '../util/logger'
 
 interface CalculateDailyWaterOptions {
     age: number
     weight: number
-    climate: {
+    weather: {
         enabled: boolean
         latitude: number
         longitude: number
@@ -15,7 +15,7 @@ interface CalculateDailyWaterOptions {
 
 interface State {
     // state
-    climateData: ClimateRecommendedWaterResponse | null
+    weatherData: WeatherRecommendedWaterResponse | null
     mounted: boolean
     showSettingsModal: boolean
     showAddWaterModal: boolean
@@ -30,7 +30,7 @@ interface State {
 
 interface Actions {
     setMounted: (mounted: boolean) => void
-    setClimateData: (data: ClimateRecommendedWaterResponse | null) => void
+    setWeatherData: (data: WeatherRecommendedWaterResponse | null) => void
     setRecommendedWater: (value: number) => void
     setDrankWater: (value: number) => void
     calculateDailyWater: (options: CalculateDailyWaterOptions) => Promise<number>
@@ -42,7 +42,7 @@ interface Actions {
 type Store = State & Actions
 
 export const useStore = create<Store>((set, get) => ({
-    climateData: null,
+    weatherData: null,
     mounted: false,
     water: {
         wasCalculated: false,
@@ -76,26 +76,26 @@ export const useStore = create<Store>((set, get) => ({
             })
         ),
 
-    setClimateData: (data) => set({ climateData: data }),
+    setWeatherData: (data) => set({ weatherData: data }),
 
     setShowSettingsModal: (value: boolean) => set({ showSettingsModal: value }),
 
     setShowAddWaterModal: (value: boolean) => set({ showAddWaterModal: value }),
 
     calculateDailyWater: async (options) => {
-        const { age, weight, climate } = options
+        const { age, weight, weather } = options
 
         log.info('setting up daily water')
         try {
-            if (climate.enabled) {
-                log.info('using climate check')
+            if (weather.enabled) {
+                log.info('using weather check')
 
-                const { latitude, longitude } = climate
+                const { latitude, longitude } = weather
 
-                const res = await calculator.recommendedWaterClimate({
+                const res = await calculator.recommendedWaterWeather({
                     age,
                     weight,
-                    climate: {
+                    weather: {
                         use: true,
                         latitude,
                         longitude,
@@ -111,7 +111,7 @@ export const useStore = create<Store>((set, get) => ({
                             recommended: res.water,
                             drank: 0,
                         }
-                        draft.climateData = res
+                        draft.weatherData = res
                     })
                 )
 

@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { climate } from '../core/climate'
+import { weather } from '../core/weather'
 
 export const recordSchema = z.object({
     id: z.string(), // ID do registro
@@ -13,9 +13,9 @@ export type RecordCreateData = Omit<Record, 'id'>
 
 export const historyEntrySchema = z.object({
     date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), // Valida formato YYYY-MM-DD
-    climate: z
-        .enum(Object.values(climate.conditions) as [string, ...string[]])
-        .default(climate.conditions.favorable), // Condição climática
+    weather: z
+        .enum(Object.values(weather.conditions) as [string, ...string[]])
+        .default(weather.conditions.favorable), // Condição climática
     goal: z.number().positive(), // Meta deve ser um número positivo
     consumed: z.number().positive(), // Consumido deve ser um número positivo
     records: z.array(recordSchema).default([]), // Lista de registros

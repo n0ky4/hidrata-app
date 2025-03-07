@@ -3,7 +3,7 @@
 import { ArrowRight } from 'lucide-react'
 import { useLocale } from '../../../i18n/context/contextHook'
 import { Button } from '../../Button'
-import { Kaomoji } from '../../KaoMoji'
+import { Kaomoji } from '../../Kaomoji'
 import { AppTitle } from '../AppTitle'
 import { StageActions, StageContent, StageProps, StageTitle } from './StageModel'
 

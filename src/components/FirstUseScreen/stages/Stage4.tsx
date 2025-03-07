@@ -8,7 +8,7 @@ import { useLocale } from '../../../i18n/context/contextHook'
 import { Button } from '../../Button'
 import { Checkbox } from '../../Checkbox'
 import { Input } from '../../Input'
-import { Kaomoji } from '../../KaoMoji'
+import { Kaomoji } from '../../Kaomoji'
 import { Label } from '../../Label'
 import { AppTitle } from '../AppTitle'
 import {
@@ -158,13 +158,13 @@ export function Stage4({ setState, nextStage, prevStage }: StageProps) {
 
         setState((prev) =>
             produce(prev, (draft) => {
-                if (!draft.climate) draft.climate = {}
+                if (!draft.weather) draft.weather = {}
 
-                draft.climate.enabled = enabled
+                draft.weather.enabled = enabled
 
                 if (enabled && locState.coords) {
-                    draft.climate.latitude = locState.coords.lat
-                    draft.climate.longitude = locState.coords.lon
+                    draft.weather.latitude = locState.coords.lat
+                    draft.weather.longitude = locState.coords.lon
                 }
             })
         )

@@ -40,11 +40,11 @@
         "apparentTemperature": "Sensação térmica",
         "relativeHumidity": "Umidade relativa",
         "labels": {
-            "SUPER_COLD": "Muito Frio",
+            "VERY_COLD": "Muito Frio",
             "COLD": "Frio",
-            "NORMAL": "Ameno",
+            "MILD": "Ameno",
             "HOT": "Quente",
-            "SUPER_HOT": "Muito Quente"
+            "VERY_HOT": "Muito Quente"
         }
     },
     "stages": {

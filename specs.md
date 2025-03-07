@@ -178,7 +178,7 @@ As configurações deverão ser armazenadas no `localStorage` com os seguintes i
     },
     "age": 25,
     "weight": 70,
-    "climate": {
+    "weather": {
         "enabled": true, // Se o app usará o coeficiente climático
         "latitude": -15.7801,
         "longitude": -47.9292
@@ -215,7 +215,7 @@ As configurações deverão ser armazenadas no `localStorage` com os seguintes i
         "history": [
             {
                 "date": "2022-10-01",
-                "climate": "favorable",
+                "weather": "favorable",
                 "goal": 2000,
                 "consumed": 1500,
                 "records": [

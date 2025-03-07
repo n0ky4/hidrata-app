@@ -1,5 +1,5 @@
 import { log } from '../util/logger'
-import { climate, Condition, TemperatureData } from './climate'
+import { Condition, TemperatureData, weather } from './weather'
 
 interface WeightAgeOptions {
     weight: number
@@ -7,14 +7,14 @@ interface WeightAgeOptions {
 }
 
 interface CalculatorOptions extends WeightAgeOptions {
-    climate?: {
+    weather?: {
         use?: boolean
         latitude?: number
         longitude?: number
     }
 }
 
-function calc({ age, weight }: WeightAgeOptions, climateCoeficient: number = 0) {
+function calc({ age, weight }: WeightAgeOptions, weatherCoeficient: number = 0) {
     // | Idade        | Constante Base (CB) |
     // | ------------ | ------------------- |
     // | ≤ 17 anos    | 40 mL/kg            |
@@ -29,7 +29,7 @@ function calc({ age, weight }: WeightAgeOptions, climateCoeficient: number = 0) 
     else if (age <= 65) base = 30
     else base = 25
 
-    return (base + climateCoeficient) * weight
+    return (base + weatherCoeficient) * weight
 }
 
 function recommendedWater(options: CalculatorOptions): number {
@@ -37,43 +37,43 @@ function recommendedWater(options: CalculatorOptions): number {
     return calc({ weight, age })
 }
 
-export interface ClimateRecommendedWaterResponse {
+export interface WeatherRecommendedWaterResponse {
     water: number
     condition: Condition
     temperatureData: TemperatureData
 }
 
-async function recommendedWaterClimate(
+async function recommendedWaterWeather(
     options: CalculatorOptions
-): Promise<ClimateRecommendedWaterResponse> {
+): Promise<WeatherRecommendedWaterResponse> {
     const { weight, age } = options
 
     if (
-        !options.climate ||
-        !options.climate.use ||
-        !options.climate.latitude ||
-        !options.climate.longitude
+        !options.weather ||
+        !options.weather.use ||
+        !options.weather.latitude ||
+        !options.weather.longitude
     )
-        throw new Error('Invalid climate options')
+        throw new Error('Invalid weather options')
 
-    const { latitude, longitude } = options.climate
+    const { latitude, longitude } = options.weather
 
     let data
 
     const coords = { lat: latitude, lon: longitude }
-    const storedData = climate.getStoredData(coords)
+    const storedData = weather.getStoredData(coords)
 
     if (storedData) {
         log.info('using stored temperature data')
         data = storedData.data
     } else {
         log.info('fetching temperature data')
-        data = await climate.getTemperature(coords)
-        climate.storeData(data, coords)
+        data = await weather.getTemperature(coords)
+        weather.storeData(data, coords)
     }
 
-    const condition = climate.getCondition(data)
-    const coeficient = condition === climate.conditions.favorable ? 0 : 10
+    const condition = weather.getCondition(data)
+    const coeficient = condition === weather.conditions.favorable ? 0 : 10
 
     return {
         water: calc({ weight, age }, coeficient),
@@ -84,5 +84,5 @@ async function recommendedWaterClimate(
 
 export const calculator = {
     recommendedWater,
-    recommendedWaterClimate,
+    recommendedWaterWeather,
 }

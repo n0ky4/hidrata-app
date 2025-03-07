@@ -1,12 +1,12 @@
-import { ClimateRecommendedWaterResponse } from '../core/calculator'
+import { WeatherRecommendedWaterResponse } from '../core/calculator'
 import { useLocale } from '../i18n/context/contextHook'
 import { TemperatureLabelTag } from './TemperatureLabelTag'
 
-interface ClimateDataProps {
-    data: ClimateRecommendedWaterResponse
+interface WeatherDataProps {
+    data: WeatherRecommendedWaterResponse
 }
 
-export function ClimateData({ data: { temperatureData, condition } }: ClimateDataProps) {
+export function WeatherData({ data: { temperatureData, condition } }: WeatherDataProps) {
     const { t } = useLocale()
 
     return (

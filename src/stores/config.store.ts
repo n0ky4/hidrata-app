@@ -24,9 +24,9 @@ interface Actions {
     setThemeFont: (font: Config['theme']['font']) => void
     setAge: (age: Config['age']) => void
     setWeight: (weight: Config['weight']) => void
-    setClimateEnabled: (enabled: Config['climate']['enabled']) => void
-    setClimateLatitude: (latitude: Config['climate']['latitude']) => void
-    setClimateLongitude: (longitude: Config['climate']['longitude']) => void
+    setWeatherEnabled: (enabled: Config['weather']['enabled']) => void
+    setWeatherLatitude: (latitude: Config['weather']['latitude']) => void
+    setWeatherLongitude: (longitude: Config['weather']['longitude']) => void
     setLanguage: (language: Config['language']) => void
 }
 
@@ -105,14 +105,14 @@ export const useConfig = create(
 
             setWeight: (weight: Config['weight']) => get().setter('weight', weight),
 
-            setClimateEnabled: (enabled: Config['climate']['enabled']) =>
-                get().setter('climate.enabled', enabled),
+            setWeatherEnabled: (enabled: Config['weather']['enabled']) =>
+                get().setter('weather.enabled', enabled),
 
-            setClimateLatitude: (latitude: Config['climate']['latitude']) =>
-                get().setter('climate.latitude', latitude),
+            setWeatherLatitude: (latitude: Config['weather']['latitude']) =>
+                get().setter('weather.latitude', latitude),
 
-            setClimateLongitude: (longitude: Config['climate']['longitude']) =>
-                get().setter('climate.longitude', longitude),
+            setWeatherLongitude: (longitude: Config['weather']['longitude']) =>
+                get().setter('weather.longitude', longitude),
 
             setLanguage: (language: Config['language']) => get().setter('language', language),
         }),

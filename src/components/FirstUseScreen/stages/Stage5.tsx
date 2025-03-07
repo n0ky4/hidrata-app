@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react'
 import { useLocale } from '../../../i18n/context/contextHook'
 import { Checkbox } from '../../Checkbox'
 import { Input } from '../../Input'
-import { KAOMOJIS } from '../../KaoMoji'
+import { KAOMOJIS } from '../../Kaomoji'
 import { Label } from '../../Label'
 import {
     BackButton,

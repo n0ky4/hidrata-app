@@ -31,13 +31,13 @@ const conditions = {
 } as const
 export type Condition = (typeof conditions)[keyof typeof conditions]
 
-export type TemperatureLabels = 'SUPER_COLD' | 'COLD' | 'NORMAL' | 'HOT' | 'SUPER_HOT'
+export type TemperatureLabels = 'VERY_COLD' | 'COLD' | 'MILD' | 'HOT' | 'VERY_HOT'
 function getLabel(temp: number): TemperatureLabels {
-    if (temp <= 0) return 'SUPER_COLD'
+    if (temp <= 0) return 'VERY_COLD'
     if (temp < 10) return 'COLD'
-    if (temp < 29) return 'NORMAL'
+    if (temp < 29) return 'MILD'
     if (temp < 32) return 'HOT'
-    return 'SUPER_HOT'
+    return 'VERY_HOT'
 }
 
 export interface TemperatureData {
@@ -70,7 +70,7 @@ async function getTemperature(coords: Coords): Promise<TemperatureData> {
 function getCondition(data: TemperatureData): Condition {
     const label = getLabel(data.apparentTemperature)
 
-    if (label === 'SUPER_COLD' || label === 'HOT' || label === 'SUPER_HOT')
+    if (label === 'VERY_COLD' || label === 'HOT' || label === 'VERY_HOT')
         return conditions.unfavorable
 
     if (data.humidity <= 30) return conditions.unfavorable
@@ -137,7 +137,7 @@ function storeData(data: TemperatureData, coords: Coords) {
     localStorage.setItem(LSKEY.TEMPERATURE, JSON.stringify(response))
 }
 
-export const climate = {
+export const weather = {
     conditions,
     getLabel,
     getTemperature,
