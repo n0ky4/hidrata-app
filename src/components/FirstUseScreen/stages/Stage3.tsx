@@ -46,7 +46,7 @@ export function Stage3({ state, setState, nextStage, prevStage }: StageProps) {
         const kgWeight =
             state.units.weight === 'kg'
                 ? weight
-                : units.convert(weight, { from: state.units.weight, to: 'kg', decimals: 0 })
+                : units.convertWeight(weight, { from: state.units.weight, to: 'kg', decimals: 0 })
 
         const { success } = weightSchema.safeParse(kgWeight)
 
@@ -131,7 +131,7 @@ export function Stage3({ state, setState, nextStage, prevStage }: StageProps) {
                                 commonInputStyle,
                                 errors.weight && 'border-red-500 ring-red-500/50'
                             )}
-                            placeholder={units.convert(70, {
+                            placeholder={units.convertWeight(70, {
                                 to:
                                     state.units && state.units.weight != null
                                         ? state.units.weight
