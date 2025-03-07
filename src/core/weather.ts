@@ -31,12 +31,13 @@ const conditions = {
 } as const
 export type Condition = (typeof conditions)[keyof typeof conditions]
 
-export type TemperatureLabels = 'VERY_COLD' | 'COLD' | 'MILD' | 'HOT' | 'VERY_HOT'
-function getLabel(temp: number): TemperatureLabels {
+export type TemperatureLabel = 'VERY_COLD' | 'COLD' | 'MILD' | 'WARM' | 'HOT' | 'VERY_HOT'
+function getLabel(temp: number): TemperatureLabel {
     if (temp <= 0) return 'VERY_COLD'
-    if (temp < 10) return 'COLD'
-    if (temp < 29) return 'MILD'
-    if (temp < 32) return 'HOT'
+    if (temp <= 5) return 'COLD'
+    if (temp <= 15) return 'MILD'
+    if (temp <= 25) return 'WARM'
+    if (temp <= 32) return 'HOT'
     return 'VERY_HOT'
 }
 
@@ -145,4 +146,8 @@ export const weather = {
     getStoredData,
     storeData,
     generateId,
+}
+
+for (let i = -10; i < 45; i += 1) {
+    console.log(i, getLabel(i))
 }

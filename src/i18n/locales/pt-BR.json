@@ -43,6 +43,7 @@
             "VERY_COLD": "Muito Frio",
             "COLD": "Frio",
             "MILD": "Ameno",
+            "WARM": "Morno",
             "HOT": "Quente",
             "VERY_HOT": "Muito Quente"
         }

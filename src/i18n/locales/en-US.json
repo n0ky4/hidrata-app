@@ -43,6 +43,7 @@
             "VERY_COLD": "Very Cold",
             "COLD": "Cold",
             "MILD": "Mild",
+            "WARM": "Warm",
             "HOT": "Hot",
             "VERY_HOT": "Very Hot"
         }
