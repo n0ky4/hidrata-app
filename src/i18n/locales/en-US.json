@@ -6,14 +6,46 @@
         "volume": "Volume",
         "next": "Next",
         "back": "Back",
+        "close": "Close",
         "age": "Age",
         "yearsOld": "years old",
         "gotIt": "Got it",
         "location": "Location",
-        "coords": "Coordenadas",
+        "coords": "Coordinates",
         "remindMeIn": "Remind me in",
         "minutes": "minutes",
-        "notificationsDenied": "Browser notifications are disabled! Please enable them to receive reminders."
+        "notificationsDenied": "Browser notifications are disabled! Please enable them to receive reminders.",
+        "history": "History",
+        "noEntryMessage": "There are no records for today... How about starting by drinking a glass of water?",
+        "remainingMessage": "Let's go! There are still {} left",
+        "dailyWaterIntake": "Daily Water Intake",
+        "add": "Add",
+        "glass": "Glass",
+        "bottle": "Bottle",
+        "settings": "Settings",
+        "notifications": "Notifications",
+        "weather": "Weather",
+        "units": "Units",
+        "language": "Language"
+    },
+    "settings": {
+        "description": "See all available options to configure the app and make it your way.",
+        "enableNotifications": "Enable notifications",
+        "notificationInterval": "Notification interval (in minutes)",
+        "enableWeatherDetection": "Enable weather detection"
+    },
+    "weather": {
+        "favorableWeather": "Favorable weather",
+        "unfavorableWeather": "Unfavorable weather",
+        "apparentTemperature": "Apparent temperature",
+        "relativeHumidity": "Relative humidity",
+        "labels": {
+            "SUPER_COLD": "Very Cold",
+            "COLD": "Cold",
+            "NORMAL": "Mild",
+            "HOT": "Hot",
+            "SUPER_HOT": "Very Hot"
+        }
     },
     "stages": {
         "stage1": {
@@ -37,7 +69,7 @@
             "checkbox": "Yes, I want to use this feature!"
         },
         "stage5": {
-            "title": "Reminders",
+            "title": "Notifications",
             "p1": "Do you want to receive notifications to remind you to drink water?",
             "checkbox": "Yes, I want to receive notifications!"
         }

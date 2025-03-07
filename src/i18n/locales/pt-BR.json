@@ -6,6 +6,7 @@
         "volume": "Volume",
         "next": "Próximo",
         "back": "Voltar",
+        "close": "Fechar",
         "age": "Idade",
         "yearsOld": "anos",
         "gotIt": "Entendi",
@@ -13,7 +14,38 @@
         "coords": "Coordenadas",
         "remindMeIn": "Me lembre em",
         "minutes": "minutos",
-        "notificationsDenied": "As notificações do navegador foram desativadas! Por favor, ative-as para receber lembretes."
+        "notificationsDenied": "As notificações do navegador foram desativadas! Por favor, ative-as para receber lembretes.",
+        "history": "Histórico",
+        "noEntryMessage": "Não há registros para hoje... Que tal começar bebendo um copo de água?",
+        "remainingMessage": "Vamos lá! Ainda faltam {}",
+        "dailyWaterIntake": "Consumo Diário de Água",
+        "add": "Adicionar",
+        "glass": "Copo",
+        "bottle": "Garrafa",
+        "weather": "Clima",
+        "units": "Unidades",
+        "settings": "Configurações",
+        "notifications": "Notificações",
+        "language": "Idioma"
+    },
+    "settings": {
+        "description": "Veja todas as opções disponíveis para configurar o aplicativo e deixe-o do seu jeito.",
+        "enableNotifications": "Ativar notificações",
+        "notificationInterval": "Intervalo de notificação (em minutos)",
+        "enableWeatherDetection": "Ativar detecção de clima"
+    },
+    "weather": {
+        "favorableWeather": "Clima favorável",
+        "unfavorableWeather": "Clima desfavorável",
+        "apparentTemperature": "Sensação térmica",
+        "relativeHumidity": "Umidade relativa",
+        "labels": {
+            "SUPER_COLD": "Muito Frio",
+            "COLD": "Frio",
+            "NORMAL": "Ameno",
+            "HOT": "Quente",
+            "SUPER_HOT": "Muito Quente"
+        }
     },
     "stages": {
         "stage1": {

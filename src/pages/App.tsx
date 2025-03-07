@@ -8,6 +8,7 @@ import { SettingsModal } from '../components/Modal/SettingsModal'
 import { NavBar } from '../components/NavBar'
 import { NoEntry } from '../components/NoEntry'
 import { useInitHandler } from '../core/initHandler'
+import { useLocale } from '../i18n/context/contextHook'
 import { useStore } from '../stores/app.store'
 import { useConfig } from '../stores/config.store'
 import { log } from '../util/logger'
@@ -15,6 +16,7 @@ import { log } from '../util/logger'
 function App() {
     const navigate = useNavigate()
     const { setupData } = useInitHandler()
+    const { t } = useLocale()
 
     // config store
     const age = useConfig((state) => state.config?.age) as number
@@ -90,7 +92,7 @@ function App() {
                     </MainSection>
                     <div className='flex flex-col gap-2'>
                         <h3 className='text-lg font-semibold text-neutral-300 text-center'>
-                            Histórico
+                            {t('generic.history')}
                         </h3>
                         {entries.length > 0 ? (
                             <div className='flex flex-col gap-4'>
@@ -104,7 +106,7 @@ function App() {
                                 ))}
                             </div>
                         ) : (
-                            <NoEntry message="Não há nenhum registro de hoje... Que tal começar tomando um copo d'água?" />
+                            <NoEntry message={t('generic.noEntryMessage') as string} />
                         )}
                     </div>
                 </main>

@@ -1,5 +1,8 @@
 import { buildStyles, CircularProgressbar } from 'react-circular-progressbar'
 import { ClassNameValue, twMerge } from 'tailwind-merge'
+import { units } from '../core/units'
+import { useLocale } from '../i18n/context/contextHook'
+import { useConfig } from '../stores/config.store'
 import { PercentButton } from './PercentButton'
 
 interface MainSectionProps {
@@ -21,13 +24,24 @@ export function MainSection({
     className,
     children,
 }: MainSectionProps) {
-    const remaining = recommended - drank
+    const { t } = useLocale()
+
+    const unit = useConfig((state) => state.config?.units.volume) || 'ml'
+
+    const remaining = units.convertVolume(recommended - drank, {
+        from: 'ml',
+        to: unit,
+        symbol: true,
+        decimals: 0,
+    })
     const opacityTransition = twMerge('common-transition', calculated ? 'opacity-100' : 'opacity-0')
+
+    const remainingComponent = <b className='text-neutral-100'>{remaining}</b>
 
     return (
         <div className={twMerge('flex justify-center items-center flex-col gap-6', className)}>
             <h2 className='uppercase font-semibold text-lg text-neutral-100'>
-                Consumo Diário de Água
+                {t('generic.dailyWaterIntake')}
             </h2>
             <div className={twMerge('relative', opacityTransition)}>
                 <CircularProgressbar
@@ -51,7 +65,7 @@ export function MainSection({
             <div className='flex items-center justify-center flex-col'>
                 {children}
                 <p className={twMerge('text-neutral-400 text-center', opacityTransition)}>
-                    Vamos lá! Ainda faltam <b className='text-neutral-100'>{remaining} ml</b> 💧
+                    {t('generic.remainingMessage', [remainingComponent])} 💧
                 </p>
             </div>
         </div>

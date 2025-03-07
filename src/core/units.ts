@@ -53,19 +53,19 @@ function getVolume(key: AvailableVolumes) {
 interface ConvertWeightOptions {
     from?: AvailableWeights // if empty, assume "kg"
     to: AvailableWeights
-    addSymbol?: boolean
+    symbol?: boolean
     decimals?: number // decimal places
 }
-interface ConvertWeightOptionsWithSymbol extends Omit<ConvertWeightOptions, 'addSymbol'> {
-    addSymbol: true
+interface ConvertWeightOptionsWithSymbol extends Omit<ConvertWeightOptions, 'symbol'> {
+    symbol: true
 }
-interface ConvertWeightOptionsWithoutSymbol extends Omit<ConvertWeightOptions, 'addSymbol'> {
-    addSymbol?: false
+interface ConvertWeightOptionsWithoutSymbol extends Omit<ConvertWeightOptions, 'symbol'> {
+    symbol?: false
 }
 function convertWeight(value: number, options: ConvertWeightOptionsWithSymbol): string
 function convertWeight(value: number, options: ConvertWeightOptionsWithoutSymbol): number
 function convertWeight(value: number, options: ConvertWeightOptions): string | number {
-    const { from = 'kg', to, addSymbol = false, decimals = 2 } = options
+    const { from = 'kg', to, symbol = false, decimals = 2 } = options
 
     let converted = value
 
@@ -82,25 +82,25 @@ function convertWeight(value: number, options: ConvertWeightOptions): string | n
         converted = Math.round(converted)
     }
 
-    return addSymbol ? `${converted} ${toUnit.symbol}` : converted
+    return symbol ? `${converted} ${toUnit.symbol}` : converted
 }
 
 interface ConvertVolumeOptions {
     from?: AvailableVolumes // if empty, assume "ml"
     to: AvailableVolumes
-    addSymbol?: boolean
+    symbol?: boolean
     decimals?: number // decimal places
 }
-interface ConvertVolumeOptionsWithSymbol extends Omit<ConvertVolumeOptions, 'addSymbol'> {
-    addSymbol: true
+interface ConvertVolumeOptionsWithSymbol extends Omit<ConvertVolumeOptions, 'symbol'> {
+    symbol: true
 }
-interface ConvertVolumeOptionsWithoutSymbol extends Omit<ConvertVolumeOptions, 'addSymbol'> {
-    addSymbol?: false
+interface ConvertVolumeOptionsWithoutSymbol extends Omit<ConvertVolumeOptions, 'symbol'> {
+    symbol?: false
 }
 function convertVolume(value: number, options: ConvertVolumeOptionsWithSymbol): string
 function convertVolume(value: number, options: ConvertVolumeOptionsWithoutSymbol): number
 function convertVolume(value: number, options: ConvertVolumeOptions): string | number {
-    const { from = 'ml', to, addSymbol = false, decimals = 2 } = options
+    const { from = 'ml', to, symbol = false, decimals = 2 } = options
 
     let converted = value
 
@@ -117,7 +117,7 @@ function convertVolume(value: number, options: ConvertVolumeOptions): string | n
         converted = Math.round(converted)
     }
 
-    return addSymbol ? `${converted} ${toUnit.symbol}` : converted
+    return symbol ? `${converted} ${toUnit.symbol}` : converted
 }
 
 function autoDetect(): [AvailableWeights, AvailableVolumes] {

@@ -66,14 +66,10 @@ export function SettingsModal({ show, onClose }: CommonModalProps) {
 
     return (
         <Modal show={show} onClose={onClose}>
-            <ModalTitle onClose={onClose}>Configurações</ModalTitle>
-            <ModalDescription>
-                Veja todas as opções disponíveis para configurar o aplicativo e deixe-o do seu
-                jeito.
-            </ModalDescription>
-
+            <ModalTitle onClose={onClose}>{t('generic.settings')}</ModalTitle>
+            <ModalDescription>{t('settings.description')}</ModalDescription>
             <div className='max-h-96 overflow-y-auto flex flex-col gap-4'>
-                <ModalSection title='Idioma'>
+                <ModalSection title={t('generic.language') as string}>
                     <Select
                         selected={lang}
                         onSelect={(value) => handleLangChange(value as AvailableLanguages)}
@@ -81,15 +77,15 @@ export function SettingsModal({ show, onClose }: CommonModalProps) {
                         w='md+'
                     />
                 </ModalSection>
-                <ModalSection title='Notificações'>
+                <ModalSection title={t('generic.notifications') as string}>
                     <Checkbox
-                        label='Ativar notificações'
+                        label={t('settings.enableNotifications') as string}
                         checked={notification}
                         onChange={setNotification}
                     />
                     {notification && (
                         <div>
-                            <Label>Intervalo de notificações (minutos)</Label>
+                            <Label>{t('settings.notificationInterval') as string}</Label>
                             <Input
                                 type='number'
                                 value={notifInterval}
@@ -106,10 +102,10 @@ export function SettingsModal({ show, onClose }: CommonModalProps) {
                         </div>
                     )}
                 </ModalSection>
-                <ModalSection title='Unidades'>
+                <ModalSection title={t('generic.units') as string}>
                     <div className='flex flex-col gap-2'>
                         <div>
-                            <Label>Peso</Label>
+                            <Label>{t('generic.weight')}</Label>
                             <Select
                                 selected={weight}
                                 onSelect={(value) =>
@@ -124,7 +120,7 @@ export function SettingsModal({ show, onClose }: CommonModalProps) {
                             />
                         </div>
                         <div>
-                            <Label>Volume</Label>
+                            <Label>{t('generic.volume')}</Label>
                             <Select
                                 selected={volume}
                                 onSelect={(value) =>
@@ -157,9 +153,9 @@ export function SettingsModal({ show, onClose }: CommonModalProps) {
                         options={['default', 'serif', 'sans-serif']}
                     />
                 </ModalSection> */}
-                <ModalSection title='Clima'>
+                <ModalSection title={t('generic.weather') as string}>
                     <Checkbox
-                        label='Ativar detecção de clima'
+                        label={t('settings.enableWeatherDetection') as string}
                         checked={climateEnabled}
                         onChange={setClimateEnabled}
                         className='mb-2'
@@ -195,7 +191,7 @@ export function SettingsModal({ show, onClose }: CommonModalProps) {
 
             <ModalActions>
                 <Button onClick={onClose} theme='ghost'>
-                    Fechar
+                    {t('generic.close')}
                 </Button>
             </ModalActions>
         </Modal>

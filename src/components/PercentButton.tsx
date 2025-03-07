@@ -4,6 +4,7 @@ import { Fragment } from 'react/jsx-runtime'
 import { twMerge } from 'tailwind-merge'
 import { DefaultContainer, defaultContainers } from '../core/defaultContainers'
 import { AvailableVolumes, units } from '../core/units'
+import { useLocale } from '../i18n/context/contextHook'
 import { useConfig } from '../stores/config.store'
 import { styles } from './Select'
 
@@ -15,6 +16,8 @@ interface PercentButtonProps {
 }
 
 export function PercentButton({ percentage, drank, recommended, onAdd }: PercentButtonProps) {
+    const { t } = useLocale()
+
     const formattedPercentage = percentage < 999 ? `${percentage.toFixed(0)}%` : '+999%'
     const formattedDrank = new Intl.NumberFormat().format(drank)
     const formattedRecommended = new Intl.NumberFormat().format(recommended)
@@ -57,11 +60,15 @@ export function PercentButton({ percentage, drank, recommended, onAdd }: Percent
                     'shadow-xl shadow-black/50'
                 )}
             >
-                <MenuItem as='button' className={styles.selectOption} onClick={() => onAdd('cup')}>
-                    Copo (
-                    {units.convertVolume(defaultContainers.cup, {
+                <MenuItem
+                    as='button'
+                    className={styles.selectOption}
+                    onClick={() => onAdd('glass')}
+                >
+                    {t('generic.glass')} (
+                    {units.convertVolume(defaultContainers.glass, {
                         to: volumeUnit,
-                        addSymbol: true,
+                        symbol: true,
                         decimals: 0,
                     })}
                     )
@@ -71,10 +78,10 @@ export function PercentButton({ percentage, drank, recommended, onAdd }: Percent
                     className={styles.selectOption}
                     onClick={() => onAdd('bottle')}
                 >
-                    Garrafa (
+                    {t('generic.bottle')} (
                     {units.convertVolume(defaultContainers.bottle, {
                         to: volumeUnit,
-                        addSymbol: true,
+                        symbol: true,
                         decimals: 0,
                     })}
                     )
@@ -86,7 +93,7 @@ export function PercentButton({ percentage, drank, recommended, onAdd }: Percent
                     onClick={() => onAdd('custom')}
                 >
                     <PlusCircle size={20} strokeWidth={2} />
-                    Adicionar
+                    {t('generic.add')}
                 </MenuItem>
             </MenuItems>
         </Menu>

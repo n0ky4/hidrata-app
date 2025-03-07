@@ -137,7 +137,7 @@ export function Stage3({ state, setState, nextStage, prevStage }: StageProps) {
                                         ? state.units.weight
                                         : 'kg',
                                 decimals: 0,
-                                addSymbol: true,
+                                symbol: true,
                             })}
                             type='number'
                             value={weight}
