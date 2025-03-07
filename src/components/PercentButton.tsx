@@ -3,6 +3,8 @@ import { PlusCircle } from 'lucide-react'
 import { Fragment } from 'react/jsx-runtime'
 import { twMerge } from 'tailwind-merge'
 import { DefaultContainer, defaultContainers } from '../core/defaultContainers'
+import { AvailableVolumes, units } from '../core/units'
+import { useConfig } from '../stores/config.store'
 import { styles } from './Select'
 
 interface PercentButtonProps {
@@ -16,6 +18,8 @@ export function PercentButton({ percentage, drank, recommended, onAdd }: Percent
     const formattedPercentage = percentage < 999 ? `${percentage.toFixed(0)}%` : '+999%'
     const formattedDrank = new Intl.NumberFormat().format(drank)
     const formattedRecommended = new Intl.NumberFormat().format(recommended)
+
+    const volumeUnit: AvailableVolumes = useConfig((state) => state.config?.units.volume) || 'ml'
 
     return (
         <Menu as='div' className='relative group'>
@@ -54,14 +58,26 @@ export function PercentButton({ percentage, drank, recommended, onAdd }: Percent
                 )}
             >
                 <MenuItem as='button' className={styles.selectOption} onClick={() => onAdd('cup')}>
-                    Copo ({defaultContainers.cup}ml)
+                    Copo (
+                    {units.convertVolume(defaultContainers.cup, {
+                        to: volumeUnit,
+                        addSymbol: true,
+                        decimals: 0,
+                    })}
+                    )
                 </MenuItem>
                 <MenuItem
                     as='button'
                     className={styles.selectOption}
                     onClick={() => onAdd('bottle')}
                 >
-                    Garrafa ({defaultContainers.bottle}ml)
+                    Garrafa (
+                    {units.convertVolume(defaultContainers.bottle, {
+                        to: volumeUnit,
+                        addSymbol: true,
+                        decimals: 0,
+                    })}
+                    )
                 </MenuItem>
                 <MenuSeparator className='border-t border-neutral-800' />
                 <MenuItem
