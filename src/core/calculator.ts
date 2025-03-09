@@ -53,8 +53,10 @@ async function recommendedWaterWeather(
         !options.weather.use ||
         !options.weather.latitude ||
         !options.weather.longitude
-    )
+    ) {
+        console.error(options)
         throw new Error('Invalid weather options')
+    }
 
     const { latitude, longitude } = options.weather
 
