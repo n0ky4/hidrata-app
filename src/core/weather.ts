@@ -147,7 +147,3 @@ export const weather = {
     storeData,
     generateId,
 }
-
-for (let i = -10; i < 45; i += 1) {
-    console.log(i, getLabel(i))
-}
