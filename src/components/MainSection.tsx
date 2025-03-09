@@ -1,5 +1,6 @@
 import { buildStyles, CircularProgressbar } from 'react-circular-progressbar'
 import { ClassNameValue, twMerge } from 'tailwind-merge'
+import { DefaultContainer } from '../core/defaultContainers'
 import { units } from '../core/units'
 import { useLocale } from '../i18n/context/contextHook'
 import { useConfig } from '../stores/config.store'
@@ -10,7 +11,7 @@ interface MainSectionProps {
     recommended: number
     calculated: boolean
     percentage: number
-    onAdd: () => void
+    onAdd: (type: DefaultContainer | 'custom') => void
     className?: ClassNameValue
     children?: React.ReactNode
 }

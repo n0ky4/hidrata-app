@@ -7,10 +7,12 @@ import { SettingsModal } from '../components/Modal/SettingsModal'
 import { NavBar } from '../components/NavBar'
 import { NoEntry } from '../components/NoEntry'
 import { WeatherData } from '../components/WeatherData'
+import { DefaultContainer, getContainer } from '../core/defaultContainers'
 import { useInitHandler } from '../core/initHandler'
 import { useLocale } from '../i18n/context/contextHook'
 import { useStore } from '../stores/app.store'
 import { useConfig } from '../stores/config.store'
+import { useData } from '../stores/data.store'
 import { log } from '../util/logger'
 
 function App() {
@@ -25,6 +27,16 @@ function App() {
     const isWeatherEnabled = useConfig((state) => state.config?.weather.enabled) as boolean
     const latitude = useConfig((state) => state.config?.weather.latitude) as number
     const longitude = useConfig((state) => state.config?.weather.longitude) as number
+
+    // data store
+    const dateId = new Date().toISOString().split('T')[0]
+    const allRecords = useData((state) => state.data?.consumption.history)
+    const records = allRecords?.find((x) => x.date === dateId)?.records || []
+
+    const addRecord = useData((state) => state.addRecord)
+    const removeRecord = useData((state) => state.removeRecord)
+    const hasHistory = useData((state) => state.hasHistory)
+    const addHistoryEntry = useData((state) => state.addHistoryEntry)
 
     // app store
     const mounted = useStore((state) => state.mounted)
@@ -73,7 +85,37 @@ function App() {
 
     if (!mounted) return null
 
-    const entries = []
+    const onAdd = (type: DefaultContainer | 'custom') => {
+        if (type === 'custom') {
+            // setShowAddWaterModal(true)
+            return
+        }
+
+        const dateId = new Date().toISOString().split('T')[0]
+
+        if (!hasHistory(dateId)) {
+            addHistoryEntry({
+                consumed: 0,
+                date: dateId,
+                goal: recommended,
+                records: [],
+                weather: weatherData?.condition || 'favorable',
+            })
+        }
+
+        const amount = getContainer(type)
+        console.log('add', amount)
+
+        addRecord(dateId, {
+            amount,
+            time: new Date().toISOString(),
+        })
+    }
+
+    const onRemove = (id: string) => {
+        console.log('remove', id)
+        removeRecord(id)
+    }
 
     return (
         <>
@@ -86,7 +128,7 @@ function App() {
                         drank={drank}
                         percentage={percentage}
                         recommended={recommended}
-                        onAdd={() => console.log('add')}
+                        onAdd={onAdd}
                     >
                         {weatherData && <WeatherData data={weatherData} />}
                     </MainSection>
@@ -94,14 +136,14 @@ function App() {
                         <h3 className='text-lg font-semibold text-neutral-300 text-center'>
                             {t('generic.history')}
                         </h3>
-                        {entries.length > 0 ? (
-                            <div className='flex flex-col gap-4'>
-                                {entries.map((entry, index) => (
+                        {records.length > 0 ? (
+                            <div className='flex flex-col gap-2'>
+                                {records.map((entry, index) => (
                                     <HistoryEntry
                                         key={index}
                                         entry={entry}
                                         onEdit={() => console.log('edit')}
-                                        onDelete={() => console.log('delete')}
+                                        onRemove={() => onRemove(entry.id)}
                                     />
                                 ))}
                             </div>
