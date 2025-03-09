@@ -22,7 +22,6 @@ export function SettingsModal({ show, onClose }: CommonModalProps) {
     const { t, setAppLanguage } = useLocale()
 
     const lang = useConfig((state) => state.config?.language) as AvailableLanguages
-    const setLanguage = useConfig((state) => state.setLanguage)
 
     const notification = useConfig((state) => state.config?.notifications.enabled) as boolean
     const setNotification = useConfig((state) => state.setNotificationsEnabled)
@@ -60,7 +59,6 @@ export function SettingsModal({ show, onClose }: CommonModalProps) {
     const setLongitude = useConfig((state) => state.setWeatherLongitude)
 
     const handleLangChange = (lang: AvailableLanguages) => {
-        setLanguage(lang)
         setAppLanguage(lang)
     }
 

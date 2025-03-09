@@ -1,15 +1,22 @@
 import { PropsWithChildren, ReactNode, useCallback, useEffect, useState } from 'react'
 import { AvailableLanguages, i18n } from '..'
+import { useConfig } from '../../stores/config.store'
 import { component } from '../../util/component'
 import { LocaleContext } from './contextHook'
 
 export function LocaleProvider({ children }: PropsWithChildren) {
     const [lang, _setLang] = useState<AvailableLanguages>('en-US')
 
-    const setAppLanguage = useCallback((lang: AvailableLanguages) => {
-        _setLang(lang)
-        localStorage.setItem('lang', lang)
-    }, [])
+    const storedLanguage = useConfig((state) => state.config?.language)
+    const setStoredLanguage = useConfig((state) => state.setLanguage)
+
+    const setAppLanguage = useCallback(
+        (lang: AvailableLanguages) => {
+            _setLang(lang)
+            setStoredLanguage(lang)
+        },
+        [setStoredLanguage]
+    )
 
     const t = useCallback(
         (path: string, components?: ReactNode[]) => {
@@ -47,9 +54,8 @@ export function LocaleProvider({ children }: PropsWithChildren) {
     }, [])
 
     useEffect(() => {
-        const lang = localStorage.getItem('lang')
-        if (lang && i18n.hasLanguage(lang)) {
-            setAppLanguage(lang as AvailableLanguages)
+        if (storedLanguage && i18n.hasLanguage(storedLanguage)) {
+            setAppLanguage(storedLanguage as AvailableLanguages)
         } else {
             const detected = detectLang()
             setAppLanguage(detected)
