@@ -1,6 +1,6 @@
 import { WeatherRecommendedWaterResponse } from '../core/calculator'
 import { useLocale } from '../i18n/context/contextHook'
-import { TemperatureLabelTag } from './TemperatureLabelTag'
+import { TemperatureTag } from './TemperatureTag'
 
 interface WeatherDataProps {
     data: WeatherRecommendedWaterResponse
@@ -12,7 +12,7 @@ export function WeatherData({ data: { temperatureData, condition } }: WeatherDat
     return (
         <div className='text-center w-fit flex items-center gap-4 mb-1 text-sm text-neutral-400 cursor-default'>
             <p>
-                <TemperatureLabelTag temperature={temperatureData.apparentTemperature} />
+                <TemperatureTag temperature={temperatureData.apparentTemperature} />
                 {condition === 'favorable' ? (
                     <b>{t('weather.favorableWeather')}</b>
                 ) : (
