@@ -15,6 +15,7 @@ interface Actions {
 
     historyArrayModifier: (operation: (history: HistoryEntry[]) => HistoryEntry[]) => void
 
+    hasHistory: (date: string) => boolean
     addHistoryEntry: (entry: HistoryEntry) => void
     updateHistoryEntry: (entry: HistoryEntry) => void
     removeHistoryEntry: (date: string) => void
@@ -22,7 +23,7 @@ interface Actions {
     recordsArrayModifier: (date: string, operation: (records: Record[]) => Record[]) => void
 
     addRecord: (date: string, record: RecordCreateData) => void
-    removeRecord: (date: string, recordId: string) => void
+    removeRecord: (recordId: string) => void
 }
 
 type DataStore = State & Actions
@@ -59,6 +60,10 @@ export const useData = create(
                         },
                     }
                 }),
+
+            hasHistory: (date: string) => {
+                return !!get().data?.consumption.history.find((x) => x.date === date)
+            },
 
             addHistoryEntry: (entry: HistoryEntry) =>
                 get().historyArrayModifier((history) => [...history, entry]),
@@ -97,10 +102,17 @@ export const useData = create(
                     },
                 ]),
 
-            removeRecord: (date: string, recordId: string) =>
-                get().recordsArrayModifier(date, (records) =>
-                    records.filter((r) => r.id !== recordId)
-                ),
+            removeRecord: (recordId: string) => {
+                const records = get().data?.consumption.history.flatMap((x) => x.records) || []
+                const record = records.find((x) => x.id === recordId)
+                if (!record) return
+
+                const recordDateId = record.time.split('T')[0]
+
+                get().recordsArrayModifier(recordDateId, (records) =>
+                    records.filter((x) => x.id !== record.id)
+                )
+            },
         }),
         {
             name: LSKEY.DATA,
