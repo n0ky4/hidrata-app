@@ -10,6 +10,7 @@ export function useAppHandler() {
     const removeRecord = useData((state) => state.removeRecord)
     const recommended = useAppStore((state) => state.water.recommended)
     const weatherData = useAppStore((state) => state.weatherData)
+    const setShowAddWaterModal = useAppStore((state) => state.setShowAddWaterModal)
 
     const getDateId = () => new Date().toISOString().split('T')[0]
 
@@ -24,13 +25,14 @@ export function useAppHandler() {
     }
 
     const getPercentage = (drank: number, recommended: number): number => {
+        if (!drank || !recommended) return 0
         const percentage = Math.max(0, (drank / recommended) * 100)
         return percentage || 0
     }
 
     const onAdd = (type: DefaultContainer | 'custom') => {
         if (type === 'custom') {
-            // setShowAddWaterModal(true)
+            setShowAddWaterModal(true)
             return
         }
 

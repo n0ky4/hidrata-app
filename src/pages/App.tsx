@@ -3,6 +3,7 @@ import 'react-circular-progressbar/dist/styles.css'
 import { useNavigate } from 'react-router'
 import { HistoryEntry } from '../components/HistoryEntry'
 import { MainSection } from '../components/MainSection'
+import { AddWaterModal } from '../components/Modal/AddWaterModal'
 import { SettingsModal } from '../components/Modal/SettingsModal'
 import { NavBar } from '../components/NavBar'
 import { NoEntry } from '../components/NoEntry'
@@ -79,7 +80,9 @@ function App() {
 
     return (
         <>
+            <AddWaterModal show={showAddWaterModal} onClose={() => setShowAddWaterModal(false)} />
             <SettingsModal show={showSettingsModal} onClose={() => setShowSettingsModal(false)} />
+
             <div className='px-4 py-6 max-w-4xl mx-auto'>
                 <NavBar onSettingsClick={() => setShowSettingsModal(true)} />
                 <main className='py-8 flex flex-col gap-8'>
