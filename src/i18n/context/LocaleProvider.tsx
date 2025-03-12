@@ -1,21 +1,28 @@
 import { PropsWithChildren, ReactNode, useCallback, useEffect, useState } from 'react'
 import { AvailableLanguages, i18n } from '..'
-import { useConfig } from '../../stores/config.store'
 import { component } from '../../util/component'
+import { LSKEY } from '../../util/localStorageKeys'
 import { LocaleContext } from './contextHook'
 
 export function LocaleProvider({ children }: PropsWithChildren) {
-    const [lang, _setLang] = useState<AvailableLanguages>('en-US')
+    const [lang, setShownLanguage] = useState<AvailableLanguages>('en-US')
 
-    const storedLanguage = useConfig((state) => state.config?.language)
-    const setStoredLanguage = useConfig((state) => state.setLanguage)
+    const storeLang = useCallback((lang: AvailableLanguages) => {
+        localStorage.setItem(LSKEY.LANG, lang)
+    }, [])
+
+    const getStoredLang = useCallback(() => {
+        const stored = localStorage.getItem(LSKEY.LANG)
+        if (!stored || !i18n.hasLanguage(stored)) return null
+        return stored as AvailableLanguages
+    }, [])
 
     const setAppLanguage = useCallback(
         (lang: AvailableLanguages) => {
-            _setLang(lang)
-            setStoredLanguage(lang)
+            setShownLanguage(lang)
+            storeLang(lang)
         },
-        [setStoredLanguage]
+        [storeLang]
     )
 
     const t = useCallback(
@@ -54,8 +61,10 @@ export function LocaleProvider({ children }: PropsWithChildren) {
     }, [])
 
     useEffect(() => {
-        if (storedLanguage && i18n.hasLanguage(storedLanguage)) {
-            setAppLanguage(storedLanguage as AvailableLanguages)
+        const storedLanguage = getStoredLang()
+
+        if (storedLanguage) {
+            setShownLanguage(storedLanguage as AvailableLanguages)
         } else {
             const detected = detectLang()
             setAppLanguage(detected)

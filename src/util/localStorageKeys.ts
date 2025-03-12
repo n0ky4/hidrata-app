@@ -3,4 +3,5 @@ export const LSKEY = {
     CONFIG: 'config',
     CONTAINERS: 'containers',
     DATA: 'data',
+    LANG: 'lang',
 }
