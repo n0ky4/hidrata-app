@@ -7,10 +7,10 @@ import { SettingsModal } from '../components/Modal/SettingsModal'
 import { NavBar } from '../components/NavBar'
 import { NoEntry } from '../components/NoEntry'
 import { WeatherData } from '../components/WeatherData'
-import { DefaultContainer, getContainer } from '../core/defaultContainers'
+import { useAppHandler } from '../core/appHandler'
 import { useInitHandler } from '../core/initHandler'
 import { useLocale } from '../i18n/context/contextHook'
-import { useStore } from '../stores/app.store'
+import { useAppStore } from '../stores/app.store'
 import { useConfig } from '../stores/config.store'
 import { useData } from '../stores/data.store'
 import { log } from '../util/logger'
@@ -28,37 +28,29 @@ function App() {
     const latitude = useConfig((state) => state.config?.weather.latitude) as number
     const longitude = useConfig((state) => state.config?.weather.longitude) as number
 
-    // data store
-    const dateId = new Date().toISOString().split('T')[0]
-    const allRecords = useData((state) => state.data?.consumption.history)
-    const records = allRecords?.find((x) => x.date === dateId)?.records || []
-
-    const addRecord = useData((state) => state.addRecord)
-    const removeRecord = useData((state) => state.removeRecord)
-    const hasHistory = useData((state) => state.hasHistory)
-    const addHistoryEntry = useData((state) => state.addHistoryEntry)
-
     // app store
-    const mounted = useStore((state) => state.mounted)
-    const setMounted = useStore((state) => state.setMounted)
+    const mounted = useAppStore((state) => state.mounted)
+    const setMounted = useAppStore((state) => state.setMounted)
 
-    const calculateDailyWater = useStore((state) => state.calculateDailyWater)
-    const wasCalculated = useStore((state) => state.water.wasCalculated)
+    const calculateDailyWater = useAppStore((state) => state.calculateDailyWater)
+    const wasCalculated = useAppStore((state) => state.water.wasCalculated)
 
-    const weatherData = useStore((state) => state.weatherData)
-    const drank = useStore((state) => state.water.drank)
-    const recommended = useStore((state) => state.water.recommended)
-    const percentage = useStore((state) => state.percentage)
+    const weatherData = useAppStore((state) => state.weatherData)
+    const recommended = useAppStore((state) => state.water.recommended)
 
     // modals
-    const showSettingsModal = useStore((state) => state.showSettingsModal)
-    const setShowSettingsModal = useStore((state) => state.setShowSettingsModal)
-    const showAddWaterModal = useStore((state) => state.showAddWaterModal)
-    const setShowAddWaterModal = useStore((state) => state.setShowAddWaterModal)
+    const showSettingsModal = useAppStore((state) => state.showSettingsModal)
+    const setShowSettingsModal = useAppStore((state) => state.setShowSettingsModal)
+    const showAddWaterModal = useAppStore((state) => state.showAddWaterModal)
+    const setShowAddWaterModal = useAppStore((state) => state.setShowAddWaterModal)
 
-    // const setDrankWater = useStore((state) => state.setDrankWater)
-    // const setRecommendedWater = useStore((state) => state.setRecommendedWater)
-    // const setWeatherData = useStore((state) => state.setWeatherData)
+    // computed
+    const allRecords = useData((state) => state.data?.consumption.history)
+    const { getDailyConsumed, getDailyRecords, getPercentage, onAdd, onRemove } = useAppHandler()
+
+    const records = getDailyRecords(allRecords || [])
+    const drank = getDailyConsumed(records)
+    const percentage = getPercentage(drank, recommended)
 
     useEffect(() => {
         const firstUse = setupData()
@@ -84,38 +76,6 @@ function App() {
     }, [])
 
     if (!mounted) return null
-
-    const onAdd = (type: DefaultContainer | 'custom') => {
-        if (type === 'custom') {
-            // setShowAddWaterModal(true)
-            return
-        }
-
-        const dateId = new Date().toISOString().split('T')[0]
-
-        if (!hasHistory(dateId)) {
-            addHistoryEntry({
-                consumed: 0,
-                date: dateId,
-                goal: recommended,
-                records: [],
-                weather: weatherData?.condition || 'favorable',
-            })
-        }
-
-        const amount = getContainer(type)
-        console.log('add', amount)
-
-        addRecord(dateId, {
-            amount,
-            time: new Date().toISOString(),
-        })
-    }
-
-    const onRemove = (id: string) => {
-        console.log('remove', id)
-        removeRecord(id)
-    }
 
     return (
         <>

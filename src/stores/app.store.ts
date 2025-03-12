@@ -22,52 +22,32 @@ interface State {
     water: {
         wasCalculated: boolean
         recommended: number
-        drank: number
     }
-    // computed
-    percentage: number
 }
 
 interface Actions {
     setMounted: (mounted: boolean) => void
     setWeatherData: (data: WeatherRecommendedWaterResponse | null) => void
     setRecommendedWater: (value: number) => void
-    setDrankWater: (value: number) => void
     calculateDailyWater: (options: CalculateDailyWaterOptions) => Promise<number>
-    reset: () => void
     setShowSettingsModal: (value: boolean) => void
     setShowAddWaterModal: (value: boolean) => void
 }
 
 type Store = State & Actions
 
-export const useStore = create<Store>((set, get) => ({
+export const useAppStore = create<Store>((set) => ({
     weatherData: null,
     mounted: false,
+    waterWasCalculated: false,
     water: {
         wasCalculated: false,
         recommended: 0,
-        drank: 0,
     },
     showSettingsModal: false,
     showAddWaterModal: false,
 
-    get percentage() {
-        const { water } = get()
-        if (!water.drank || !water.recommended) return 0
-
-        const percentage = (water.drank / water.recommended) * 100
-        return Math.max(0, percentage)
-    },
-
     setMounted: (mounted) => set({ mounted }),
-
-    setDrankWater: (value) =>
-        set((state) =>
-            produce(state, (draft) => {
-                draft.water.drank = value
-            })
-        ),
 
     setRecommendedWater: (value) =>
         set((state) =>
@@ -109,7 +89,6 @@ export const useStore = create<Store>((set, get) => ({
                         draft.water = {
                             wasCalculated: true,
                             recommended: res.water,
-                            drank: 0,
                         }
                         draft.weatherData = res
                     })
@@ -129,7 +108,6 @@ export const useStore = create<Store>((set, get) => ({
                         draft.water = {
                             wasCalculated: true,
                             recommended: value,
-                            drank: 0,
                         }
                     })
                 )
@@ -141,15 +119,4 @@ export const useStore = create<Store>((set, get) => ({
             throw err
         }
     },
-
-    reset: () =>
-        set((state) =>
-            produce(state, (draft) => {
-                draft.water = {
-                    wasCalculated: false,
-                    recommended: 0,
-                    drank: 0,
-                }
-            })
-        ),
 }))
