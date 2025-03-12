@@ -38,6 +38,7 @@
     "weather": {
         "favorableWeather": "Favorable weather",
         "unfavorableWeather": "Unfavorable weather",
+        "unfavorableWeatherTitle": "An extra amount has been added due to unfavorable weather conditions. Stay safe!",
         "apparentTemperature": "Apparent temperature",
         "relativeHumidity": "Relative humidity",
         "labels": {

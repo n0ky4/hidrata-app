@@ -16,7 +16,9 @@ export function WeatherData({ data: { temperatureData, condition } }: WeatherDat
                 {condition === 'favorable' ? (
                     <b>{t('weather.favorableWeather')}</b>
                 ) : (
-                    <b>{t('weather.unfavorableWeather')}</b>
+                    <b title={t('weather.unfavorableWeatherTitle') as string}>
+                        {t('weather.unfavorableWeather')}
+                    </b>
                 )}
             </p>
             <p title={t('weather.apparentTemperature') as string}>
