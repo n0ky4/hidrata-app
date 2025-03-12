@@ -30,7 +30,7 @@ export function useAppHandler() {
         return percentage || 0
     }
 
-    const onAdd = (type: DefaultContainer | 'custom') => {
+    const onAddRecord = (type: DefaultContainer | 'custom') => {
         if (type === 'custom') {
             setShowAddWaterModal(true)
             return
@@ -57,7 +57,7 @@ export function useAppHandler() {
         })
     }
 
-    const onRemove = (id: string) => {
+    const onRemoveRecord = (id: string) => {
         console.log('remove', id)
         removeRecord(id)
     }
@@ -66,7 +66,7 @@ export function useAppHandler() {
         getDailyRecords,
         getDailyConsumed,
         getPercentage,
-        onAdd,
-        onRemove,
+        onAddRecord,
+        onRemoveRecord,
     }
 }
