@@ -2,7 +2,6 @@
 
 import { produce } from 'immer'
 import { useEffect, useState } from 'react'
-import { twMerge } from 'tailwind-merge'
 import { units } from '../../../core/units'
 import { useLocale } from '../../../i18n/context/contextHook'
 import { ageSchema, weightSchema } from '../../../schemas/config.schema'
@@ -112,13 +111,11 @@ export function Stage3({ state, setState, nextStage, prevStage }: StageProps) {
                             {t('generic.age')}
                         </Label>
                         <Input
-                            className={twMerge(
-                                commonInputStyle,
-                                errors.age && 'border-red-500 ring-red-500/50'
-                            )}
+                            className={commonInputStyle}
                             placeholder={`18 ${t('generic.yearsOld')}`}
                             type='number'
                             value={age}
+                            error={errors.age}
                             onChange={(e) => setInput('age', e.target.value)}
                         />
                     </div>
@@ -127,10 +124,8 @@ export function Stage3({ state, setState, nextStage, prevStage }: StageProps) {
                             {t('generic.weight')}
                         </Label>
                         <Input
-                            className={twMerge(
-                                commonInputStyle,
-                                errors.weight && 'border-red-500 ring-red-500/50'
-                            )}
+                            className={commonInputStyle}
+                            error={errors.weight}
                             placeholder={units.convertWeight(70, {
                                 to:
                                     state.units && state.units.weight != null

@@ -1,6 +1,10 @@
 import { twMerge } from 'tailwind-merge'
 
-export function Input({ className, ...rest }: React.InputHTMLAttributes<HTMLInputElement>) {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+    error?: boolean
+}
+
+export function Input({ className, error, ...rest }: InputProps) {
     return (
         <input
             className={twMerge(
@@ -8,6 +12,7 @@ export function Input({ className, ...rest }: React.InputHTMLAttributes<HTMLInpu
                 'focus:outline-none focus-visible:ring-2 ring-blue-500',
                 'common-transition',
                 'border border-neutral-800',
+                error && 'border-red-500 ring-red-500/50',
                 className
             )}
             {...rest}
