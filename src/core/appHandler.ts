@@ -24,8 +24,8 @@ export function useAppHandler() {
     }
 
     const getPercentage = (drank: number, recommended: number): number => {
-        const percentage = (drank / recommended) * 100
-        return Math.max(0, percentage)
+        const percentage = Math.max(0, (drank / recommended) * 100)
+        return percentage || 0
     }
 
     const onAdd = (type: DefaultContainer | 'custom') => {
