@@ -29,15 +29,17 @@ export function MainSection({
 
     const unit = useConfig((state) => state.config?.units.volume) || 'ml'
 
-    const remaining = units.convertVolume(recommended - drank, {
+    const remaining = recommended - drank
+    const remainingLabel = units.convertVolume(remaining, {
         from: 'ml',
         to: unit,
         symbol: true,
         decimals: 0,
     })
+
     const opacityTransition = twMerge('common-transition', calculated ? 'opacity-100' : 'opacity-0')
 
-    const remainingComponent = <b className='text-neutral-100'>{remaining}</b>
+    const remainingComponent = <b className='text-neutral-100'>{remainingLabel}</b>
 
     return (
         <div className={twMerge('flex justify-center items-center flex-col gap-6', className)}>
@@ -65,9 +67,16 @@ export function MainSection({
             </div>
             <div className='flex items-center justify-center flex-col'>
                 {children}
-                <p className={twMerge('text-neutral-400 text-center', opacityTransition)}>
-                    {t('generic.remainingMessage', [remainingComponent])} 💧
-                </p>
+
+                {remaining > 0 ? (
+                    <p className={twMerge('text-neutral-400 text-center', opacityTransition)}>
+                        {t('generic.remainingMessage', [remainingComponent])} 💧
+                    </p>
+                ) : (
+                    <p className={twMerge('text-neutral-400 text-center', opacityTransition)}>
+                        {t('generic.congratulations')} 🎉
+                    </p>
+                )}
             </div>
         </div>
     )

@@ -18,6 +18,7 @@
         "history": "History",
         "noEntryMessage": "There are no records for today... How about starting by drinking a glass of water?",
         "remainingMessage": "Let's go! There are still {} left",
+        "congratulations": "Congratulations! You've reached your daily goal!",
         "dailyWaterIntake": "Daily Water Intake",
         "add": "Add",
         "glass": "Glass",
