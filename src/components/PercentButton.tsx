@@ -3,9 +3,8 @@ import { PlusCircle } from 'lucide-react'
 import { Fragment } from 'react/jsx-runtime'
 import { twMerge } from 'tailwind-merge'
 import { DefaultContainer, defaultContainers } from '../core/defaultContainers'
-import { AvailableVolumes, units } from '../core/units'
+import { units } from '../core/units'
 import { useLocale } from '../i18n/context/contextHook'
-import { useConfig } from '../stores/config.store'
 import { styles } from './Select'
 
 interface PercentButtonProps {
@@ -18,11 +17,23 @@ interface PercentButtonProps {
 export function PercentButton({ percentage, drank, recommended, onAdd }: PercentButtonProps) {
     const { t } = useLocale()
 
+    const volumeUnit = units.useConfigVolume()
     const formattedPercentage = percentage < 999 ? `${percentage.toFixed(0)}%` : '+999%'
-    const formattedDrank = new Intl.NumberFormat().format(drank)
-    const formattedRecommended = new Intl.NumberFormat().format(recommended)
 
-    const volumeUnit: AvailableVolumes = useConfig((state) => state.config?.units.volume) || 'ml'
+    const convertedDrank = units.convertVolume(drank, {
+        from: 'ml',
+        to: volumeUnit,
+        decimals: 0,
+    })
+
+    const convertedRecommended = units.convertVolume(recommended, {
+        from: 'ml',
+        to: volumeUnit,
+        decimals: 0,
+    })
+
+    const formattedDrank = new Intl.NumberFormat().format(convertedDrank)
+    const formattedRecommended = new Intl.NumberFormat().format(convertedRecommended)
 
     return (
         <Menu as='div' className='relative group'>
@@ -47,7 +58,8 @@ export function PercentButton({ percentage, drank, recommended, onAdd }: Percent
                                     active && 'text-neutral-300'
                                 )}
                             >
-                                {formattedDrank} / {formattedRecommended} ml
+                                {formattedDrank} / {formattedRecommended}{' '}
+                                {units.getVolume(volumeUnit).symbol}
                             </span>
                         </div>
                     </button>

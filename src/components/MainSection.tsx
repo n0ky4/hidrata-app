@@ -3,7 +3,6 @@ import { ClassNameValue, twMerge } from 'tailwind-merge'
 import { DefaultContainer } from '../core/defaultContainers'
 import { units } from '../core/units'
 import { useLocale } from '../i18n/context/contextHook'
-import { useConfig } from '../stores/config.store'
 import { PercentButton } from './PercentButton'
 
 interface MainSectionProps {
@@ -27,12 +26,12 @@ export function MainSection({
 }: MainSectionProps) {
     const { t } = useLocale()
 
-    const unit = useConfig((state) => state.config?.units.volume) || 'ml'
+    const volumeUnit = units.useConfigVolume()
 
     const remaining = recommended - drank
     const remainingLabel = units.convertVolume(remaining, {
         from: 'ml',
-        to: unit,
+        to: volumeUnit,
         symbol: true,
         decimals: 0,
     })

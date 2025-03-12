@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 import { SelectOptionProps } from '../components/Select'
+import { useConfig } from './../stores/config.store'
 
 const weight = {
     kg: {
@@ -172,6 +173,14 @@ const onSetVolume = (
     setVolume(find.value as AvailableVolumes)
 }
 
+const useConfigVolume = () => {
+    return useConfig((state) => state.config?.units.volume) || 'ml'
+}
+
+const useConfigWeight = () => {
+    return useConfig((state) => state.config?.units.weight) || 'kg'
+}
+
 export const units = {
     weight,
     volume,
@@ -186,4 +195,6 @@ export const units = {
     getVolumeSelectOptions,
     onSetWeight,
     onSetVolume,
+    useConfigVolume,
+    useConfigWeight,
 }

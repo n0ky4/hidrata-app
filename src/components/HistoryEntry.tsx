@@ -1,6 +1,7 @@
 import { Pencil, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
+import { units } from '../core/units'
 import { Record } from '../schemas/data.schema'
 import { Button } from './Button'
 
@@ -13,12 +14,28 @@ interface HistoryEntryProps {
 export function HistoryEntry({ entry, onEdit, onRemove }: HistoryEntryProps) {
     const [time, setTime] = useState('')
 
+    const volumeUnit = units.useConfigVolume()
+
+    const convertedAmount = units.convertVolume(entry.amount, {
+        from: 'ml',
+        to: volumeUnit,
+        decimals: 0,
+        symbol: true,
+    })
+
     const getText = (diff: number) => {
         const minutes = Math.floor(diff / 60000)
+        let text = ''
+
         if (minutes === 0) return 'agora'
-        if (minutes < 60) return `${minutes}m`
-        const hours = Math.floor(minutes / 60)
-        return `${hours}h`
+
+        if (minutes < 60) text = `${minutes} minutos`
+        else {
+            const hours = Math.floor(minutes / 60)
+            text = `${hours} horas`
+        }
+
+        return `há ${text}`
     }
 
     useEffect(() => {
@@ -47,9 +64,9 @@ export function HistoryEntry({ entry, onEdit, onRemove }: HistoryEntryProps) {
                 'common-transition'
             )}
         >
-            <div className='flex items-center gap-12'>
-                <span className='text-neutral-400'>{time}</span>
-                <span>bebeu {entry.amount}</span>
+            <div className='flex items-center'>
+                <span className='text-neutral-400 min-w-32'>{time}</span>
+                <span>bebeu {convertedAmount}</span>
             </div>
             <div className='flex items-center gap-2'>
                 <Button theme='ghost' square onClick={onEdit}>
