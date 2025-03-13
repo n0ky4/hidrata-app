@@ -1,6 +1,8 @@
 import { log } from '../util/logger'
 import { Condition, TemperatureData, weather } from './weather'
 
+export const RECOMMENDED_LIMIT = 7_000
+
 interface WeightAgeOptions {
     weight: number
     age: number
@@ -29,7 +31,9 @@ function calc({ age, weight }: WeightAgeOptions, weatherCoeficient: number = 0) 
     else if (age <= 65) base = 30
     else base = 25
 
-    return (base + weatherCoeficient) * weight
+    const calculated = (base + weatherCoeficient) * weight
+
+    return Math.min(calculated, RECOMMENDED_LIMIT)
 }
 
 function recommendedWater(options: CalculatorOptions): number {
