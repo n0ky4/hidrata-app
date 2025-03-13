@@ -95,7 +95,7 @@ function App() {
                         recommended={recommended}
                         noRecords={noRecords}
                     >
-                        {weatherData && <WeatherData data={weatherData} />}
+                        {isWeatherEnabled && weatherData && <WeatherData data={weatherData} />}
                     </MainSection>
                     <div className='flex flex-col gap-2'>
                         <h3 className='text-lg font-semibold text-neutral-300 text-center'>
