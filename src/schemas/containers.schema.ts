@@ -1,9 +1,11 @@
 import { z } from 'zod'
 
+export const MAX_CONTAINER_VOLUME = 10_000
+
 export const containerSchema = z.object({
     id: z.string(), // Id do container
-    name: z.string(), // Nome do container
-    volume: z.number().int().positive().max(10_000), // Volume do container em ml
+    name: z.string().optional(), // Nome do container
+    volume: z.number().int().positive().max(MAX_CONTAINER_VOLUME), // Volume do container em ml
 })
 export type Container = z.infer<typeof containerSchema>
 

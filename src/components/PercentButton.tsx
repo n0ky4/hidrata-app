@@ -2,19 +2,20 @@ import { Menu, MenuButton, MenuItem, MenuItems, MenuSeparator } from '@headlessu
 import { PlusCircle } from 'lucide-react'
 import { Fragment } from 'react/jsx-runtime'
 import { twMerge } from 'tailwind-merge'
-import { DefaultContainer, defaultContainers } from '../core/defaultContainers'
+import { useAppHandler } from '../core/appHandler'
+import { defaultContainers } from '../core/defaultContainers'
 import { units } from '../core/units'
 import { useLocale } from '../i18n/context/contextHook'
+import { useContainers } from '../stores/containers.store'
 import { styles } from './Select'
 
 interface PercentButtonProps {
-    onAdd: (type: DefaultContainer | 'custom') => void
     percentage: number
     drank: number
     recommended: number
 }
 
-export function PercentButton({ percentage, drank, recommended, onAdd }: PercentButtonProps) {
+export function PercentButton({ percentage, drank, recommended }: PercentButtonProps) {
     const { t } = useLocale()
 
     const volumeUnit = units.useConfigVolume()
@@ -34,6 +35,15 @@ export function PercentButton({ percentage, drank, recommended, onAdd }: Percent
 
     const formattedDrank = new Intl.NumberFormat().format(convertedDrank)
     const formattedRecommended = new Intl.NumberFormat().format(convertedRecommended)
+
+    const containers = useContainers((state) => state.data?.containers)
+
+    const {
+        addDefaultContainerRecord,
+        requestOpenAddWaterModal,
+        addVolumeRecord,
+        addContainerRecord,
+    } = useAppHandler()
 
     return (
         <Menu as='div' className='relative group'>
@@ -75,7 +85,7 @@ export function PercentButton({ percentage, drank, recommended, onAdd }: Percent
                 <MenuItem
                     as='button'
                     className={styles.selectOption}
-                    onClick={() => onAdd('glass')}
+                    onClick={() => addDefaultContainerRecord('glass')}
                 >
                     {t('generic.glass')} (
                     {units.convertVolume(defaultContainers.glass, {
@@ -88,7 +98,7 @@ export function PercentButton({ percentage, drank, recommended, onAdd }: Percent
                 <MenuItem
                     as='button'
                     className={styles.selectOption}
-                    onClick={() => onAdd('bottle')}
+                    onClick={() => addDefaultContainerRecord('bottle')}
                 >
                     {t('generic.bottle')} (
                     {units.convertVolume(defaultContainers.bottle, {
@@ -98,11 +108,49 @@ export function PercentButton({ percentage, drank, recommended, onAdd }: Percent
                     })}
                     )
                 </MenuItem>
+
+                {/* custom containers below */}
+                {containers &&
+                    containers.length > 0 &&
+                    containers.map((container) => {
+                        const volume = units.convertVolume(container.volume, {
+                            to: volumeUnit,
+                            symbol: true,
+                            decimals: 0,
+                        })
+
+                        if (!container.name) {
+                            // add volume
+                            return (
+                                <MenuItem
+                                    key={container.id}
+                                    as='button'
+                                    className={styles.selectOption}
+                                    onClick={() => addVolumeRecord(container.volume)}
+                                >
+                                    {volume}
+                                </MenuItem>
+                            )
+                        }
+
+                        return (
+                            <MenuItem
+                                key={container.id}
+                                as='button'
+                                className={styles.selectOption}
+                                onClick={() => addContainerRecord(container.id, container.volume)}
+                            >
+                                {container.name} ({volume})
+                            </MenuItem>
+                        )
+                    })}
+
                 <MenuSeparator className='border-t border-neutral-800' />
+
                 <MenuItem
                     as='button'
                     className={styles.selectOption}
-                    onClick={() => onAdd('custom')}
+                    onClick={() => requestOpenAddWaterModal()}
                 >
                     <PlusCircle size={20} strokeWidth={2} />
                     {t('generic.add')}

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { units } from '../core/units'
 import { Record } from '../schemas/data.schema'
+import { useContainers } from '../stores/containers.store'
 import { Button } from './Button'
 
 interface HistoryEntryProps {
@@ -15,8 +16,11 @@ export function HistoryEntry({ entry, onEdit, onRemove }: HistoryEntryProps) {
     const [time, setTime] = useState('')
 
     const volumeUnit = units.useConfigVolume()
+    const getContainer = useContainers((state) => state.getContainer)
 
-    const convertedAmount = units.convertVolume(entry.amount, {
+    const container = entry.containerId ? getContainer(entry.containerId) : null
+
+    const convertedVolume = units.convertVolume(entry.volume, {
         from: 'ml',
         to: volumeUnit,
         decimals: 0,
@@ -66,7 +70,11 @@ export function HistoryEntry({ entry, onEdit, onRemove }: HistoryEntryProps) {
         >
             <div className='flex items-center'>
                 <span className='text-neutral-400 min-w-32'>{time}</span>
-                <span>bebeu {convertedAmount}</span>
+                {container?.name ? (
+                    <span title={convertedVolume}>bebeu no(a) {container.name}</span>
+                ) : (
+                    <span>bebeu {convertedVolume}</span>
+                )}
             </div>
             <div className='flex items-center gap-2'>
                 <Button theme='ghost' square onClick={onEdit}>

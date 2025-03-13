@@ -18,7 +18,9 @@ interface Actions {
     init: () => void
     setContainers: (containers: Containers) => void
     containerArrayModifier: (operation: (containers: Container[]) => Container[]) => void
-    addContainer: (container: ContainerCreateData) => void
+    //
+    getContainer: (id: string) => Container | undefined
+    addContainer: (container: ContainerCreateData) => string
     updateContainer: (container: ContainerUpdateData) => void
     renameContainer: (id: string, name: string) => void
     removeContainer: (id: string) => void
@@ -37,6 +39,11 @@ export const useContainers = create(
                         data,
                     }
                 }),
+
+            getContainer: (id) => {
+                if (!get().data) return undefined
+                return get()?.data?.containers.find((c) => c.id === id)
+            },
 
             setContainers: (containers) =>
                 set((state) => ({
@@ -57,11 +64,11 @@ export const useContainers = create(
                     }
                 }),
 
-            addContainer: (container) =>
-                get().containerArrayModifier((containers) => [
-                    ...containers,
-                    { id: shortId(), ...container },
-                ]),
+            addContainer: (container) => {
+                const id = shortId()
+                get().containerArrayModifier((containers) => [...containers, { id, ...container }])
+                return id
+            },
 
             updateContainer: (container) =>
                 get().containerArrayModifier((containers) =>

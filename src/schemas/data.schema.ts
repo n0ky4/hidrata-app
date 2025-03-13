@@ -4,7 +4,7 @@ import { weather } from '../core/weather'
 export const recordSchema = z.object({
     id: z.string(), // ID do registro
     time: z.string(), // Data em UTC
-    amount: z.number().positive(), // Quantidade deve ser um número positivo
+    volume: z.number().positive(), // Volume deve ser um número positivo
     containerId: z.string().optional(), // Container é opcional
 })
 

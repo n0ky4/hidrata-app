@@ -1,6 +1,5 @@
 import { buildStyles, CircularProgressbar } from 'react-circular-progressbar'
 import { ClassNameValue, twMerge } from 'tailwind-merge'
-import { DefaultContainer } from '../core/defaultContainers'
 import { units } from '../core/units'
 import { useLocale } from '../i18n/context/contextHook'
 import { PercentButton } from './PercentButton'
@@ -10,7 +9,6 @@ interface MainSectionProps {
     recommended: number
     calculated: boolean
     percentage: number
-    onAdd: (type: DefaultContainer | 'custom') => void
     className?: ClassNameValue
     children?: React.ReactNode
 }
@@ -20,7 +18,6 @@ export function MainSection({
     recommended,
     calculated,
     percentage,
-    onAdd,
     className,
     children,
 }: MainSectionProps) {
@@ -37,7 +34,6 @@ export function MainSection({
     })
 
     const opacityTransition = twMerge('common-transition', calculated ? 'opacity-100' : 'opacity-0')
-
     const remainingComponent = <b className='text-neutral-100'>{remainingLabel}</b>
 
     return (
@@ -60,7 +56,6 @@ export function MainSection({
                         drank={drank}
                         recommended={recommended}
                         percentage={percentage}
-                        onAdd={onAdd}
                     />
                 </div>
             </div>

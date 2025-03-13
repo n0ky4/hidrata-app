@@ -47,8 +47,7 @@ function App() {
 
     // computed
     const allRecords = useData((state) => state.data?.consumption.history)
-    const { getDailyConsumed, getDailyRecords, getPercentage, onAddRecord, onRemoveRecord } =
-        useAppHandler()
+    const { getDailyConsumed, getDailyRecords, getPercentage, removeRecord } = useAppHandler()
 
     const records = getDailyRecords(allRecords || [])
     const drank = getDailyConsumed(records)
@@ -92,7 +91,6 @@ function App() {
                         drank={drank}
                         percentage={percentage}
                         recommended={recommended}
-                        onAdd={onAddRecord}
                     >
                         {weatherData && <WeatherData data={weatherData} />}
                     </MainSection>
@@ -107,7 +105,7 @@ function App() {
                                         key={index}
                                         entry={entry}
                                         onEdit={() => console.log('edit')}
-                                        onRemove={() => onRemoveRecord(entry.id)}
+                                        onRemove={() => removeRecord(entry.id)}
                                     />
                                 ))}
                             </div>
