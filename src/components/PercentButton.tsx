@@ -39,9 +39,6 @@ export function PercentButton({
         decimals: 0,
     })
 
-    const formattedDrank = new Intl.NumberFormat().format(convertedDrank)
-    const formattedRecommended = new Intl.NumberFormat().format(convertedRecommended)
-
     const containers = useContainers((state) => state.data?.containers)
 
     const {
@@ -74,7 +71,7 @@ export function PercentButton({
                                     active && 'text-neutral-300'
                                 )}
                             >
-                                {formattedDrank} / {formattedRecommended}{' '}
+                                {convertedDrank} / {convertedRecommended}{' '}
                                 {units.getVolume(volumeUnit).symbol}
                             </span>
                         </div>
