@@ -97,7 +97,7 @@ export function FirstUseScreen({ show, onClose }: FirstUseProps) {
     }
 
     return (
-        <Modal show={show} onClose={() => {}} noBackdrop>
+        <Modal show={show} onClose={() => {}} noBackdrop transition={false}>
             <div
                 className={twMerge(
                     'absolute top-0 left-0 h-1 overflow-hidden',

@@ -8,6 +8,8 @@ export interface CommonModalProps {
     show: boolean
     onClose: () => void
     noBackdrop?: boolean
+    className?: string
+    transition?: boolean
 }
 
 interface ModalProps extends CommonModalProps {
@@ -56,21 +58,27 @@ export function ModalSection({ title, children }: ModalSectionProps) {
     )
 }
 
-export function Modal({ onClose, show, children, noBackdrop = false }: ModalProps) {
+export function Modal({
+    onClose,
+    show,
+    children,
+    noBackdrop = false,
+    transition = true,
+    className,
+}: ModalProps) {
     return (
         <Dialog
             open={show}
             onClose={onClose}
             className={twMerge(
                 'fixed top-0 left-0 w-screen h-screen z-50 group',
-                'common-transition'
-                // 'data-[closed]:opacity-0 opacity-100'
+                transition && 'common-transition',
+                className
             )}
-            // transition
         >
             {!noBackdrop && (
                 <DialogBackdrop
-                    transition
+                    transition={transition}
                     className={twMerge(
                         'fixed inset-0 bg-black/30 common-transition',
                         // closed
@@ -83,7 +91,7 @@ export function Modal({ onClose, show, children, noBackdrop = false }: ModalProp
 
             <div className='fixed flex w-screen items-center justify-center p-4 lg:pt-20 pt-10'>
                 <DialogPanel
-                    transition
+                    transition={transition}
                     className={twMerge(
                         'relative overflow-hidden w-full max-w-xl',
                         'p-12 rounded-xl',
@@ -100,29 +108,5 @@ export function Modal({ onClose, show, children, noBackdrop = false }: ModalProp
                 </DialogPanel>
             </div>
         </Dialog>
-
-        // <Dialog open={show} onClose={() => {}} className='relative z-50'>
-        // <div className='fixed flex w-screen items-center justify-center p-4 lg:pt-20 pt-10'>
-        //     <DialogPanel className='relative overflow-hidden w-full max-w-xl flex flex-col gap-4 border border-neutral-800 bg-neutral-900 p-12 rounded-xl'>
-        //         <div
-        //             className={twMerge(
-        //                 'absolute top-0 left-0 h-1 overflow-hidden',
-        //                 'common-transition'
-        //             )}
-        //             style={{
-        //                 width: `${progress}%`,
-        //             }}
-        //         >
-        //             <div className='absolute top-0 left-0 w-full h-1 rounded-full bg-gradient-to-r from-blue-500 to-blue-400' />
-        //         </div>
-        //         <Stage
-        //             nextStage={nextStage}
-        //             prevStage={prevStage}
-        //             setState={setState}
-        //             state={state}
-        //         />
-        //     </DialogPanel>
-        // </div>
-        // </Dialog>
     )
 }
