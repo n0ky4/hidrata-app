@@ -32,13 +32,14 @@ const conditions = {
 export type Condition = (typeof conditions)[keyof typeof conditions]
 
 export type TemperatureLabel = 'VERY_COLD' | 'COLD' | 'MILD' | 'WARM' | 'HOT' | 'VERY_HOT'
-function getLabel(temp: number): TemperatureLabel {
-    if (temp <= 0) return 'VERY_COLD'
-    if (temp <= 5) return 'COLD'
-    if (temp <= 15) return 'MILD'
-    if (temp <= 25) return 'WARM'
-    if (temp <= 32) return 'HOT'
-    return 'VERY_HOT'
+function getLabel(temperature: number): TemperatureLabel {
+    const roundedTemperature = Math.round(temperature)
+    if (roundedTemperature <= 0) return 'VERY_COLD' // ... 0
+    if (roundedTemperature <= 5) return 'COLD' // 1 - 5
+    if (roundedTemperature <= 15) return 'MILD' // 6 - 15
+    if (roundedTemperature <= 25) return 'WARM' // 16 - 25
+    if (roundedTemperature <= 32) return 'HOT' // 26 - 32
+    return 'VERY_HOT' // 33 ...
 }
 
 export interface TemperatureData {
