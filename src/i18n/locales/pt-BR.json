@@ -8,7 +8,7 @@
         "save": "Salvar"
     },
     "addWater": {
-        "customVolume": "Volume personalizado",
+        "customContainer": "Recipiente personalizado",
         "nameInputLabel": "Nome (opcional)",
         "placeholders": [
             "Caneca que minha mãe me deu",
@@ -30,7 +30,6 @@
         "history": "Histórico",
         "language": "Idioma",
         "location": "Localização",
-        "minutes": "minutos",
         "noEntryMessage": "Não há registros para hoje... Que tal começar bebendo um copo de água?",
         "notifications": "Notificações",
         "notificationsDenied": "As notificações do navegador foram desativadas! Por favor, ative-as para receber lembretes.",
@@ -41,7 +40,15 @@
         "volume": "Volume",
         "weather": "Clima",
         "weight": "Peso",
-        "yearsOld": "anos"
+        "yearsOld": "anos",
+        "containers": "Recipientes",
+        "minuteAgo": "há {} minuto",
+        "hourAgo": "há {} hora",
+        "minutesAgo": "há {} minutos",
+        "hoursAgo": "há {} horas",
+        "drank": "bebeu {}",
+        "drankFrom": "bebeu no(a) {}",
+        "justNow": "agora mesmo"
     },
     "language": "Português (Brasil)",
     "settings": {

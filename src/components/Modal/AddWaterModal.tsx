@@ -78,7 +78,7 @@ export function AddWaterModal({ onClose: _onClose, show }: CommonModalProps) {
 
     return (
         <Modal show={show} onClose={onClose}>
-            <ModalTitle onClose={onClose}>{t('addWater.customVolume')}</ModalTitle>
+            <ModalTitle onClose={onClose}>{t('addWater.customContainer')}</ModalTitle>
 
             <div className='flex flex-col gap-4 w-full'>
                 <div className='w-full'>

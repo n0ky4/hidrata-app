@@ -1,8 +1,10 @@
+import { Trash2 } from 'lucide-react'
 import { location } from '../../core/location'
 import { AvailableTemperatures, AvailableVolumes, AvailableWeights, units } from '../../core/units'
 import { AvailableLanguages, i18n } from '../../i18n'
 import { useLocale } from '../../i18n/context/contextHook'
 import { useConfig } from '../../stores/config.store'
+import { useContainers } from '../../stores/containers.store'
 import { Button } from '../Button'
 import { Checkbox } from '../Checkbox'
 import { LocationForm } from '../FirstUseScreen/LocationForm'
@@ -65,6 +67,11 @@ export function SettingsModal({ show, onClose: _onClose }: CommonModalProps) {
     const ogLatitude = useConfig((state) => state.config?.weather.latitude) as number
     const ogLongitude = useConfig((state) => state.config?.weather.longitude) as number
 
+    const containers = useContainers((state) => state.data?.containers) || []
+    const removeContainer = useContainers((state) => state.removeContainer)
+
+    const volumeUnit = units.useConfigVolume()
+
     const onClose = () => {
         // handle location
 
@@ -86,6 +93,48 @@ export function SettingsModal({ show, onClose: _onClose }: CommonModalProps) {
             <ModalTitle onClose={onClose}>{t('generic.settings')}</ModalTitle>
             <ModalDescription>{t('settings.description')}</ModalDescription>
             <div className='max-h-96 overflow-y-auto flex flex-col gap-4 pt-[2px] pb-20 pl-[2px] pr-2'>
+                {containers.length > 0 && (
+                    <ModalSection title={t('generic.containers') as string}>
+                        <div className='flex flex-col gap-2'>
+                            {containers.map((container) => {
+                                const formattedVolume = units.convertVolume(container.volume, {
+                                    to: volumeUnit,
+                                    symbol: true,
+                                    decimals: 0,
+                                })
+
+                                return (
+                                    <div
+                                        className='bg-zinc-950/50 border border-zinc-800 p-2 rounded-lg flex items-center justify-between'
+                                        key={container.id}
+                                    >
+                                        {container.name ? (
+                                            <div>
+                                                <span className='text-zinc-300'>
+                                                    {container.name || 'Sem nome'}
+                                                </span>{' '}
+                                                <span className='text-zinc-400'>
+                                                    ({formattedVolume})
+                                                </span>
+                                            </div>
+                                        ) : (
+                                            <span className='text-zinc-400'>{formattedVolume}</span>
+                                        )}
+
+                                        <Button
+                                            theme='ghost'
+                                            square
+                                            className='w-8 h-8'
+                                            onClick={() => removeContainer(container.id)}
+                                        >
+                                            <Trash2 size={18} />
+                                        </Button>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </ModalSection>
+                )}
                 <ModalSection title={t('generic.language') as string}>
                     <Select
                         selected={lang}
