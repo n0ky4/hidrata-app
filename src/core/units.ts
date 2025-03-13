@@ -127,8 +127,9 @@ function convertVolume(value: number, options: ConvertVolumeOptions): string | n
     return symbol ? `${converted} ${toUnit.symbol}` : converted
 }
 
-function celsiusToFahrenheit(celsius: number): number {
-    return celsius * (9 / 5) + 32
+function celsiusToFahrenheit(celsius: number, round: boolean = true): number {
+    const converted = celsius * (9 / 5) + 32
+    return round ? Math.round(converted) : converted
 }
 
 function autoDetect(): [AvailableWeights, AvailableVolumes] {
@@ -208,6 +209,10 @@ const useConfigWeight = () => {
     return useConfig((state) => state.config?.units.weight) || 'kg'
 }
 
+const useConfigTemperature = () => {
+    return useConfig((state) => state.config?.units.temperature) || 'c'
+}
+
 export const units = {
     weight,
     volume,
@@ -229,4 +234,5 @@ export const units = {
     onSetTemperature,
     useConfigVolume,
     useConfigWeight,
+    useConfigTemperature,
 }
