@@ -22,7 +22,7 @@ export function Stage1({ nextStage }: StageProps) {
             <StageActions>
                 <div />
                 <Button onClick={nextStage}>
-                    {t('generic.gotIt')}!
+                    {t('actions.gotIt')}!
                     <ArrowRight size={20} strokeWidth={3} />
                 </Button>
             </StageActions>

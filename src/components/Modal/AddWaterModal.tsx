@@ -113,10 +113,10 @@ export function AddWaterModal({ onClose: _onClose, show }: CommonModalProps) {
 
             <ModalActions>
                 <Button onClick={onClose} theme='ghost'>
-                    {t('generic.close')}
+                    {t('actions.close')}
                 </Button>
                 <Button onClick={handleAdd} disabled={volumeError}>
-                    {t('generic.add')}
+                    {t('actions.add')}
                 </Button>
             </ModalActions>
         </Modal>

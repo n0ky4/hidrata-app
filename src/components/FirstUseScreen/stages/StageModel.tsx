@@ -17,7 +17,7 @@ export function BackButton({ onClick, ...rest }: React.HTMLProps<HTMLButtonEleme
     return (
         <Button onClick={onClick} theme='ghost' {...rest} type='button'>
             <ArrowLeft size={18} strokeWidth={3} />
-            {t('generic.back')}
+            {t('actions.back')}
         </Button>
     )
 }
@@ -26,7 +26,7 @@ export function NextButton({ onClick, ...rest }: React.HTMLProps<HTMLButtonEleme
     const { t } = useLocale()
     return (
         <Button onClick={onClick} {...rest} type='button'>
-            {t('generic.next')}
+            {t('actions.next')}
             <ArrowRight size={18} strokeWidth={3} />
         </Button>
     )

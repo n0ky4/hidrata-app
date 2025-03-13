@@ -187,7 +187,7 @@ export function SettingsModal({ show, onClose }: CommonModalProps) {
 
             <ModalActions>
                 <Button onClick={onClose} theme='ghost'>
-                    {t('generic.close')}
+                    {t('actions.close')}
                 </Button>
             </ModalActions>
         </Modal>

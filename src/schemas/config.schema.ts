@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { notifications } from '../core/notifications'
 import { theme } from '../core/theme'
-import { AvailableVolumes, AvailableWeights, units } from '../core/units'
+import { AvailableTemperatures, AvailableVolumes, AvailableWeights, units } from '../core/units'
 
 export const ageSchema = z.number().int().positive().min(1).max(120)
 export const weightSchema = z.number().positive().min(3).max(350)
@@ -24,6 +24,11 @@ export const configSchema = z.object({
             volume: z
                 .custom<AvailableVolumes>((value) => units.availableVolumes.includes(value))
                 .default('ml'),
+            temperature: z
+                .custom<AvailableTemperatures>((value) =>
+                    units.availableTemperatures.includes(value)
+                )
+                .default('c'),
         })
         .default({}),
     theme: z

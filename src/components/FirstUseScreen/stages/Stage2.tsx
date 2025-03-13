@@ -3,7 +3,12 @@
 import { produce } from 'immer'
 import { useEffect } from 'react'
 import { StateType } from '..'
-import { AvailableVolumes, AvailableWeights, units } from '../../../core/units'
+import {
+    AvailableTemperatures,
+    AvailableVolumes,
+    AvailableWeights,
+    units,
+} from '../../../core/units'
 import { useLocale } from '../../../i18n/context/contextHook'
 import { Select } from '../../Select'
 import {
@@ -20,6 +25,7 @@ export function Stage2({ nextStage, prevStage, state, setState }: StageProps) {
 
     const weight = state.units ? state.units.weight : ''
     const volume = state.units ? state.units.volume : ''
+    const temperature = state.units ? state.units.temperature : ''
 
     const setWeight = (value: AvailableWeights) => {
         setState((prev: StateType) =>
@@ -39,12 +45,18 @@ export function Stage2({ nextStage, prevStage, state, setState }: StageProps) {
         )
     }
 
+    const setTemperature = (value: AvailableTemperatures) => {
+        setState((prev: StateType) =>
+            produce(prev, (draft) => {
+                if (draft.units === undefined) draft.units = {}
+                draft.units.temperature = value
+            })
+        )
+    }
+
     const weightSelectOptions = units.getWeightSelectOptions(t)
     const volumeSelectOptions = units.getVolumeSelectOptions(t)
-
-    const beforeNext = () => {
-        nextStage()
-    }
+    const temperatureSelectOptions = units.getTemperatureSelectOptions(t)
 
     useEffect(() => {
         if (state.unitsDetected) return
@@ -102,11 +114,28 @@ export function Stage2({ nextStage, prevStage, state, setState }: StageProps) {
                             w='lg'
                         />
                     </div>
+                    <div>
+                        <label className='mb-1 text-neutral-400 text-sm font-medium'>
+                            {t('weather.temperature')}
+                        </label>
+                        <Select
+                            options={temperatureSelectOptions}
+                            selected={temperature || 'c'}
+                            onSelect={(value) =>
+                                units.onSetTemperature(
+                                    value as AvailableTemperatures,
+                                    setTemperature,
+                                    temperatureSelectOptions
+                                )
+                            }
+                            w='lg'
+                        />
+                    </div>
                 </div>
             </StageContent>
             <StageActions>
                 <BackButton onClick={prevStage} />
-                <NextButton onClick={beforeNext} />
+                <NextButton onClick={nextStage} />
             </StageActions>
         </>
     )
