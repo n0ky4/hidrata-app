@@ -25,7 +25,7 @@ export function PercentButton({
     const { t } = useLocale()
 
     const volumeUnit = units.useConfigVolume()
-    const formattedPercentage = percentage < 999 ? `${percentage.toFixed(0)}%` : '+999%'
+    const formattedPercentage = percentage < 999 ? `${Math.floor(percentage)}%` : '+999%'
 
     const convertedDrank = units.convertVolume(drank, {
         from: 'ml',
