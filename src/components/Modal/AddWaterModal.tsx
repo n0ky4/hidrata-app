@@ -39,7 +39,8 @@ export function AddWaterModal({ onClose: _onClose, show }: CommonModalProps) {
 
     const numberVolume = Number(state.volume)
 
-    const volumeError = !!(state.volume && (numberVolume <= 0 || numberVolume > maxVolume))
+    const hasVolume = !isNaN(numberVolume) && numberVolume > 0
+    const volumeError = numberVolume > maxVolume
 
     const handleAdd = () => {
         const { name, save } = state
@@ -96,7 +97,7 @@ export function AddWaterModal({ onClose: _onClose, show }: CommonModalProps) {
                         error={volumeError}
                     />
                 </div>
-                <Checkbox checked={state.save} onChange={setSave} label={t('generic.save')} />
+                <Checkbox checked={state.save} onChange={setSave} label={t('actions.save')} />
                 {state.save && (
                     <div className='w-full'>
                         <Label>{t('addWater.nameInputLabel')}</Label>
@@ -115,7 +116,7 @@ export function AddWaterModal({ onClose: _onClose, show }: CommonModalProps) {
                 <Button onClick={onClose} theme='ghost'>
                     {t('actions.close')}
                 </Button>
-                <Button onClick={handleAdd} disabled={volumeError}>
+                <Button onClick={handleAdd} disabled={volumeError || !hasVolume}>
                     {t('actions.add')}
                 </Button>
             </ModalActions>

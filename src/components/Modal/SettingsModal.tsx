@@ -1,9 +1,11 @@
-import { AvailableVolumes, AvailableWeights, units } from '../../core/units'
+import { location } from '../../core/location'
+import { AvailableTemperatures, AvailableVolumes, AvailableWeights, units } from '../../core/units'
 import { AvailableLanguages, i18n } from '../../i18n'
 import { useLocale } from '../../i18n/context/contextHook'
 import { useConfig } from '../../stores/config.store'
 import { Button } from '../Button'
 import { Checkbox } from '../Checkbox'
+import { LocationForm } from '../FirstUseScreen/LocationForm'
 import { Input } from '../Input'
 import { Label } from '../Label'
 import { Select } from '../Select'
@@ -18,7 +20,7 @@ import {
 
 const langOptions = i18n.getLanguageOptions()
 
-export function SettingsModal({ show, onClose }: CommonModalProps) {
+export function SettingsModal({ show, onClose: _onClose }: CommonModalProps) {
     const { t, setAppLanguage, lang } = useLocale()
 
     const notification = useConfig((state) => state.config?.notifications.enabled) as boolean
@@ -38,6 +40,10 @@ export function SettingsModal({ show, onClose }: CommonModalProps) {
     const setVolume = useConfig((state) => state.setUnitsVolume)
     const volumeSelectOptions = units.getVolumeSelectOptions(t)
 
+    const temperature = useConfig((state) => state.config?.units.temperature) as string
+    const setTemperature = useConfig((state) => state.setUnitsTemperature)
+    const temperatureSelectOptions = units.getTemperatureSelectOptions(t)
+
     // const themeMode = useConfig((state) => state.config?.theme.mode) as string
     // const setThemeMode = useConfig((state) => state.setThemeMode)
 
@@ -50,25 +56,40 @@ export function SettingsModal({ show, onClose }: CommonModalProps) {
     const weatherEnabled = useConfig((state) => state.config?.weather.enabled) as boolean
     const setWeatherEnabled = useConfig((state) => state.setWeatherEnabled)
 
-    const latitude = useConfig((state) => state.config?.weather.latitude) as number
-    const setLatitude = useConfig((state) => state.setWeatherLatitude)
+    const { locState, handleLocationChange, fetchCustomCoords } =
+        location.useLocationManagement(lang)
 
-    const longitude = useConfig((state) => state.config?.weather.longitude) as number
+    const setLatitude = useConfig((state) => state.setWeatherLatitude)
     const setLongitude = useConfig((state) => state.setWeatherLongitude)
 
-    const handleLangChange = (lang: AvailableLanguages) => {
-        setAppLanguage(lang)
+    const ogLatitude = useConfig((state) => state.config?.weather.latitude) as number
+    const ogLongitude = useConfig((state) => state.config?.weather.longitude) as number
+
+    const onClose = () => {
+        // handle location
+
+        if (locState.coords && weatherEnabled) {
+            const changed =
+                locState.coords.lat !== ogLatitude || locState.coords.lon !== ogLongitude
+
+            if (changed) {
+                setLatitude(locState.coords.lat)
+                setLongitude(locState.coords.lon)
+                window.location.reload()
+            }
+        }
+        _onClose()
     }
 
     return (
         <Modal show={show} onClose={onClose}>
             <ModalTitle onClose={onClose}>{t('generic.settings')}</ModalTitle>
             <ModalDescription>{t('settings.description')}</ModalDescription>
-            <div className='max-h-96 overflow-y-auto flex flex-col gap-4'>
+            <div className='max-h-96 overflow-y-auto flex flex-col gap-4 pt-[2px] pb-20 pl-[2px] pr-2'>
                 <ModalSection title={t('generic.language') as string}>
                     <Select
                         selected={lang}
-                        onSelect={(value) => handleLangChange(value as AvailableLanguages)}
+                        onSelect={(value) => setAppLanguage(value as AvailableLanguages)}
                         options={langOptions}
                         w='md+'
                     />
@@ -130,6 +151,21 @@ export function SettingsModal({ show, onClose }: CommonModalProps) {
                                 options={volumeSelectOptions}
                             />
                         </div>
+                        <div>
+                            <Label>{t('weather.temperature')}</Label>
+                            <Select
+                                selected={temperature}
+                                onSelect={(value) =>
+                                    units.onSetTemperature(
+                                        value as AvailableTemperatures,
+                                        setTemperature,
+                                        temperatureSelectOptions
+                                    )
+                                }
+                                w='lg'
+                                options={temperatureSelectOptions}
+                            />
+                        </div>
                     </div>
                 </ModalSection>
                 {/* <ModalSection title='Tema'>
@@ -157,30 +193,11 @@ export function SettingsModal({ show, onClose }: CommonModalProps) {
                         className='mb-2'
                     />
                     {weatherEnabled && (
-                        <div className='flex flex-col gap-2'>
-                            <div>
-                                <Label>Latitude</Label>
-                                <Input
-                                    type='number'
-                                    value={latitude || ''}
-                                    min={-90}
-                                    max={90}
-                                    onChange={(e) => setLatitude(Number(e.target.value))}
-                                    className='w-32'
-                                />
-                            </div>
-                            <div>
-                                <Label>Longitude</Label>
-                                <Input
-                                    type='number'
-                                    value={longitude || ''}
-                                    min={-180}
-                                    max={180}
-                                    onChange={(e) => setLongitude(Number(e.target.value))}
-                                    className='w-32'
-                                />
-                            </div>
-                        </div>
+                        <LocationForm
+                            locState={locState}
+                            handleLocationChange={handleLocationChange}
+                            fetchCustomCoords={fetchCustomCoords}
+                        />
                     )}
                 </ModalSection>
             </div>

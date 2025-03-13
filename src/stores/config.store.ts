@@ -19,6 +19,7 @@ interface Actions {
     setNotificationsSound: (sound: Config['notifications']['sound']) => void
     setUnitsWeight: (weight: Config['units']['weight']) => void
     setUnitsVolume: (volume: Config['units']['volume']) => void
+    setUnitsTemperature: (temperature: Config['units']['temperature']) => void
     setThemeMode: (mode: Config['theme']['mode']) => void
     setThemeAccentColor: (color: Config['theme']['accentColor']) => void
     setThemeFont: (font: Config['theme']['font']) => void
@@ -92,6 +93,9 @@ export const useConfig = create(
 
             setUnitsVolume: (volume: Config['units']['volume']) =>
                 get().setter('units.volume', volume),
+
+            setUnitsTemperature: (temperature: Config['units']['temperature']) =>
+                get().setter('units.temperature', temperature),
 
             setThemeMode: (mode: Config['theme']['mode']) => get().setter('theme.mode', mode),
 

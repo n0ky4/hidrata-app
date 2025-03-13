@@ -159,7 +159,7 @@ export function PercentButton({
                     onClick={() => requestOpenAddWaterModal()}
                 >
                     <PlusCircle size={20} strokeWidth={2} />
-                    {t('generic.add')}
+                    {t('actions.add')}
                 </MenuItem>
             </MenuItems>
         </Menu>
