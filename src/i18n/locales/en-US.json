@@ -4,31 +4,33 @@
     "generic": {
         "weight": "Weight",
         "volume": "Volume",
-        "next": "Next",
-        "back": "Back",
-        "close": "Close",
         "age": "Age",
         "yearsOld": "years old",
-        "gotIt": "Got it",
-        "location": "Location",
-        "coords": "Coordinates",
         "remindMeIn": "Remind me in",
         "minutes": "minutes",
         "notificationsDenied": "Browser notifications are disabled! Please enable them to receive reminders.",
-        "history": "History",
         "noEntryMessage": "There are no records for today... How about starting by drinking a glass of water?",
         "remainingMessage": "Let's go! There are still {} left",
         "congratulations": "Congratulations! You've reached your daily goal!",
         "dailyWaterIntake": "Daily Water Intake",
-        "add": "Add",
+        "location": "Location",
+        "coords": "Coordinates",
+        "history": "History",
         "glass": "Glass",
         "bottle": "Bottle",
         "settings": "Settings",
         "notifications": "Notifications",
         "weather": "Weather",
         "units": "Units",
-        "language": "Language",
-        "save": "Save"
+        "language": "Language"
+    },
+    "actions": {
+        "save": "Save",
+        "add": "Add",
+        "next": "Next",
+        "back": "Back",
+        "close": "Close",
+        "gotIt": "Got it"
     },
     "settings": {
         "description": "See all available options to configure the app and make it your way.",
@@ -52,6 +54,7 @@
         "favorableWeather": "Favorable weather",
         "unfavorableWeather": "Unfavorable weather",
         "unfavorableWeatherTitle": "An extra amount has been added due to unfavorable weather conditions. Stay safe!",
+        "temperature": "Temperature",
         "apparentTemperature": "Apparent temperature",
         "relativeHumidity": "Relative humidity",
         "labels": {
@@ -100,6 +103,8 @@
         "flOz": "Fluid Ounce",
         "flOzP": "Fluid Ounces",
         "ml": "Mililiter",
-        "mlP": "Mililiters"
+        "mlP": "Mililiters",
+        "celsius": "Celsius",
+        "fahrenheit": "Fahrenheit"
     }
 }

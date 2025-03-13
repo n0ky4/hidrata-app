@@ -52,6 +52,7 @@
         "favorableWeather": "Clima favorável",
         "unfavorableWeather": "Clima desfavorável",
         "unfavorableWeatherTitle": "Foi adicionada uma quantidade extra devido às condições climáticas desfavoráveis. Se cuida!",
+        "temperature": "Temperatura",
         "apparentTemperature": "Sensação térmica",
         "relativeHumidity": "Umidade relativa",
         "labels": {
@@ -100,6 +101,8 @@
         "flOz": "Onça fluida",
         "flOzP": "Onças fluidas",
         "ml": "Mililitro",
-        "mlP": "Mililitros"
+        "mlP": "Mililitros",
+        "celsius": "Celsius",
+        "fahrenheit": "Fahrenheit"
     }
 }
