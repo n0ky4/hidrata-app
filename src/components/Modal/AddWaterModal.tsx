@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useAppHandler } from '../../core/appHandler'
 import { units } from '../../core/units'
 import { useLocale } from '../../i18n/context/contextHook'
@@ -17,7 +17,7 @@ interface AddWaterState {
 }
 
 export function AddWaterModal({ onClose: _onClose, show }: CommonModalProps) {
-    const { t } = useLocale()
+    const { t, lang } = useLocale()
 
     const addContainer = useContainers((state) => state.addContainer)
     const { addContainerRecord, addVolumeRecord } = useAppHandler()
@@ -63,30 +63,42 @@ export function AddWaterModal({ onClose: _onClose, show }: CommonModalProps) {
         _onClose()
     }
 
+    const placeholders = t('addWater.placeholders').toString().split(',')
+
+    const randomPlaceholder = useMemo(() => {
+        return placeholders[Math.floor(Math.random() * placeholders.length)]
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [lang])
+
     return (
         <Modal show={show} onClose={onClose}>
-            <ModalTitle onClose={onClose}>Quantidade personalizada</ModalTitle>
+            <ModalTitle onClose={onClose}>{t('addWater.customVolume')}</ModalTitle>
 
             <div className='flex flex-col gap-4 w-full'>
                 <div className='w-full'>
-                    <Label error={volumeError}>Quantidade</Label>
+                    <Label error={volumeError}>{t('generic.volume')}</Label>
                     <Input
                         type='number'
                         className='hide-arrows w-full'
-                        placeholder='1500 ml'
+                        placeholder={units.convertVolume(250, {
+                            from: 'ml',
+                            to: volumeUnit,
+                            decimals: 0,
+                            symbol: true,
+                        })}
                         value={state.volume || ''}
                         onChange={(e) => setVolume(e.target.value)}
                         error={volumeError}
                     />
                 </div>
-                <Checkbox checked={state.save} onChange={setSave} label='Salvar' />
+                <Checkbox checked={state.save} onChange={setSave} label={t('generic.save')} />
                 {state.save && (
                     <div className='w-full'>
-                        <Label>Nome (opcional)</Label>
+                        <Label>{t('addWater.nameInputLabel')}</Label>
                         <Input
                             type='text'
                             className='w-full'
-                            placeholder='Caneca que minha mãe me deu'
+                            placeholder={randomPlaceholder}
                             value={state.name || ''}
                             onChange={(e) => setName(e.target.value)}
                         />

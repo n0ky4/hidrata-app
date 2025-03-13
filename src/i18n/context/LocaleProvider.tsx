@@ -36,6 +36,16 @@ export function LocaleProvider({ children }: PropsWithChildren) {
                 if (!value) return path
             }
 
+            if (Array.isArray(value)) {
+                return value.map((v) => {
+                    if (typeof v !== 'string') return path
+                    if (components) {
+                        return component.insert(v, components)
+                    }
+                    return v
+                })
+            }
+
             if (typeof value !== 'string') return path
             if (components) {
                 return component.insert(value, components)

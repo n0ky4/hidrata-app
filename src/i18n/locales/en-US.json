@@ -27,13 +27,26 @@
         "notifications": "Notifications",
         "weather": "Weather",
         "units": "Units",
-        "language": "Language"
+        "language": "Language",
+        "save": "Save"
     },
     "settings": {
         "description": "See all available options to configure the app and make it your way.",
         "enableNotifications": "Enable notifications",
         "notificationInterval": "Notification interval (in minutes)",
         "enableWeatherDetection": "Enable weather detection"
+    },
+    "addWater": {
+        "customVolume": "Custom volume",
+        "nameInputLabel": "Name (optional)",
+        "placeholders": [
+            "Mug my mom gave me",
+            "Hello Kitty glass",
+            "Botafogo bottle",
+            "Cheese spread glass",
+            "Aluminum glass that keeps water cold",
+            "Holy grail"
+        ]
     },
     "weather": {
         "favorableWeather": "Favorable weather",

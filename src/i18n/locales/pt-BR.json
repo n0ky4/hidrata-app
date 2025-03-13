@@ -27,13 +27,26 @@
         "units": "Unidades",
         "settings": "Configurações",
         "notifications": "Notificações",
-        "language": "Idioma"
+        "language": "Idioma",
+        "save": "Salvar"
     },
     "settings": {
         "description": "Veja todas as opções disponíveis para configurar o aplicativo e deixe-o do seu jeito.",
         "enableNotifications": "Ativar notificações",
         "notificationInterval": "Intervalo de notificação (em minutos)",
         "enableWeatherDetection": "Ativar detecção de clima"
+    },
+    "addWater": {
+        "customVolume": "Volume personalizado",
+        "nameInputLabel": "Nome (opcional)",
+        "placeholders": [
+            "Caneca que minha mãe me deu",
+            "Copo da Hello Kitty",
+            "Garrafa do Botafogo",
+            "Copo de requeijão",
+            "Copo de alumínio que deixa a água gelada",
+            "Cálice sagrado"
+        ]
     },
     "weather": {
         "favorableWeather": "Clima favorável",
