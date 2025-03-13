@@ -1,7 +1,7 @@
 import { PropsWithChildren, ReactNode, useCallback, useEffect, useState } from 'react'
 import { AvailableLanguages, i18n } from '..'
 import { component } from '../../util/component'
-import { LSKEY } from '../../util/localStorageKeys'
+import { LSKEY } from '../../util/localStorage'
 import { LocaleContext } from './contextHook'
 
 export function LocaleProvider({ children }: PropsWithChildren) {

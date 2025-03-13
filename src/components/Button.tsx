@@ -11,6 +11,11 @@ const themes = {
         'hover:bg-white/10',
         'focus-visible:ring-2 focus-visible:ring-white/50'
     ),
+    danger: twMerge(
+        'bg-red-700 text-neutral-100',
+        'hover:bg-red-800',
+        'focus-visible:ring-2 focus-visible:ring-red-100/75'
+    ),
 }
 type Theme = keyof typeof themes
 

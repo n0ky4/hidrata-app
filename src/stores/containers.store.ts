@@ -6,7 +6,7 @@ import {
     Containers,
     ContainerUpdateData,
 } from '../schemas/containers.schema'
-import { LSKEY } from '../util/localStorageKeys'
+import { LSKEY } from '../util/localStorage'
 import { shortId } from '../util/nanoid'
 import { containersSchema } from './../schemas/containers.schema'
 

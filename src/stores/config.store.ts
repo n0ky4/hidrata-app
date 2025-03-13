@@ -3,7 +3,7 @@ import { produce } from 'immer'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { Config, ConfigInitOptions, configSchema } from '../schemas/config.schema'
-import { LSKEY } from '../util/localStorageKeys'
+import { LSKEY } from '../util/localStorage'
 
 interface State {
     config: Config | null

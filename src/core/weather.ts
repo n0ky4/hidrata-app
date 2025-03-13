@@ -1,4 +1,4 @@
-import { LSKEY } from '../util/localStorageKeys'
+import { LSKEY } from '../util/localStorage'
 import { log } from '../util/logger'
 import { Coords } from './location'
 

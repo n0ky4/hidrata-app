@@ -1,6 +1,6 @@
 import { useContainers } from '../stores/containers.store'
 import { useData } from '../stores/data.store'
-import { LSKEY } from '../util/localStorageKeys'
+import { LSKEY } from '../util/localStorage'
 import { log } from '../util/logger'
 
 export function useInitHandler() {

@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { Data, dataSchema, HistoryEntry, Record, RecordCreateData } from '../schemas/data.schema'
-import { LSKEY } from '../util/localStorageKeys'
+import { LSKEY } from '../util/localStorage'
 import { shortId } from '../util/nanoid'
 
 interface State {

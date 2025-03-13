@@ -24,6 +24,7 @@ interface ModalTitleProps {
 interface ModalSectionProps {
     title: string
     children: React.ReactNode
+    className?: string
 }
 
 export function ModalTitle({ children, onClose }: ModalTitleProps) {
@@ -49,9 +50,9 @@ export function ModalActions({ children }: PropsWithChildren) {
     return <div className='flex items-center justify-end gap-4 mt-8'>{children}</div>
 }
 
-export function ModalSection({ title, children }: ModalSectionProps) {
+export function ModalSection({ title, children, className }: ModalSectionProps) {
     return (
-        <div className='flex flex-col gap-1'>
+        <div className={twMerge('flex flex-col gap-1', className)}>
             <h3 className='text-lg font-semibold text-neutral-100'>{title}</h3>
             {children}
         </div>

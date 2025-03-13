@@ -1,10 +1,12 @@
 import { Trash2 } from 'lucide-react'
+import { useState } from 'react'
 import { location } from '../../core/location'
 import { AvailableTemperatures, AvailableVolumes, AvailableWeights, units } from '../../core/units'
 import { AvailableLanguages, i18n } from '../../i18n'
 import { useLocale } from '../../i18n/context/contextHook'
 import { useConfig } from '../../stores/config.store'
 import { useContainers } from '../../stores/containers.store'
+import { removeAllData } from '../../util/localStorage'
 import { Button } from '../Button'
 import { Checkbox } from '../Checkbox'
 import { LocationForm } from '../FirstUseScreen/LocationForm'
@@ -88,11 +90,25 @@ export function SettingsModal({ show, onClose: _onClose }: CommonModalProps) {
         _onClose()
     }
 
+    const [confirmCount, setCurrentCount] = useState(0)
+    const confirmDelete = () => {
+        setCurrentCount((prev) => {
+            const next = prev + 1
+
+            if (next === 5) {
+                removeAllData()
+                window.location.reload()
+            }
+
+            return next
+        })
+    }
+
     return (
         <Modal show={show} onClose={onClose}>
             <ModalTitle onClose={onClose}>{t('generic.settings')}</ModalTitle>
             <ModalDescription>{t('settings.description')}</ModalDescription>
-            <div className='max-h-96 overflow-y-auto flex flex-col gap-4 pt-[2px] pb-20 pl-[2px] pr-2'>
+            <div className='max-h-96 overflow-y-auto flex flex-col gap-4 py-[2px] pl-[2px] pr-2'>
                 {containers.length > 0 && (
                     <ModalSection title={t('generic.containers') as string}>
                         <div className='flex flex-col gap-2'>
@@ -248,6 +264,12 @@ export function SettingsModal({ show, onClose: _onClose }: CommonModalProps) {
                             fetchCustomCoords={fetchCustomCoords}
                         />
                     )}
+                </ModalSection>
+
+                <ModalSection title='Zona de perigo' className='mt-20'>
+                    <Button onClick={confirmDelete} theme='danger' className='w-fit'>
+                        Deletar todos os dados {confirmCount != 0 && `(${confirmCount}/5)`}
+                    </Button>
                 </ModalSection>
             </div>
 
