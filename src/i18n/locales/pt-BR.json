@@ -1,40 +1,11 @@
 {
-    "language": "Português (Brasil)",
-    "appName": "hidrata-app",
-    "generic": {
-        "weight": "Peso",
-        "volume": "Volume",
-        "next": "Próximo",
-        "back": "Voltar",
-        "close": "Fechar",
-        "age": "Idade",
-        "yearsOld": "anos",
-        "gotIt": "Entendi",
-        "location": "Localização",
-        "coords": "Coordenadas",
-        "remindMeIn": "Me lembre em",
-        "minutes": "minutos",
-        "notificationsDenied": "As notificações do navegador foram desativadas! Por favor, ative-as para receber lembretes.",
-        "history": "Histórico",
-        "noEntryMessage": "Não há registros para hoje... Que tal começar bebendo um copo de água?",
-        "remainingMessage": "Vamos lá! Ainda faltam {}",
-        "congratulations": "Parabéns! Você atingiu sua meta diária!",
-        "dailyWaterIntake": "Consumo Diário de Água",
-        "add": "Adicionar",
-        "glass": "Copo",
-        "bottle": "Garrafa",
-        "weather": "Clima",
-        "units": "Unidades",
-        "settings": "Configurações",
-        "notifications": "Notificações",
-        "language": "Idioma",
-        "save": "Salvar"
-    },
-    "settings": {
-        "description": "Veja todas as opções disponíveis para configurar o aplicativo e deixe-o do seu jeito.",
-        "enableNotifications": "Ativar notificações",
-        "notificationInterval": "Intervalo de notificação (em minutos)",
-        "enableWeatherDetection": "Ativar detecção de clima"
+    "actions": {
+        "add": "Add",
+        "back": "Back",
+        "close": "Close",
+        "gotIt": "Got it",
+        "next": "Next",
+        "save": "Save"
     },
     "addWater": {
         "customVolume": "Volume personalizado",
@@ -48,61 +19,92 @@
             "Cálice sagrado"
         ]
     },
-    "weather": {
-        "favorableWeather": "Clima favorável",
-        "unfavorableWeather": "Clima desfavorável",
-        "unfavorableWeatherTitle": "Foi adicionada uma quantidade extra devido às condições climáticas desfavoráveis. Se cuida!",
-        "temperature": "Temperatura",
-        "apparentTemperature": "Sensação térmica",
-        "relativeHumidity": "Umidade relativa",
-        "labels": {
-            "VERY_COLD": "Muito Frio",
-            "COLD": "Frio",
-            "MILD": "Ameno",
-            "WARM": "Morno",
-            "HOT": "Quente",
-            "VERY_HOT": "Muito Quente"
-        }
+    "appName": "hidrata-app",
+    "generic": {
+        "age": "Idade",
+        "bottle": "Garrafa",
+        "congratulations": "Parabéns! Você atingiu sua meta diária!",
+        "coords": "Coordenadas",
+        "dailyWaterIntake": "Consumo Diário de Água",
+        "glass": "Copo",
+        "history": "Histórico",
+        "language": "Idioma",
+        "location": "Localização",
+        "minutes": "minutos",
+        "noEntryMessage": "Não há registros para hoje... Que tal começar bebendo um copo de água?",
+        "notifications": "Notificações",
+        "notificationsDenied": "As notificações do navegador foram desativadas! Por favor, ative-as para receber lembretes.",
+        "remainingMessage": "Vamos lá! Ainda faltam {}",
+        "remindMeIn": "Me lembre em",
+        "settings": "Configurações",
+        "units": "Unidades",
+        "volume": "Volume",
+        "weather": "Clima",
+        "weight": "Peso",
+        "yearsOld": "anos"
+    },
+    "language": "Português (Brasil)",
+    "settings": {
+        "description": "Veja todas as opções disponíveis para configurar o aplicativo e deixe-o do seu jeito.",
+        "enableNotifications": "Ativar notificações",
+        "enableWeatherDetection": "Ativar detecção de clima",
+        "notificationInterval": "Intervalo de notificação (em minutos)"
     },
     "stages": {
         "stage1": {
-            "title": "Bem-vindo(a)!",
             "p1": "Você está a um passo de usar o {}!",
             "p2": "Antes de começar, precisamos calcular a quantidade de água que você deve beber diariamente e configurar algumas coisinhas pra deixar sua experiência ainda mais legal!",
-            "p3": "Ah, e não se preocupe! Todos os dados só serão armazenados no seu dispositivo, e você poderá alterar as configurações a qualquer momento."
+            "p3": "Ah, e não se preocupe! Todos os dados só serão armazenados no seu dispositivo, e você poderá alterar as configurações a qualquer momento.",
+            "title": "Bem-vindo(a)!"
         },
         "stage2": {
-            "title": "Unidades de medida",
-            "p1": "Primeiramente, quais são as unidades de medida que você prefere usar?"
+            "p1": "Primeiramente, quais são as unidades de medida que você prefere usar?",
+            "title": "Unidades de medida"
         },
         "stage3": {
-            "title": "Idade e Peso",
-            "p1": "Para calcularmos a quantidade de água que você deve beber diariamente, precisamos saber a sua idade e peso."
+            "p1": "Para calcularmos a quantidade de água que você deve beber diariamente, precisamos saber a sua idade e peso.",
+            "title": "Idade e Peso"
         },
         "stage4": {
-            "title": "Que calor!",
+            "checkbox": "Sim, eu quero usar essa funcionalidade!",
             "p1": "Se você quiser, o {} pode detectar automaticamente as condições climáticas da sua região e ajustar a quantidade de água que você deve beber diariamente. Legal, né?",
             "p2": "Você deseja usar essa funcionalidade?",
-            "checkbox": "Sim, eu quero usar essa funcionalidade!"
+            "title": "Que calor!"
         },
         "stage5": {
-            "title": "Lembretes",
+            "checkbox": "Sim, eu quero receber notificações!",
             "p1": "Você deseja receber notificações para lembrá-lo(a) de beber água?",
-            "checkbox": "Sim, eu quero receber notificações!"
+            "title": "Lembretes"
         }
     },
     "units": {
+        "celsius": "Celsius",
+        "fahrenheit": "Fahrenheit",
+        "flOz": "Onça fluida",
+        "flOzP": "Onças fluidas",
         "kg": "Quilograma",
         "kgP": "Quilogramas",
         "lb": "Libra",
         "lbP": "Libras",
-        "st": "Stone",
-        "stP": "Stones",
-        "flOz": "Onça fluida",
-        "flOzP": "Onças fluidas",
         "ml": "Mililitro",
         "mlP": "Mililitros",
-        "celsius": "Celsius",
-        "fahrenheit": "Fahrenheit"
+        "st": "Stone",
+        "stP": "Stones"
+    },
+    "weather": {
+        "apparentTemperature": "Sensação térmica",
+        "favorableWeather": "Clima favorável",
+        "labels": {
+            "COLD": "Frio",
+            "HOT": "Quente",
+            "MILD": "Ameno",
+            "VERY_COLD": "Muito Frio",
+            "VERY_HOT": "Muito Quente",
+            "WARM": "Morno"
+        },
+        "relativeHumidity": "Umidade relativa",
+        "temperature": "Temperatura",
+        "unfavorableWeather": "Clima desfavorável",
+        "unfavorableWeatherTitle": "Foi adicionada uma quantidade extra devido às condições climáticas desfavoráveis. Se cuida!"
     }
 }

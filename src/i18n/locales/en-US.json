@@ -1,42 +1,11 @@
 {
-    "language": "English",
-    "appName": "hidrata-app",
-    "generic": {
-        "weight": "Weight",
-        "volume": "Volume",
-        "age": "Age",
-        "yearsOld": "years old",
-        "remindMeIn": "Remind me in",
-        "minutes": "minutes",
-        "notificationsDenied": "Browser notifications are disabled! Please enable them to receive reminders.",
-        "noEntryMessage": "There are no records for today... How about starting by drinking a glass of water?",
-        "remainingMessage": "Let's go! There are still {} left",
-        "congratulations": "Congratulations! You've reached your daily goal!",
-        "dailyWaterIntake": "Daily Water Intake",
-        "location": "Location",
-        "coords": "Coordinates",
-        "history": "History",
-        "glass": "Glass",
-        "bottle": "Bottle",
-        "settings": "Settings",
-        "notifications": "Notifications",
-        "weather": "Weather",
-        "units": "Units",
-        "language": "Language"
-    },
     "actions": {
-        "save": "Save",
         "add": "Add",
-        "next": "Next",
         "back": "Back",
         "close": "Close",
-        "gotIt": "Got it"
-    },
-    "settings": {
-        "description": "See all available options to configure the app and make it your way.",
-        "enableNotifications": "Enable notifications",
-        "notificationInterval": "Notification interval (in minutes)",
-        "enableWeatherDetection": "Enable weather detection"
+        "gotIt": "Got it",
+        "next": "Next",
+        "save": "Save"
     },
     "addWater": {
         "customVolume": "Custom volume",
@@ -50,61 +19,92 @@
             "Holy grail"
         ]
     },
-    "weather": {
-        "favorableWeather": "Favorable weather",
-        "unfavorableWeather": "Unfavorable weather",
-        "unfavorableWeatherTitle": "An extra amount has been added due to unfavorable weather conditions. Stay safe!",
-        "temperature": "Temperature",
-        "apparentTemperature": "Apparent temperature",
-        "relativeHumidity": "Relative humidity",
-        "labels": {
-            "VERY_COLD": "Very Cold",
-            "COLD": "Cold",
-            "MILD": "Mild",
-            "WARM": "Warm",
-            "HOT": "Hot",
-            "VERY_HOT": "Very Hot"
-        }
+    "appName": "hidrata-app",
+    "generic": {
+        "age": "Age",
+        "bottle": "Bottle",
+        "congratulations": "Congratulations! You've reached your daily goal!",
+        "coords": "Coordinates",
+        "dailyWaterIntake": "Daily Water Intake",
+        "glass": "Glass",
+        "history": "History",
+        "language": "Language",
+        "location": "Location",
+        "minutes": "minutes",
+        "noEntryMessage": "There are no records for today... How about starting by drinking a glass of water?",
+        "notifications": "Notifications",
+        "notificationsDenied": "Browser notifications are disabled! Please enable them to receive reminders.",
+        "remainingMessage": "Let's go! There are still {} left",
+        "remindMeIn": "Remind me in",
+        "settings": "Settings",
+        "units": "Units",
+        "volume": "Volume",
+        "weather": "Weather",
+        "weight": "Weight",
+        "yearsOld": "years old"
+    },
+    "language": "English",
+    "settings": {
+        "description": "See all available options to configure the app and make it your way.",
+        "enableNotifications": "Enable notifications",
+        "enableWeatherDetection": "Enable weather detection",
+        "notificationInterval": "Notification interval (in minutes)"
     },
     "stages": {
         "stage1": {
-            "title": "Welcome!",
             "p1": "You're one step away from using {}!",
             "p2": "Before we start, we need to calculate the amount of water you should drink daily and set up some things to make your experience even better!",
-            "p3": "Oh, and don't worry! All data will only be stored on your device, and you can change the settings at any time."
+            "p3": "Oh, and don't worry! All data will only be stored on your device, and you can change the settings at any time.",
+            "title": "Welcome!"
         },
         "stage2": {
-            "title": "Measurement units",
-            "p1": "First, what are the measurement units you prefer to use?"
+            "p1": "First, what are the measurement units you prefer to use?",
+            "title": "Measurement units"
         },
         "stage3": {
-            "title": "Age and Weight",
-            "p1": "In order to calculate the amount of water you should drink daily, we need to know your age and weight."
+            "p1": "In order to calculate the amount of water you should drink daily, we need to know your age and weight.",
+            "title": "Age and Weight"
         },
         "stage4": {
-            "title": "It's so hot!",
+            "checkbox": "Yes, I want to use this feature!",
             "p1": "{} can automatically detect the weather conditions in your region and adjust the amount of water you should drink daily. Cool, right?",
             "p2": "Do you want to use this feature?",
-            "checkbox": "Yes, I want to use this feature!"
+            "title": "It's so hot!"
         },
         "stage5": {
-            "title": "Notifications",
+            "checkbox": "Yes, I want to receive notifications!",
             "p1": "Do you want to receive notifications to remind you to drink water?",
-            "checkbox": "Yes, I want to receive notifications!"
+            "title": "Notifications"
         }
     },
     "units": {
+        "celsius": "Celsius",
+        "fahrenheit": "Fahrenheit",
+        "flOz": "Fluid Ounce",
+        "flOzP": "Fluid Ounces",
         "kg": "Kilogram",
         "kgP": "Kilograms",
         "lb": "Pound",
         "lbP": "Pounds",
-        "st": "Stone",
-        "stP": "Stones",
-        "flOz": "Fluid Ounce",
-        "flOzP": "Fluid Ounces",
         "ml": "Mililiter",
         "mlP": "Mililiters",
-        "celsius": "Celsius",
-        "fahrenheit": "Fahrenheit"
+        "st": "Stone",
+        "stP": "Stones"
+    },
+    "weather": {
+        "apparentTemperature": "Apparent temperature",
+        "favorableWeather": "Favorable weather",
+        "labels": {
+            "COLD": "Cold",
+            "HOT": "Hot",
+            "MILD": "Mild",
+            "VERY_COLD": "Very Cold",
+            "VERY_HOT": "Very Hot",
+            "WARM": "Warm"
+        },
+        "relativeHumidity": "Relative humidity",
+        "temperature": "Temperature",
+        "unfavorableWeather": "Unfavorable weather",
+        "unfavorableWeatherTitle": "An extra amount has been added due to unfavorable weather conditions. Stay safe!"
     }
 }
