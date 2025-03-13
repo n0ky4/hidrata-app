@@ -13,9 +13,15 @@ interface PercentButtonProps {
     percentage: number
     drank: number
     recommended: number
+    pulse?: boolean
 }
 
-export function PercentButton({ percentage, drank, recommended }: PercentButtonProps) {
+export function PercentButton({
+    percentage,
+    drank,
+    recommended,
+    pulse = false,
+}: PercentButtonProps) {
     const { t } = useLocale()
 
     const volumeUnit = units.useConfigVolume()
@@ -52,8 +58,8 @@ export function PercentButton({ percentage, drank, recommended }: PercentButtonP
                     <button
                         className={twMerge(
                             'common-transition',
-                            'select-none hover:bg-white/5 p-8 rounded-3xl group min-w-48',
-                            active && 'bg-white/5'
+                            'select-none p-8 rounded-3xl group min-w-48',
+                            pulse ? 'custom-pulse' : active ? 'bg-white/5' : 'hover:bg-white/5'
                         )}
                     >
                         <div className='leading-none'>

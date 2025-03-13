@@ -53,6 +53,8 @@ function App() {
     const drank = getDailyConsumed(records)
     const percentage = getPercentage(drank, recommended)
 
+    const noRecords = !records || records.length === 0
+
     useEffect(() => {
         const firstUse = setupData()
         log.info('first use', firstUse)
@@ -91,6 +93,7 @@ function App() {
                         drank={drank}
                         percentage={percentage}
                         recommended={recommended}
+                        noRecords={noRecords}
                     >
                         {weatherData && <WeatherData data={weatherData} />}
                     </MainSection>
@@ -98,7 +101,7 @@ function App() {
                         <h3 className='text-lg font-semibold text-neutral-300 text-center'>
                             {t('generic.history')}
                         </h3>
-                        {records.length > 0 ? (
+                        {!noRecords ? (
                             <div className='flex flex-col gap-2'>
                                 {records.map((entry, index) => (
                                     <HistoryEntry

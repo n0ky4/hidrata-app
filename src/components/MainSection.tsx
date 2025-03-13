@@ -9,6 +9,7 @@ interface MainSectionProps {
     recommended: number
     calculated: boolean
     percentage: number
+    noRecords?: boolean
     className?: ClassNameValue
     children?: React.ReactNode
 }
@@ -20,6 +21,7 @@ export function MainSection({
     percentage,
     className,
     children,
+    noRecords,
 }: MainSectionProps) {
     const { t } = useLocale()
 
@@ -56,6 +58,7 @@ export function MainSection({
                         drank={drank}
                         recommended={recommended}
                         percentage={percentage}
+                        pulse={noRecords}
                     />
                 </div>
             </div>
