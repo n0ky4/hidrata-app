@@ -45,14 +45,19 @@ export function AddWaterModal({ onClose: _onClose, show }: CommonModalProps) {
         const { name, save } = state
         let containerId
 
+        const volume = units.convertVolume(numberVolume, {
+            from: volumeUnit,
+            to: 'ml',
+        })
+
         if (save)
             containerId = addContainer({
                 name: name?.trim(),
-                volume: numberVolume,
+                volume,
             })
 
-        if (containerId) addContainerRecord(containerId, numberVolume)
-        else addVolumeRecord(numberVolume)
+        if (containerId) addContainerRecord(containerId, volume)
+        else addVolumeRecord(volume)
 
         onClose()
     }
