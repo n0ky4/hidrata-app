@@ -1,4 +1,4 @@
-import { Pencil, Trash2 } from 'lucide-react'
+import { Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { units } from '../core/units'
@@ -77,9 +77,9 @@ export function HistoryEntry({ entry, onEdit, onRemove }: HistoryEntryProps) {
                 )}
             </div>
             <div className='flex items-center gap-2'>
-                <Button theme='ghost' square onClick={onEdit}>
+                {/* <Button theme='ghost' square onClick={onEdit}>
                     <Pencil size={20} strokeWidth={2} />
-                </Button>
+                </Button> */}
                 <Button theme='ghost' square onClick={onRemove}>
                     <Trash2 size={20} strokeWidth={2} />
                 </Button>
