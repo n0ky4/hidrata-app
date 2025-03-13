@@ -5,17 +5,14 @@ import { useConfig } from './../stores/config.store'
 const weight = {
     kg: {
         symbol: 'kg',
-        name: 'Kilogram',
         factor: 1,
     },
     lb: {
         symbol: 'lb',
-        name: 'Pound',
         factor: 2.20462, // 1 kg = 2.20462 lb
     },
     st: {
         symbol: 'st',
-        name: 'Stone',
         factor: 1 / 6.35029, // 1 kg = 0.157473 st
     },
 } as const
@@ -25,23 +22,28 @@ export type AvailableWeights = keyof typeof weight
 const volume = {
     ml: {
         symbol: 'ml',
-        name: 'Milliliter',
         factor: 1,
-    },
-    l: {
-        // only used for display - ml is used instead
-        symbol: 'l',
-        name: 'Liter',
-        factor: 1 / 1000, // 1000 ml = 1 l
     },
     'fl-oz': {
         symbol: 'fl oz',
-        name: 'Fluid Ounce',
         factor: 1 / 29.5735, // 1 ml = 0.033814 fl oz
     },
 } as const
 const availableVolumes = ['ml', 'fl-oz'] as const
 export type AvailableVolumes = 'ml' | 'fl-oz'
+
+const temperature = {
+    c: {
+        symbol: '°C',
+        name: 'Celsius',
+    },
+    f: {
+        symbol: '°F',
+        name: 'Fahrenheit',
+    },
+} as const
+const availableTemperatures = Object.keys(temperature)
+export type AvailableTemperatures = keyof typeof temperature
 
 function getWeight(key: AvailableWeights) {
     return weight[key]
@@ -49,6 +51,10 @@ function getWeight(key: AvailableWeights) {
 
 function getVolume(key: AvailableVolumes) {
     return volume[key]
+}
+
+function getTemperature(key: AvailableTemperatures) {
+    return temperature[key]
 }
 
 interface ConvertWeightOptions {
@@ -121,6 +127,10 @@ function convertVolume(value: number, options: ConvertVolumeOptions): string | n
     return symbol ? `${converted} ${toUnit.symbol}` : converted
 }
 
+function celsiusToFahrenheit(celsius: number): number {
+    return celsius * (9 / 5) + 32
+}
+
 function autoDetect(): [AvailableWeights, AvailableVolumes] {
     let weight: AvailableWeights = 'kg'
     let volume: AvailableVolumes = 'ml'
@@ -153,6 +163,13 @@ const getVolumeSelectOptions = (t: (key: string) => string | ReactNode): SelectO
     { label: `${t('units.flOzP')} (fl oz)`, value: 'fl-oz' },
 ]
 
+const getTemperatureSelectOptions = (
+    t: (key: string) => string | ReactNode
+): SelectOptionProps[] => [
+    { label: `${t('units.celsius')} (°C)`, value: 'c' },
+    { label: `${t('units.fahrenheit')} (°F)`, value: 'f' },
+]
+
 const onSetWeight = (
     value: AvailableWeights,
     setWeight: (value: AvailableWeights) => void,
@@ -173,6 +190,16 @@ const onSetVolume = (
     setVolume(find.value as AvailableVolumes)
 }
 
+const onSetTemperature = (
+    value: AvailableTemperatures,
+    setTemperature: (value: AvailableTemperatures) => void,
+    temperatureSelectOptions: SelectOptionProps[]
+) => {
+    const find = temperatureSelectOptions.find((o) => o.value === value)
+    if (!find) return
+    setTemperature(find.value as 'c' | 'f')
+}
+
 const useConfigVolume = () => {
     return useConfig((state) => state.config?.units.volume) || 'ml'
 }
@@ -186,15 +213,20 @@ export const units = {
     volume,
     availableWeights,
     availableVolumes,
+    availableTemperatures,
     autoDetect,
     getWeight,
     getVolume,
+    getTemperature,
     convertWeight,
     convertVolume,
     getWeightSelectOptions,
     getVolumeSelectOptions,
+    getTemperatureSelectOptions,
+    celsiusToFahrenheit,
     onSetWeight,
     onSetVolume,
+    onSetTemperature,
     useConfigVolume,
     useConfigWeight,
 }
