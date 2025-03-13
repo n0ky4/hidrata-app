@@ -2,15 +2,11 @@ import { z } from 'zod'
 import { notifications } from '../core/notifications'
 import { theme } from '../core/theme'
 import { AvailableVolumes, AvailableWeights, units } from '../core/units'
-import { i18n } from '../i18n'
 
 export const ageSchema = z.number().int().positive().min(1).max(120)
 export const weightSchema = z.number().positive().min(3).max(350)
 
 export const configSchema = z.object({
-    language: z
-        .enum(Object.keys(i18n.availableLanguages) as [string, ...string[]])
-        .default('en-US'), // Idioma do aplicativo
     notifications: z
         .object({
             enabled: z.boolean().default(true),

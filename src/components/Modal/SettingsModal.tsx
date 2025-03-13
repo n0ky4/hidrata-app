@@ -19,9 +19,7 @@ import {
 const langOptions = i18n.getLanguageOptions()
 
 export function SettingsModal({ show, onClose }: CommonModalProps) {
-    const { t, setAppLanguage } = useLocale()
-
-    const lang = useConfig((state) => state.config?.language) as AvailableLanguages
+    const { t, setAppLanguage, lang } = useLocale()
 
     const notification = useConfig((state) => state.config?.notifications.enabled) as boolean
     const setNotification = useConfig((state) => state.setNotificationsEnabled)
@@ -29,8 +27,8 @@ export function SettingsModal({ show, onClose }: CommonModalProps) {
     const notifInterval = useConfig((state) => state.config?.notifications.interval) as number
     const setNotifInterval = useConfig((state) => state.setNotificationsInterval)
 
-    const notifSound = useConfig((state) => state.config?.notifications.sound) as string
-    const setNotifSound = useConfig((state) => state.setNotificationsSound)
+    // const notifSound = useConfig((state) => state.config?.notifications.sound) as string
+    // const setNotifSound = useConfig((state) => state.setNotificationsSound)
 
     const weight = useConfig((state) => state.config?.units.weight) as string
     const setWeight = useConfig((state) => state.setUnitsWeight)
@@ -40,14 +38,14 @@ export function SettingsModal({ show, onClose }: CommonModalProps) {
     const setVolume = useConfig((state) => state.setUnitsVolume)
     const volumeSelectOptions = units.getVolumeSelectOptions(t)
 
-    const themeMode = useConfig((state) => state.config?.theme.mode) as string
-    const setThemeMode = useConfig((state) => state.setThemeMode)
+    // const themeMode = useConfig((state) => state.config?.theme.mode) as string
+    // const setThemeMode = useConfig((state) => state.setThemeMode)
 
-    const accentColor = useConfig((state) => state.config?.theme.accentColor) as string
-    const setAccentColor = useConfig((state) => state.setThemeAccentColor)
+    // const accentColor = useConfig((state) => state.config?.theme.accentColor) as string
+    // const setAccentColor = useConfig((state) => state.setThemeAccentColor)
 
-    const font = useConfig((state) => state.config?.theme.font) as string
-    const setFont = useConfig((state) => state.setThemeFont)
+    // const font = useConfig((state) => state.config?.theme.font) as string
+    // const setFont = useConfig((state) => state.setThemeFont)
 
     const weatherEnabled = useConfig((state) => state.config?.weather.enabled) as boolean
     const setWeatherEnabled = useConfig((state) => state.setWeatherEnabled)
