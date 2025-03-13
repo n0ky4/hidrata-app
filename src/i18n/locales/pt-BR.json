@@ -1,11 +1,11 @@
 {
     "actions": {
-        "add": "Add",
-        "back": "Back",
-        "close": "Close",
-        "gotIt": "Got it",
-        "next": "Next",
-        "save": "Save"
+        "add": "Adicionar",
+        "back": "Voltar",
+        "close": "Fechar",
+        "gotIt": "Entendi",
+        "next": "Próximo",
+        "save": "Salvar"
     },
     "addWater": {
         "customVolume": "Volume personalizado",
