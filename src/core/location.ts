@@ -2,26 +2,45 @@ import { produce } from 'immer'
 import { useCallback, useRef, useState } from 'react'
 
 export interface IpData {
+    ip: string
+    network: string
+    version: string
     city: string
-    country: string
-    lat: number
-    lon: number
     region: string
-    regionName: string
-    status: string
+    region_code: string
+    country: string
+    country_name: string
+    country_code: string
+    country_code_iso3: string
+    country_capital: string
+    country_tld: string
+    continent_code: string
+    in_eu: boolean
+    postal: string
+    latitude: number
+    longitude: number
+    timezone: string
+    utc_offset: string
+    country_calling_code: string
+    currency: string
+    currency_name: string
+    languages: string
+    country_area: number
+    country_population: number
+    asn: string
+    org: string
 }
 
 const getLocationValue = (data: IpData) => {
-    return data ? `${data.city}, ${data?.regionName || data.region}, ${data.country}` : ''
+    return data ? `${data.city}, ${data?.region || data.region_code}, ${data.country}` : ''
 }
 
-const fetchLocation = (lang?: string): Promise<IpData> => {
-    const langArg = lang ? `?lang=${lang}` : ''
+const fetchLocation = (): Promise<IpData> => {
     return new Promise((resolve, reject) => {
-        fetch(`http://ip-api.com/json${langArg}`)
+        fetch(`https://ipapi.co/json`)
             .then((res) => res.json())
             .then((data) => {
-                if (!data || data.status !== 'success') {
+                if (!data || !data.city) {
                     console.error(data)
                     return reject('No data received')
                 }
@@ -109,7 +128,7 @@ function useLocationManagement(lang: string) {
 
     const fetchLocationData = useCallback(async () => {
         try {
-            const data = await location.fetchLocation(lang)
+            const data = await location.fetchLocation()
             const locVal = location.getLocationValue(data)
             locationDetected.current = data
 
@@ -117,7 +136,7 @@ function useLocationManagement(lang: string) {
                 show: true,
                 inputValue: locVal,
                 placeName: locVal,
-                coords: { lat: data.lat, lon: data.lon },
+                coords: { lat: data.latitude, lon: data.longitude },
             })
             setCanContinue(true)
         } catch (err) {
@@ -130,7 +149,7 @@ function useLocationManagement(lang: string) {
             })
             setCanContinue(false)
         }
-    }, [lang, updateLocationState])
+    }, [updateLocationState])
 
     const handleLocationToggle = useCallback(
         (checked: boolean) => {
@@ -154,14 +173,14 @@ function useLocationManagement(lang: string) {
         const detectedLoc = data ? location.getLocationValue(data) : null
 
         if (detectedLoc && locState.inputValue === detectedLoc) {
-            const { lat, lon } = data || {}
-            if (!lat || !lon) throw new Error('No coordinates found')
+            const { latitude, longitude } = data || {}
+            if (!latitude || !longitude) throw new Error('No coordinates found')
 
             updateLocationState({
                 show: true,
                 inputValue: detectedLoc,
                 placeName: detectedLoc,
-                coords: { lat, lon },
+                coords: { lat: longitude, lon: longitude },
             })
             setCanContinue(true)
             return
