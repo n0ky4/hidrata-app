@@ -45,6 +45,7 @@ export const configSchema = z.object({
             enabled: z.boolean().default(false), // Usar detecção de condições climáticas
             latitude: z.number().min(-90).max(90).optional(), // Latitude válida
             longitude: z.number().min(-180).max(180).optional(), // Longitude válida
+            placeName: z.string().optional(), // Nome da localização
         })
         .default({}),
 })

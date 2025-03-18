@@ -60,11 +60,15 @@ export function SettingsModal({ show, onClose: _onClose }: CommonModalProps) {
     const weatherEnabled = useConfig((state) => state.config?.weather.enabled) as boolean
     const setWeatherEnabled = useConfig((state) => state.setWeatherEnabled)
 
-    const { locState, handleLocationChange, fetchCustomCoords } =
-        location.useLocationManagement(lang)
-
     const setLatitude = useConfig((state) => state.setWeatherLatitude)
     const setLongitude = useConfig((state) => state.setWeatherLongitude)
+    const setPlaceName = useConfig((state) => state.setWeatherPlaceName)
+    const placeName = useConfig((state) => state.config?.weather.placeName) as string
+
+    const { locState, handleLocationChange, fetchCustomCoords } = location.useLocationManagement({
+        lang,
+        defaultInputValue: placeName,
+    })
 
     const ogLatitude = useConfig((state) => state.config?.weather.latitude) as number
     const ogLongitude = useConfig((state) => state.config?.weather.longitude) as number
@@ -75,8 +79,7 @@ export function SettingsModal({ show, onClose: _onClose }: CommonModalProps) {
     const volumeUnit = units.useConfigVolume()
 
     const onClose = () => {
-        // handle location
-
+        // handle location change
         if (locState.coords && weatherEnabled) {
             const { latitude, longitude } = locState.coords
 
@@ -85,6 +88,8 @@ export function SettingsModal({ show, onClose: _onClose }: CommonModalProps) {
             if (changed) {
                 setLatitude(latitude)
                 setLongitude(longitude)
+                if (locState.placeName) setPlaceName(locState.placeName)
+
                 window.location.reload()
             }
         }

@@ -31,6 +31,16 @@ export interface IpData {
     org: string
 }
 
+export interface Coords {
+    latitude: number
+    longitude: number
+}
+
+export interface GetCoordsInfo {
+    coords: Coords
+    place: string
+}
+
 const getLocationValue = (data: IpData) => {
     return data ? `${data.city}, ${data?.region || data.region_code}, ${data.country}` : ''
 }
@@ -50,16 +60,6 @@ const fetchLocation = (): Promise<IpData> => {
                 reject(err)
             })
     })
-}
-
-export interface Coords {
-    latitude: number
-    longitude: number
-}
-
-export interface GetCoordsInfo {
-    coords: Coords
-    place: string
 }
 
 const fetchCoords = (query: string, lang?: string): Promise<GetCoordsInfo> => {
@@ -106,14 +106,19 @@ export interface LocationState {
     coords: Coords | null
 }
 
+interface LocationManagementOptions {
+    lang: string
+    defaultInputValue?: string
+}
+
 // location management hook
-function useLocationManagement(lang: string) {
+function useLocationManagement({ lang, defaultInputValue }: LocationManagementOptions) {
     const [enabled, setEnabled] = useState(false)
     const [canContinue, setCanContinue] = useState(true)
     const locationDetected = useRef<IpData | null>(null)
     const [locState, setLocState] = useState<LocationState>({
         show: false,
-        inputValue: '',
+        inputValue: defaultInputValue || '',
         placeName: null,
         coords: null,
     })

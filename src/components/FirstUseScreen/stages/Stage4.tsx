@@ -27,7 +27,7 @@ export function Stage4({ setState, nextStage, prevStage }: StageProps) {
         handleLocationToggle,
         handleLocationChange,
         fetchCustomCoords,
-    } = location.useLocationManagement(lang)
+    } = location.useLocationManagement({ lang })
 
     const handleNext = useCallback(() => {
         if (!canContinue) return
@@ -41,12 +41,13 @@ export function Stage4({ setState, nextStage, prevStage }: StageProps) {
                 if (enabled && locState.coords) {
                     draft.weather.latitude = locState.coords.latitude
                     draft.weather.longitude = locState.coords.longitude
+                    if (locState.placeName) draft.weather.placeName = locState.placeName
                 }
             })
         )
 
         nextStage()
-    }, [canContinue, enabled, locState.coords, setState, nextStage])
+    }, [canContinue, enabled, locState.coords, locState.placeName, setState, nextStage])
 
     return (
         <>
