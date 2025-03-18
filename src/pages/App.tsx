@@ -10,6 +10,7 @@ import { NoEntry } from '../components/NoEntry'
 import { WeatherData } from '../components/WeatherData'
 import { useAppHandler } from '../core/appHandler'
 import { useInitHandler } from '../core/initHandler'
+import { notifications } from '../core/notifications'
 import { useLocale } from '../i18n/context/contextHook'
 import { useAppStore } from '../stores/app.store'
 import { useConfig } from '../stores/config.store'
@@ -54,6 +55,8 @@ function App() {
     const percentage = getPercentage(drank, recommended)
 
     const noRecords = !records || records.length === 0
+
+    notifications.useNotifications()
 
     useEffect(() => {
         const firstUse = setupData()

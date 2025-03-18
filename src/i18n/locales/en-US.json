@@ -58,6 +58,10 @@
         "enableWeatherDetection": "Enable weather detection",
         "notificationInterval": "Notification interval (in minutes)"
     },
+    "notification": {
+        "title": "Drink water!",
+        "message": "It's time to drink water! 💧"
+    },
     "stages": {
         "stage1": {
             "p1": "You're one step away from using {}!",

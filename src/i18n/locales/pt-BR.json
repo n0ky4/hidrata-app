@@ -58,6 +58,10 @@
         "enableWeatherDetection": "Ativar detecção de clima",
         "notificationInterval": "Intervalo de notificação (em minutos)"
     },
+    "notification": {
+        "title": "Beber água!",
+        "message": "É hora de beber água! 💧"
+    },
     "stages": {
         "stage1": {
             "p1": "Você está a um passo de usar o {}!",
