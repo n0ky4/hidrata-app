@@ -39,8 +39,8 @@ export function Stage4({ setState, nextStage, prevStage }: StageProps) {
                 draft.weather.enabled = enabled
 
                 if (enabled && locState.coords) {
-                    draft.weather.latitude = locState.coords.lat
-                    draft.weather.longitude = locState.coords.lon
+                    draft.weather.latitude = locState.coords.latitude
+                    draft.weather.longitude = locState.coords.longitude
                 }
             })
         )

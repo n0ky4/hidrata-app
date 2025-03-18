@@ -48,10 +48,10 @@ export interface TemperatureData {
     humidity: number
 }
 
-async function getTemperature(coords: Coords): Promise<TemperatureData> {
+async function getTemperature({ latitude, longitude }: Coords): Promise<TemperatureData> {
     const params: Record<string, string> = {
-        latitude: coords.lat.toString(),
-        longitude: coords.lon.toString(),
+        latitude: latitude.toString(),
+        longitude: longitude.toString(),
         current: 'temperature_2m,relative_humidity_2m,apparent_temperature',
         forecast_days: '1',
     }
@@ -86,8 +86,8 @@ interface StoredResponse {
     data: TemperatureData
 }
 
-function generateId(coords: Coords): string {
-    return btoa(`${coords.lat},${coords.lon}`)
+function generateId({ latitude, longitude }: Coords): string {
+    return btoa(`${latitude},${longitude}`)
 }
 
 function getStoredData(coords: Coords): StoredResponse | null {

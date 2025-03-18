@@ -53,8 +53,8 @@ const fetchLocation = (): Promise<IpData> => {
 }
 
 export interface Coords {
-    lat: number
-    lon: number
+    latitude: number
+    longitude: number
 }
 
 export interface GetCoordsInfo {
@@ -82,14 +82,14 @@ const fetchCoords = (query: string, lang?: string): Promise<GetCoordsInfo> => {
                     return reject('No data received')
                 }
 
-                const formattedLat = parseFloat(Number(data[0].lat).toFixed(4))
-                const formattedLon = parseFloat(Number(data[0].lon).toFixed(4))
+                const latitude = parseFloat(Number(data[0].lat).toFixed(4))
+                const longitude = parseFloat(Number(data[0].lon).toFixed(4))
 
-                if (!formattedLat || !formattedLon || isNaN(formattedLat) || isNaN(formattedLon))
+                if (!latitude || !longitude || isNaN(latitude) || isNaN(longitude))
                     return reject('Invalid coordinates')
 
                 return resolve({
-                    coords: { lat: formattedLat, lon: formattedLon },
+                    coords: { latitude, longitude },
                     place: data[0].display_name,
                 })
             })
@@ -132,11 +132,13 @@ function useLocationManagement(lang: string) {
             const locVal = location.getLocationValue(data)
             locationDetected.current = data
 
+            const { latitude, longitude } = data
+
             updateLocationState({
                 show: true,
                 inputValue: locVal,
                 placeName: locVal,
-                coords: { lat: data.latitude, lon: data.longitude },
+                coords: { latitude, longitude },
             })
             setCanContinue(true)
         } catch (err) {
@@ -180,7 +182,7 @@ function useLocationManagement(lang: string) {
                 show: true,
                 inputValue: detectedLoc,
                 placeName: detectedLoc,
-                coords: { lat: longitude, lon: longitude },
+                coords: { latitude, longitude },
             })
             setCanContinue(true)
             return

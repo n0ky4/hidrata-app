@@ -47,7 +47,8 @@ export function LocationForm({
                         <MapPin size={16} />
                     </div>
                     <span className='truncate' title={locState.placeName}>
-                        {locState.placeName} ({locState.coords.lat}, {locState.coords.lon})
+                        {locState.placeName} ({locState.coords.latitude},{' '}
+                        {locState.coords.longitude})
                     </span>
                 </div>
             )}

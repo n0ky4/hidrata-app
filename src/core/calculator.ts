@@ -1,4 +1,5 @@
 import { log } from '../util/logger'
+import { Coords } from './location'
 import { Condition, TemperatureData, weather } from './weather'
 
 export const RECOMMENDED_LIMIT = 7_000
@@ -66,7 +67,7 @@ async function recommendedWaterWeather(
 
     let data
 
-    const coords = { lat: latitude, lon: longitude }
+    const coords: Coords = { latitude, longitude }
     const storedData = weather.getStoredData(coords)
 
     if (storedData) {

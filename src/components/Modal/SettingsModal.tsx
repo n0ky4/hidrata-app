@@ -78,12 +78,13 @@ export function SettingsModal({ show, onClose: _onClose }: CommonModalProps) {
         // handle location
 
         if (locState.coords && weatherEnabled) {
-            const changed =
-                locState.coords.lat !== ogLatitude || locState.coords.lon !== ogLongitude
+            const { latitude, longitude } = locState.coords
+
+            const changed = latitude !== ogLatitude || longitude !== ogLongitude
 
             if (changed) {
-                setLatitude(locState.coords.lat)
-                setLongitude(locState.coords.lon)
+                setLatitude(latitude)
+                setLongitude(longitude)
                 window.location.reload()
             }
         }
