@@ -36,6 +36,7 @@
         "justNow": "agora mesmo",
         "language": "Idioma",
         "location": "Localização",
+        "minutes": "minutos",
         "minuteAgo": "há {} minuto",
         "minutesAgo": "há {} minutos",
         "noEntryMessage": "Não há registros para hoje... Que tal começar bebendo um copo de água?",
@@ -56,6 +57,10 @@
         "enableNotifications": "Ativar notificações",
         "enableWeatherDetection": "Ativar detecção de clima",
         "notificationInterval": "Intervalo de notificação (em minutos)"
+    },
+    "notification": {
+        "title": "Beber água!",
+        "message": "É hora de beber água! 💧"
     },
     "stages": {
         "stage1": {

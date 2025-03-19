@@ -36,6 +36,7 @@
         "justNow": "just now",
         "language": "Language",
         "location": "Location",
+        "minutes": "minutes",
         "minuteAgo": "{} minute ago",
         "minutesAgo": "{} minutes ago",
         "noEntryMessage": "There are no records for today... How about starting by drinking a glass of water?",
@@ -56,6 +57,10 @@
         "enableNotifications": "Enable notifications",
         "enableWeatherDetection": "Enable weather detection",
         "notificationInterval": "Notification interval (in minutes)"
+    },
+    "notification": {
+        "title": "Drink water!",
+        "message": "It's time to drink water! 💧"
     },
     "stages": {
         "stage1": {
